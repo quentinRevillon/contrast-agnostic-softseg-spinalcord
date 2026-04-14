@@ -196,6 +196,8 @@ def main():
     parser.add_argument("--paddings", nargs="+", type=float, default=[-1, 0, 5, 10, 20, 40],
                         help="Padding in mm around GT bbox. -1 = no crop (baseline).")
     parser.add_argument("--device", default="cuda", choices=["cuda", "cpu"])
+    parser.add_argument("--max-subjects", type=int, default=None,
+                        help="Limit to the first N subjects (for quick testing).")
     args = parser.parse_args()
 
     device = torch.device(args.device)
@@ -203,6 +205,8 @@ def main():
     predictor = load_predictor(args.model_dir, device)
 
     subjects = load_test_subjects(TEST_SPLIT)
+    if args.max_subjects is not None:
+        subjects = subjects[: args.max_subjects]
 
     # count total volumes upfront for progress display
     all_contrasts = [

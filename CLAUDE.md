@@ -36,6 +36,20 @@ INFÉRENCE NNUNET
 - modèle : MODEL_DIR = ~/spinalcordtoolbox/data/deepseg_models/model_seg_sc_contrast_agnostic_nnunet/nnUNetTrainer__nnUNetPlans__3d_fullres
 - variables d'env nnUNet_raw/preprocessed/results requises à l'import (valeur dummy suffit)
 
+PARALLÉLISATION — set_slot / get_slot
+- Ce serveur dispose de slots de parallélisation numérotés 0 à 9
+- TOUJOURS utiliser set_slot pour toute tâche lourde en CPU ou GPU (inférence, entraînement, prétraitement)
+- Lancer en arrière-plan : set_slot <n> <commande>
+- Consulter la sortie    : get_slot <n>
+- IMPORTANT : set_slot ne propage ni PATH ni conda ni tilde (~)
+  → toujours chemin absolu pour python ET pour tous les arguments :
+    set_slot 0 /home/quentinr/.conda/envs/contrast_agnostic/bin/python \
+        /home/quentinr/contrast-agnostic-softseg-spinalcord/cropping_YOLO/eval_crop_robustness_nnunet.py \
+        --data-root /home/quentinr/data/data-multi-subject ...
+    set_slot 1 python autre_script.py ...
+    get_slot 0   # voir la sortie du slot 0
+- Ne jamais lancer une commande longue en foreground ou avec nohup — utiliser set_slot
+
 SCRIPTS — cropping_YOLO/
   eval_crop_robustness.py        ← expérience oracle via sct_deepseg (subprocess, CPU)
   eval_crop_robustness_nnunet.py ← même expérience via nnUNetPredictor direct (GPU/CPU)
