@@ -1,9 +1,8 @@
 """
-Plot Dice vs padding results from eval_crop_robustness_nnunet.py.
+Plot Dice vs padding results from eval_crop_robustness_nnunet.py (frozen test split).
 
-One subplot per contrast. Each point = one padding level (mean ± std across
-subjects). Padding -1 (no crop / baseline) is the rightmost point, labelled
-"no crop" on the x-axis.
+One subplot per contrast. Each point = one padding level (mean ± std across subjects).
+Padding -1 (no crop / baseline) is the rightmost point, labelled "no crop" on the x-axis.
 
 Usage:
     python cropping_YOLO/plot_crop_robustness.py results_crop_robustness.csv
@@ -40,6 +39,11 @@ def main():
     args = get_parser().parse_args()
     df = pd.read_csv(args.input)
 
+    # Compute statistics for the suptitle
+    n_subjects = df["subject"].nunique()
+    n_volumes = len(df[df["padding_mm"] == -1])  # count baseline rows (one per volume)
+    split_info = f"{n_subjects} subjects, {n_volumes} volumes (frozen test split)"
+
     contrasts = [c for c in CONTRAST_ORDER if c in df["contrast"].unique()]
     contrasts += [c for c in df["contrast"].unique() if c not in CONTRAST_ORDER]
 
@@ -73,7 +77,8 @@ def main():
         ax.set_title(CONTRAST_LABELS.get(contrast, contrast), fontweight="bold")
         ax.set_xticks(x_positions)
         ax.set_xticklabels(x_labels, rotation=30, ha="right", fontsize=8)
-        ax.set_ylim(0, 1.05)
+        ax.set_ylim(0, 1.0)
+        ax.set_yticks(np.arange(0, 1.1, 0.1))
         ax.set_ylabel("Dice")
         ax.grid(axis="y", alpha=0.3)
 
@@ -81,8 +86,10 @@ def main():
     for ax in axes[len(contrasts):]:
         ax.set_visible(False)
 
-    fig.suptitle("SC segmentation Dice vs crop padding (mean ± std across subjects)", y=1.01)
-    fig.tight_layout()
+    fig.text(0.5, 0.02, "Additional padding to the minimal enclosing box of GT (mm)",
+             ha="center", fontsize=11)
+    fig.suptitle(f"SC segmentation Dice vs crop padding (mean ± std across subjects)\n{split_info}", y=0.995)
+    fig.tight_layout(rect=[0, 0.03, 1, 0.99])
 
     output = args.output or args.input.with_suffix(".png")
     fig.savefig(output, dpi=150, bbox_inches="tight")
