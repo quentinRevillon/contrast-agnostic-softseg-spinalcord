@@ -1,2 +1,11 @@
 *.idea
 *__pycache__/
+
+# Logs
+datasplits_cropping/out/logs/
+
+# Large NIfTI outputs (worst-case inspection images)
+eval_seg_robustness_with_cropping/images/
+
+# Backup files
+*_old.yml
