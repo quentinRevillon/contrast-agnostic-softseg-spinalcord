@@ -1,0 +1,300 @@
+{
+    "contrasts": [
+        "T2w"
+    ],
+    "dataset": "site_007",
+    "datasetVersions": {
+        "site_007": "git-main-d97606861b6ed64af339943dab0c4559216812a1"
+    },
+    "description": "Datasets for contrast-agnostic spinal cord segmentation",
+    "labels": {
+        "0": "background",
+        "1": "sc-seg"
+    },
+    "license": "MIT",
+    "modality": {
+        "0": "MRI"
+    },
+    "numImagesPerContrast": {
+        "test": {
+            "T2w": 7
+        },
+        "train": {
+            "T2w": 50
+        },
+        "validation": {
+            "T2w": 7
+        }
+    },
+    "numTestImagesTotal": 7,
+    "numTestSubjects": 7,
+    "numTrainingImagesTotal": 50,
+    "numTrainingSubjects": 50,
+    "numValidationImagesTotal": 7,
+    "numValidationSubjects": 7,
+    "reference": "BIDS: Brain Imaging Data Structure",
+    "seed": 50,
+    "tensorImageSize": "3D",
+    "test": [
+        {
+            "image": "/home/quentinr/data/site_007/sub-van075/anat/sub-van075_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van075/anat/sub-van075_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van116/anat/sub-van116_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van116/anat/sub-van116_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van145/anat/sub-van145_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van145/anat/sub-van145_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van163/anat/sub-van163_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van163/anat/sub-van163_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van290/anat/sub-van290_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van290/anat/sub-van290_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van402/anat/sub-van402_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van402/anat/sub-van402_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van496/anat/sub-van496_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van496/anat/sub-van496_acq-sag_T2w_label-SC_seg.nii.gz"
+        }
+    ],
+    "train": [
+        {
+            "image": "/home/quentinr/data/site_007/sub-van004/anat/sub-van004_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van004/anat/sub-van004_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van009/anat/sub-van009_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van009/anat/sub-van009_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van020/anat/sub-van020_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van020/anat/sub-van020_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van021/anat/sub-van021_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van021/anat/sub-van021_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van029/anat/sub-van029_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van029/anat/sub-van029_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van030/anat/sub-van030_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van030/anat/sub-van030_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van033/anat/sub-van033_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van033/anat/sub-van033_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van035/anat/sub-van035_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van035/anat/sub-van035_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van046/anat/sub-van046_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van046/anat/sub-van046_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van058/anat/sub-van058_acq-sag_run-01_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van058/anat/sub-van058_acq-sag_run-01_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van060/anat/sub-van060_acq-sag_run-01_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van060/anat/sub-van060_acq-sag_run-01_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van073/anat/sub-van073_acq-sag_run-01_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van073/anat/sub-van073_acq-sag_run-01_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van077/anat/sub-van077_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van077/anat/sub-van077_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van084/anat/sub-van084_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van084/anat/sub-van084_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van085/anat/sub-van085_acq-sag_run-01_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van085/anat/sub-van085_acq-sag_run-01_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van101/anat/sub-van101_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van101/anat/sub-van101_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van106/anat/sub-van106_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van106/anat/sub-van106_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van134/anat/sub-van134_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van134/anat/sub-van134_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van140/anat/sub-van140_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van140/anat/sub-van140_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van141/anat/sub-van141_acq-sag_run-01_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van141/anat/sub-van141_acq-sag_run-01_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van152/anat/sub-van152_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van152/anat/sub-van152_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van160/anat/sub-van160_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van160/anat/sub-van160_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van166/anat/sub-van166_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van166/anat/sub-van166_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van185/anat/sub-van185_acq-sag_run-01_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van185/anat/sub-van185_acq-sag_run-01_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van189/anat/sub-van189_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van189/anat/sub-van189_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van198/anat/sub-van198_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van198/anat/sub-van198_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van209/anat/sub-van209_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van209/anat/sub-van209_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van233/anat/sub-van233_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van233/anat/sub-van233_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van242/anat/sub-van242_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van242/anat/sub-van242_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van244/anat/sub-van244_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van244/anat/sub-van244_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van250/anat/sub-van250_acq-sag_run-01_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van250/anat/sub-van250_acq-sag_run-01_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van270/anat/sub-van270_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van270/anat/sub-van270_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van276/anat/sub-van276_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van276/anat/sub-van276_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van286/anat/sub-van286_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van286/anat/sub-van286_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van305/anat/sub-van305_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van305/anat/sub-van305_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van325/anat/sub-van325_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van325/anat/sub-van325_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van330/anat/sub-van330_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van330/anat/sub-van330_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van344/anat/sub-van344_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van344/anat/sub-van344_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van368/anat/sub-van368_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van368/anat/sub-van368_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van377/anat/sub-van377_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van377/anat/sub-van377_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van398/anat/sub-van398_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van398/anat/sub-van398_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van414/anat/sub-van414_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van414/anat/sub-van414_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van422/anat/sub-van422_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van422/anat/sub-van422_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van429/anat/sub-van429_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van429/anat/sub-van429_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van444/anat/sub-van444_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van444/anat/sub-van444_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van453/anat/sub-van453_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van453/anat/sub-van453_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van468/anat/sub-van468_acq-sag_run-02_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van468/anat/sub-van468_acq-sag_run-02_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van472/anat/sub-van472_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van472/anat/sub-van472_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van483/anat/sub-van483_acq-sag_run-02_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van483/anat/sub-van483_acq-sag_run-02_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van501/anat/sub-van501_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van501/anat/sub-van501_acq-sag_T2w_label-SC_seg.nii.gz"
+        }
+    ],
+    "validation": [
+        {
+            "image": "/home/quentinr/data/site_007/sub-van015/anat/sub-van015_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van015/anat/sub-van015_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van065/anat/sub-van065_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van065/anat/sub-van065_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van094/anat/sub-van094_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van094/anat/sub-van094_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van222/anat/sub-van222_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van222/anat/sub-van222_acq-sag_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van442/anat/sub-van442_acq-sag_run-02_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van442/anat/sub-van442_acq-sag_run-02_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van473/anat/sub-van473_acq-sag_run-01_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van473/anat/sub-van473_acq-sag_run-01_T2w_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/site_007/sub-van497/anat/sub-van497_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/site_007/derivatives/labels/sub-van497/anat/sub-van497_acq-sag_T2w_label-SC_seg.nii.gz"
+        }
+    ]
+}

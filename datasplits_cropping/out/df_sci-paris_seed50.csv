@@ -1,0 +1,15 @@
+datasetName,subjectID,sessionID,orientationID,contrastID,pathologyID,split,filename
+sci-paris,sub-045,,,T2w,SCI,train,sub-045_T2w_seg-manual.nii.gz
+sci-paris,sub-046,,,T2w,SCI,validation,sub-046_T2w_seg-manual.nii.gz
+sci-paris,sub-047,,,T2w,SCI,train,sub-047_T2w_seg-manual.nii.gz
+sci-paris,sub-049,,,T2w,SCI,train,sub-049_T2w_seg-manual.nii.gz
+sci-paris,sub-050,,,T2w,SCI,train,sub-050_T2w_seg-manual.nii.gz
+sci-paris,sub-053,,,T2w,SCI,train,sub-053_T2w_seg-manual.nii.gz
+sci-paris,sub-054,,,T2w,SCI,test,sub-054_T2w_seg-manual.nii.gz
+sci-paris,sub-057,,,T2w,SCI,train,sub-057_T2w_seg-manual.nii.gz
+sci-paris,sub-058,,,T2w,SCI,validation,sub-058_T2w_seg-manual.nii.gz
+sci-paris,sub-059,,,T2w,SCI,train,sub-059_T2w_seg-manual.nii.gz
+sci-paris,sub-060,,,T2w,SCI,train,sub-060_T2w_seg-manual.nii.gz
+sci-paris,sub-064,,,T2w,SCI,test,sub-064_T2w_seg-manual.nii.gz
+sci-paris,sub-065,,,T2w,SCI,train,sub-065_T2w_seg-manual.nii.gz
+sci-paris,sub-072,,,T2w,SCI,train,sub-072_T2w_seg-manual.nii.gz

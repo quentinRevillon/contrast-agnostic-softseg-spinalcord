@@ -1,0 +1,1176 @@
+{
+    "contrasts": [
+        "UNIT1"
+    ],
+    "dataset": "basel-mp2rage",
+    "datasetVersions": {
+        "basel-mp2rage": "git-master-16ad793dcebd2d69e22e1c1f99e79d5bfde40e09*"
+    },
+    "description": "Datasets for contrast-agnostic spinal cord segmentation",
+    "labels": {
+        "0": "background",
+        "1": "sc-seg"
+    },
+    "license": "MIT",
+    "modality": {
+        "0": "MRI"
+    },
+    "numImagesPerContrast": {
+        "test": {
+            "UNIT1": 29
+        },
+        "train": {
+            "UNIT1": 225
+        },
+        "validation": {
+            "UNIT1": 29
+        }
+    },
+    "numTestImagesTotal": 29,
+    "numTestSubjects": 29,
+    "numTrainingImagesTotal": 225,
+    "numTrainingSubjects": 225,
+    "numValidationImagesTotal": 29,
+    "numValidationSubjects": 29,
+    "reference": "BIDS: Brain Imaging Data Structure",
+    "seed": 50,
+    "tensorImageSize": "3D",
+    "test": [
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C020/anat/sub-C020_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C020/anat/sub-C020_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C030/anat/sub-C030_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C030/anat/sub-C030_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C031/anat/sub-C031_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C031/anat/sub-C031_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C050/anat/sub-C050_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C050/anat/sub-C050_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C053/anat/sub-C053_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C053/anat/sub-C053_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C057/anat/sub-C057_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C057/anat/sub-C057_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C063/anat/sub-C063_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C063/anat/sub-C063_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C067/anat/sub-C067_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C067/anat/sub-C067_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C079/anat/sub-C079_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C079/anat/sub-C079_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C083/anat/sub-C083_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C083/anat/sub-C083_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P007/anat/sub-P007_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P007/anat/sub-P007_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P010/anat/sub-P010_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P010/anat/sub-P010_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P011/anat/sub-P011_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P011/anat/sub-P011_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P012/anat/sub-P012_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P012/anat/sub-P012_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P017/anat/sub-P017_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P017/anat/sub-P017_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P034/anat/sub-P034_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P034/anat/sub-P034_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P035/anat/sub-P035_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P035/anat/sub-P035_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P061/anat/sub-P061_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P061/anat/sub-P061_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P077/anat/sub-P077_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P077/anat/sub-P077_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P079/anat/sub-P079_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P079/anat/sub-P079_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P104/anat/sub-P104_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P104/anat/sub-P104_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P106/anat/sub-P106_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P106/anat/sub-P106_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P121/anat/sub-P121_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P121/anat/sub-P121_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P134/anat/sub-P134_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P134/anat/sub-P134_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P144/anat/sub-P144_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P144/anat/sub-P144_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P157/anat/sub-P157_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P157/anat/sub-P157_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P163/anat/sub-P163_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P163/anat/sub-P163_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P190/anat/sub-P190_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P190/anat/sub-P190_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P250/anat/sub-P250_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P250/anat/sub-P250_UNIT1_label-SC_seg.nii.gz"
+        }
+    ],
+    "train": [
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C001/anat/sub-C001_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C001/anat/sub-C001_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C002/anat/sub-C002_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C002/anat/sub-C002_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C003/anat/sub-C003_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C003/anat/sub-C003_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C005/anat/sub-C005_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C005/anat/sub-C005_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C006/anat/sub-C006_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C006/anat/sub-C006_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C007/anat/sub-C007_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C007/anat/sub-C007_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C008/anat/sub-C008_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C008/anat/sub-C008_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C009/anat/sub-C009_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C009/anat/sub-C009_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C010/anat/sub-C010_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C010/anat/sub-C010_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C011/anat/sub-C011_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C011/anat/sub-C011_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C012/anat/sub-C012_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C012/anat/sub-C012_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C013/anat/sub-C013_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C013/anat/sub-C013_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C014/anat/sub-C014_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C014/anat/sub-C014_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C015/anat/sub-C015_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C015/anat/sub-C015_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C016/anat/sub-C016_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C016/anat/sub-C016_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C018/anat/sub-C018_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C018/anat/sub-C018_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C019/anat/sub-C019_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C019/anat/sub-C019_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C021/anat/sub-C021_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C021/anat/sub-C021_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C022/anat/sub-C022_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C022/anat/sub-C022_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C023/anat/sub-C023_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C023/anat/sub-C023_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C024/anat/sub-C024_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C024/anat/sub-C024_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C025/anat/sub-C025_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C025/anat/sub-C025_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C026/anat/sub-C026_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C026/anat/sub-C026_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C027/anat/sub-C027_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C027/anat/sub-C027_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C029/anat/sub-C029_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C029/anat/sub-C029_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C032/anat/sub-C032_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C032/anat/sub-C032_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C033/anat/sub-C033_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C033/anat/sub-C033_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C034/anat/sub-C034_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C034/anat/sub-C034_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C036/anat/sub-C036_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C036/anat/sub-C036_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C037/anat/sub-C037_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C037/anat/sub-C037_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C039/anat/sub-C039_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C039/anat/sub-C039_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C041/anat/sub-C041_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C041/anat/sub-C041_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C043/anat/sub-C043_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C043/anat/sub-C043_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C044/anat/sub-C044_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C044/anat/sub-C044_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C045/anat/sub-C045_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C045/anat/sub-C045_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C046/anat/sub-C046_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C046/anat/sub-C046_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C048/anat/sub-C048_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C048/anat/sub-C048_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C051/anat/sub-C051_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C051/anat/sub-C051_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C052/anat/sub-C052_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C052/anat/sub-C052_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C054/anat/sub-C054_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C054/anat/sub-C054_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C055/anat/sub-C055_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C055/anat/sub-C055_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C056/anat/sub-C056_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C056/anat/sub-C056_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C058/anat/sub-C058_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C058/anat/sub-C058_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C059/anat/sub-C059_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C059/anat/sub-C059_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C060/anat/sub-C060_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C060/anat/sub-C060_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C061/anat/sub-C061_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C061/anat/sub-C061_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C062/anat/sub-C062_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C062/anat/sub-C062_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C064/anat/sub-C064_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C064/anat/sub-C064_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C068/anat/sub-C068_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C068/anat/sub-C068_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C069/anat/sub-C069_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C069/anat/sub-C069_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C070/anat/sub-C070_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C070/anat/sub-C070_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C071/anat/sub-C071_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C071/anat/sub-C071_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C074/anat/sub-C074_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C074/anat/sub-C074_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C075/anat/sub-C075_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C075/anat/sub-C075_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C077/anat/sub-C077_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C077/anat/sub-C077_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C078/anat/sub-C078_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C078/anat/sub-C078_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C081/anat/sub-C081_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C081/anat/sub-C081_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C082/anat/sub-C082_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C082/anat/sub-C082_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C084/anat/sub-C084_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C084/anat/sub-C084_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C085/anat/sub-C085_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C085/anat/sub-C085_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C086/anat/sub-C086_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C086/anat/sub-C086_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C087/anat/sub-C087_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C087/anat/sub-C087_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C088/anat/sub-C088_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C088/anat/sub-C088_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C089/anat/sub-C089_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C089/anat/sub-C089_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C090/anat/sub-C090_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C090/anat/sub-C090_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C091/anat/sub-C091_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C091/anat/sub-C091_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C092/anat/sub-C092_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C092/anat/sub-C092_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C093/anat/sub-C093_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C093/anat/sub-C093_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C094/anat/sub-C094_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C094/anat/sub-C094_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C095/anat/sub-C095_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C095/anat/sub-C095_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C096/anat/sub-C096_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C096/anat/sub-C096_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C098/anat/sub-C098_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C098/anat/sub-C098_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C099/anat/sub-C099_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C099/anat/sub-C099_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C100/anat/sub-C100_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C100/anat/sub-C100_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C101/anat/sub-C101_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C101/anat/sub-C101_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C102/anat/sub-C102_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C102/anat/sub-C102_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C103/anat/sub-C103_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C103/anat/sub-C103_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C105/anat/sub-C105_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C105/anat/sub-C105_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C106/anat/sub-C106_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C106/anat/sub-C106_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C107/anat/sub-C107_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C107/anat/sub-C107_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C108/anat/sub-C108_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C108/anat/sub-C108_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P001/anat/sub-P001_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P001/anat/sub-P001_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P002/anat/sub-P002_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P002/anat/sub-P002_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P003/anat/sub-P003_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P003/anat/sub-P003_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P004/anat/sub-P004_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P004/anat/sub-P004_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P005/anat/sub-P005_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P005/anat/sub-P005_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P006/anat/sub-P006_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P006/anat/sub-P006_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P013/anat/sub-P013_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P013/anat/sub-P013_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P014/anat/sub-P014_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P014/anat/sub-P014_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P015/anat/sub-P015_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P015/anat/sub-P015_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P016/anat/sub-P016_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P016/anat/sub-P016_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P019/anat/sub-P019_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P019/anat/sub-P019_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P022/anat/sub-P022_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P022/anat/sub-P022_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P024/anat/sub-P024_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P024/anat/sub-P024_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P025/anat/sub-P025_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P025/anat/sub-P025_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P026/anat/sub-P026_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P026/anat/sub-P026_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P027/anat/sub-P027_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P027/anat/sub-P027_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P028/anat/sub-P028_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P028/anat/sub-P028_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P029/anat/sub-P029_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P029/anat/sub-P029_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P030/anat/sub-P030_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P030/anat/sub-P030_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P031/anat/sub-P031_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P031/anat/sub-P031_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P033/anat/sub-P033_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P033/anat/sub-P033_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P037/anat/sub-P037_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P037/anat/sub-P037_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P038/anat/sub-P038_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P038/anat/sub-P038_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P039/anat/sub-P039_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P039/anat/sub-P039_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P040/anat/sub-P040_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P040/anat/sub-P040_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P041/anat/sub-P041_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P041/anat/sub-P041_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P042/anat/sub-P042_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P042/anat/sub-P042_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P043/anat/sub-P043_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P043/anat/sub-P043_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P044/anat/sub-P044_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P044/anat/sub-P044_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P047/anat/sub-P047_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P047/anat/sub-P047_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P048/anat/sub-P048_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P048/anat/sub-P048_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P049/anat/sub-P049_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P049/anat/sub-P049_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P051/anat/sub-P051_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P051/anat/sub-P051_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P052/anat/sub-P052_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P052/anat/sub-P052_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P054/anat/sub-P054_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P054/anat/sub-P054_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P056/anat/sub-P056_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P056/anat/sub-P056_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P057/anat/sub-P057_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P057/anat/sub-P057_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P058/anat/sub-P058_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P058/anat/sub-P058_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P059/anat/sub-P059_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P059/anat/sub-P059_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P062/anat/sub-P062_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P062/anat/sub-P062_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P063/anat/sub-P063_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P063/anat/sub-P063_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P065/anat/sub-P065_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P065/anat/sub-P065_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P067/anat/sub-P067_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P067/anat/sub-P067_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P068/anat/sub-P068_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P068/anat/sub-P068_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P069/anat/sub-P069_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P069/anat/sub-P069_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P070/anat/sub-P070_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P070/anat/sub-P070_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P071/anat/sub-P071_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P071/anat/sub-P071_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P072/anat/sub-P072_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P072/anat/sub-P072_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P073/anat/sub-P073_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P073/anat/sub-P073_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P074/anat/sub-P074_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P074/anat/sub-P074_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P075/anat/sub-P075_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P075/anat/sub-P075_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P076/anat/sub-P076_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P076/anat/sub-P076_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P078/anat/sub-P078_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P078/anat/sub-P078_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P081/anat/sub-P081_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P081/anat/sub-P081_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P082/anat/sub-P082_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P082/anat/sub-P082_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P083/anat/sub-P083_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P083/anat/sub-P083_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P084/anat/sub-P084_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P084/anat/sub-P084_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P085/anat/sub-P085_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P085/anat/sub-P085_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P086/anat/sub-P086_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P086/anat/sub-P086_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P087/anat/sub-P087_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P087/anat/sub-P087_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P088/anat/sub-P088_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P088/anat/sub-P088_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P089/anat/sub-P089_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P089/anat/sub-P089_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P091/anat/sub-P091_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P091/anat/sub-P091_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P092/anat/sub-P092_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P092/anat/sub-P092_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P094/anat/sub-P094_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P094/anat/sub-P094_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P095/anat/sub-P095_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P095/anat/sub-P095_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P096/anat/sub-P096_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P096/anat/sub-P096_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P098/anat/sub-P098_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P098/anat/sub-P098_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P099/anat/sub-P099_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P099/anat/sub-P099_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P100/anat/sub-P100_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P100/anat/sub-P100_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P103/anat/sub-P103_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P103/anat/sub-P103_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P105/anat/sub-P105_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P105/anat/sub-P105_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P108/anat/sub-P108_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P108/anat/sub-P108_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P110/anat/sub-P110_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P110/anat/sub-P110_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P111/anat/sub-P111_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P111/anat/sub-P111_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P112/anat/sub-P112_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P112/anat/sub-P112_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P113/anat/sub-P113_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P113/anat/sub-P113_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P114/anat/sub-P114_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P114/anat/sub-P114_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P115/anat/sub-P115_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P115/anat/sub-P115_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P116/anat/sub-P116_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P116/anat/sub-P116_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P118/anat/sub-P118_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P118/anat/sub-P118_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P119/anat/sub-P119_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P119/anat/sub-P119_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P120/anat/sub-P120_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P120/anat/sub-P120_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P122/anat/sub-P122_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P122/anat/sub-P122_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P123/anat/sub-P123_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P123/anat/sub-P123_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P124/anat/sub-P124_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P124/anat/sub-P124_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P125/anat/sub-P125_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P125/anat/sub-P125_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P126/anat/sub-P126_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P126/anat/sub-P126_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P129/anat/sub-P129_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P129/anat/sub-P129_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P130/anat/sub-P130_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P130/anat/sub-P130_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P132/anat/sub-P132_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P132/anat/sub-P132_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P133/anat/sub-P133_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P133/anat/sub-P133_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P135/anat/sub-P135_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P135/anat/sub-P135_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P136/anat/sub-P136_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P136/anat/sub-P136_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P137/anat/sub-P137_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P137/anat/sub-P137_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P139/anat/sub-P139_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P139/anat/sub-P139_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P140/anat/sub-P140_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P140/anat/sub-P140_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P141/anat/sub-P141_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P141/anat/sub-P141_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P142/anat/sub-P142_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P142/anat/sub-P142_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P145/anat/sub-P145_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P145/anat/sub-P145_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P146/anat/sub-P146_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P146/anat/sub-P146_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P147/anat/sub-P147_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P147/anat/sub-P147_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P148/anat/sub-P148_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P148/anat/sub-P148_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P149/anat/sub-P149_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P149/anat/sub-P149_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P151/anat/sub-P151_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P151/anat/sub-P151_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P153/anat/sub-P153_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P153/anat/sub-P153_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P156/anat/sub-P156_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P156/anat/sub-P156_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P159/anat/sub-P159_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P159/anat/sub-P159_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P160/anat/sub-P160_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P160/anat/sub-P160_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P161/anat/sub-P161_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P161/anat/sub-P161_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P162/anat/sub-P162_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P162/anat/sub-P162_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P165/anat/sub-P165_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P165/anat/sub-P165_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P167/anat/sub-P167_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P167/anat/sub-P167_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P169/anat/sub-P169_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P169/anat/sub-P169_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P170/anat/sub-P170_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P170/anat/sub-P170_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P172/anat/sub-P172_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P172/anat/sub-P172_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P173/anat/sub-P173_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P173/anat/sub-P173_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P174/anat/sub-P174_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P174/anat/sub-P174_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P175/anat/sub-P175_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P175/anat/sub-P175_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P176/anat/sub-P176_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P176/anat/sub-P176_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P178/anat/sub-P178_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P178/anat/sub-P178_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P180/anat/sub-P180_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P180/anat/sub-P180_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P181/anat/sub-P181_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P181/anat/sub-P181_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P182/anat/sub-P182_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P182/anat/sub-P182_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P183/anat/sub-P183_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P183/anat/sub-P183_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P184/anat/sub-P184_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P184/anat/sub-P184_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P185/anat/sub-P185_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P185/anat/sub-P185_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P187/anat/sub-P187_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P187/anat/sub-P187_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P188/anat/sub-P188_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P188/anat/sub-P188_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P189/anat/sub-P189_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P189/anat/sub-P189_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P191/anat/sub-P191_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P191/anat/sub-P191_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P192/anat/sub-P192_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P192/anat/sub-P192_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P193/anat/sub-P193_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P193/anat/sub-P193_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P194/anat/sub-P194_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P194/anat/sub-P194_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P197/anat/sub-P197_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P197/anat/sub-P197_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P198/anat/sub-P198_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P198/anat/sub-P198_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P199/anat/sub-P199_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P199/anat/sub-P199_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P200/anat/sub-P200_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P200/anat/sub-P200_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P241/anat/sub-P241_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P241/anat/sub-P241_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P242/anat/sub-P242_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P242/anat/sub-P242_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P243/anat/sub-P243_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P243/anat/sub-P243_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P244/anat/sub-P244_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P244/anat/sub-P244_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P246/anat/sub-P246_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P246/anat/sub-P246_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P249/anat/sub-P249_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P249/anat/sub-P249_UNIT1_label-SC_seg.nii.gz"
+        }
+    ],
+    "validation": [
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C028/anat/sub-C028_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C028/anat/sub-C028_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C035/anat/sub-C035_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C035/anat/sub-C035_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C040/anat/sub-C040_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C040/anat/sub-C040_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C042/anat/sub-C042_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C042/anat/sub-C042_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C047/anat/sub-C047_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C047/anat/sub-C047_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C049/anat/sub-C049_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C049/anat/sub-C049_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C065/anat/sub-C065_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C065/anat/sub-C065_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C066/anat/sub-C066_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C066/anat/sub-C066_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C072/anat/sub-C072_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C072/anat/sub-C072_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C073/anat/sub-C073_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C073/anat/sub-C073_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C080/anat/sub-C080_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C080/anat/sub-C080_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-C097/anat/sub-C097_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-C097/anat/sub-C097_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P021/anat/sub-P021_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P021/anat/sub-P021_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P023/anat/sub-P023_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P023/anat/sub-P023_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P036/anat/sub-P036_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P036/anat/sub-P036_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P045/anat/sub-P045_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P045/anat/sub-P045_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P046/anat/sub-P046_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P046/anat/sub-P046_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P050/anat/sub-P050_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P050/anat/sub-P050_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P053/anat/sub-P053_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P053/anat/sub-P053_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P055/anat/sub-P055_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P055/anat/sub-P055_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P066/anat/sub-P066_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P066/anat/sub-P066_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P080/anat/sub-P080_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P080/anat/sub-P080_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P097/anat/sub-P097_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P097/anat/sub-P097_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P101/anat/sub-P101_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P101/anat/sub-P101_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P102/anat/sub-P102_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P102/anat/sub-P102_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P109/anat/sub-P109_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P109/anat/sub-P109_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P117/anat/sub-P117_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P117/anat/sub-P117_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P138/anat/sub-P138_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P138/anat/sub-P138_UNIT1_label-SC_seg.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/basel-mp2rage/sub-P179/anat/sub-P179_UNIT1.nii.gz",
+            "label": "/home/quentinr/data/basel-mp2rage/derivatives/labels/sub-P179/anat/sub-P179_UNIT1_label-SC_seg.nii.gz"
+        }
+    ]
+}

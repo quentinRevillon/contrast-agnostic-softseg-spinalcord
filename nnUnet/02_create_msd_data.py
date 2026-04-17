@@ -23,13 +23,30 @@ pd.set_option('display.max_colwidth', None)
 # an updated BIDS format (e.g., data-multi-subject) and others are in the process of getting updated
 # This dict is used to store the names of the folders and corresponding suffixes for each dataset
 # convention --> "dataset_name (as per git-annex)": ["labels_folder", "labels_suffix"]
+# FILESEG_SUFFIXES = {
+#     "basel-mp2rage": ["labels_softseg_bin", "desc-softseg_label-SC_seg"],
+#     "canproco": ["labels", "seg-manual"],
+#     "data-multi-subject": ["labels_softseg_bin", "desc-softseg_label-SC_seg"],
+#     "dcm-brno": ["labels", "seg"],
+#     "dcm-zurich": ["labels", "label-SC_mask-manual"],
+#     "dcm-zurich-lesions": ["labels", "label-SC_mask-manual"],
+#     "dcm-zurich-lesions-20231115": ["labels", "label-SC_mask-manual"],
+#     "lumbar-epfl": ["labels", "seg-manual"],
+#     "lumbar-vanderbilt": ["labels", "label-SC_seg"],
+#     "sci-colorado": ["labels", "seg-manual"],
+#     "sci-paris": ["labels", "seg-manual"],
+#     "sci-zurich": ["labels", "seg-manual"],
+#     "sct-testing-large": ["labels", "seg-manual"],
+#     "site_006": ["labels", "label-SC_seg"],     # from PRAXIS SCI dataset; Montreal site
+#     "site_007": ["labels", "label-SC_seg"],     # from PRAXIS SCI dataset; Vancouver site
+# }
 FILESEG_SUFFIXES = {
-    "basel-mp2rage": ["labels_softseg_bin", "desc-softseg_label-SC_seg"],
+    "basel-mp2rage": ["labels", "label-SC_seg"],
     "canproco": ["labels", "seg-manual"],
     "data-multi-subject": ["labels_softseg_bin", "desc-softseg_label-SC_seg"],
     "dcm-brno": ["labels", "seg"],
-    "dcm-zurich": ["labels", "label-SC_mask-manual"],
-    "dcm-zurich-lesions": ["labels", "label-SC_mask-manual"],
+    "dcm-zurich": ["labels", "label-SC_seg"],
+    "dcm-zurich-lesions": ["labels", "label-SC_seg"],
     "dcm-zurich-lesions-20231115": ["labels", "label-SC_mask-manual"],
     "lumbar-epfl": ["labels", "seg-manual"],
     "lumbar-vanderbilt": ["labels", "label-SC_seg"],
@@ -40,6 +57,7 @@ FILESEG_SUFFIXES = {
     "site_006": ["labels", "label-SC_seg"],     # from PRAXIS SCI dataset; Montreal site
     "site_007": ["labels", "label-SC_seg"],     # from PRAXIS SCI dataset; Vancouver site
 }
+#nih-ms-mp2rage manquant
 
 # add abbreviations of pathologies in sct-testing-large and other datasets to be included in the aggregated dataset
 # NOTE: only subjects with these pathologies are selected from sct-testing-large dataset (info obtained from participants.tsv)

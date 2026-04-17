@@ -1,0 +1,128 @@
+{
+    "contrasts": [
+        "T2w"
+    ],
+    "dataset": "lumbar-epfl",
+    "datasetVersions": {
+        "lumbar-epfl": "git-master-8639e25848723b62018bc553a174f294cec5978a"
+    },
+    "description": "Datasets for contrast-agnostic spinal cord segmentation",
+    "labels": {
+        "0": "background",
+        "1": "sc-seg"
+    },
+    "license": "MIT",
+    "modality": {
+        "0": "MRI"
+    },
+    "numImagesPerContrast": {
+        "test": {
+            "T2w": 3
+        },
+        "train": {
+            "T2w": 16
+        },
+        "validation": {
+            "T2w": 2
+        }
+    },
+    "numTestImagesTotal": 3,
+    "numTestSubjects": 3,
+    "numTrainingImagesTotal": 16,
+    "numTrainingSubjects": 16,
+    "numValidationImagesTotal": 2,
+    "numValidationSubjects": 2,
+    "reference": "BIDS: Brain Imaging Data Structure",
+    "seed": 50,
+    "tensorImageSize": "3D",
+    "test": [
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-01/anat/sub-01_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-01/anat/sub-01_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-15/anat/sub-15_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-15/anat/sub-15_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-16/anat/sub-16_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-16/anat/sub-16_T2w_seg-manual.nii.gz"
+        }
+    ],
+    "train": [
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-02/anat/sub-02_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-02/anat/sub-02_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-03/anat/sub-03_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-03/anat/sub-03_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-04/anat/sub-04_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-04/anat/sub-04_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-05/anat/sub-05_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-05/anat/sub-05_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-06/anat/sub-06_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-06/anat/sub-06_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-08/anat/sub-08_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-08/anat/sub-08_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-09/anat/sub-09_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-09/anat/sub-09_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-10/anat/sub-10_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-10/anat/sub-10_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-11/anat/sub-11_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-11/anat/sub-11_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-12/anat/sub-12_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-12/anat/sub-12_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-13/anat/sub-13_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-13/anat/sub-13_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-14/anat/sub-14_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-14/anat/sub-14_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-17/anat/sub-17_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-17/anat/sub-17_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-18/anat/sub-18_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-18/anat/sub-18_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-19/anat/sub-19_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-19/anat/sub-19_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-21/anat/sub-21_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-21/anat/sub-21_T2w_seg-manual.nii.gz"
+        }
+    ],
+    "validation": [
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-07/anat/sub-07_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-07/anat/sub-07_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/lumbar-epfl/sub-20/anat/sub-20_T2w.nii.gz",
+            "label": "/home/quentinr/data/lumbar-epfl/derivatives/labels/sub-20/anat/sub-20_T2w_seg-manual.nii.gz"
+        }
+    ]
+}

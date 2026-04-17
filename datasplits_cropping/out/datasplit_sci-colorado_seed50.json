@@ -1,0 +1,364 @@
+{
+    "contrasts": [
+        "T2w"
+    ],
+    "dataset": "sci-colorado",
+    "datasetVersions": {
+        "sci-colorado": "git-master-c9da263820f4903bb06dbb8f31b1e65fcbb7a79e"
+    },
+    "description": "Datasets for contrast-agnostic spinal cord segmentation",
+    "labels": {
+        "0": "background",
+        "1": "sc-seg"
+    },
+    "license": "MIT",
+    "modality": {
+        "0": "MRI"
+    },
+    "numImagesPerContrast": {
+        "test": {
+            "T2w": 8
+        },
+        "train": {
+            "T2w": 64
+        },
+        "validation": {
+            "T2w": 8
+        }
+    },
+    "numTestImagesTotal": 8,
+    "numTestSubjects": 8,
+    "numTrainingImagesTotal": 64,
+    "numTrainingSubjects": 64,
+    "numValidationImagesTotal": 8,
+    "numValidationSubjects": 8,
+    "reference": "BIDS: Brain Imaging Data Structure",
+    "seed": 50,
+    "tensorImageSize": "3D",
+    "test": [
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5445/anat/sub-5445_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5445/anat/sub-5445_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5505/anat/sub-5505_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5505/anat/sub-5505_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5828/anat/sub-5828_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5828/anat/sub-5828_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6004/anat/sub-6004_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6004/anat/sub-6004_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6005/anat/sub-6005_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6005/anat/sub-6005_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6162/anat/sub-6162_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6162/anat/sub-6162_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6184/anat/sub-6184_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6184/anat/sub-6184_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6549/anat/sub-6549_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6549/anat/sub-6549_T2w_seg-manual.nii.gz"
+        }
+    ],
+    "train": [
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5416/anat/sub-5416_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5416/anat/sub-5416_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5425/anat/sub-5425_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5425/anat/sub-5425_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5471/anat/sub-5471_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5471/anat/sub-5471_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5493/anat/sub-5493_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5493/anat/sub-5493_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5512/anat/sub-5512_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5512/anat/sub-5512_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5543/anat/sub-5543_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5543/anat/sub-5543_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5546/anat/sub-5546_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5546/anat/sub-5546_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5554/anat/sub-5554_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5554/anat/sub-5554_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5556/anat/sub-5556_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5556/anat/sub-5556_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5584/anat/sub-5584_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5584/anat/sub-5584_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5585/anat/sub-5585_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5585/anat/sub-5585_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5586/anat/sub-5586_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5586/anat/sub-5586_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5601/anat/sub-5601_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5601/anat/sub-5601_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5602/anat/sub-5602_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5602/anat/sub-5602_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5626/anat/sub-5626_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5626/anat/sub-5626_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5629/anat/sub-5629_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5629/anat/sub-5629_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5636/anat/sub-5636_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5636/anat/sub-5636_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5656/anat/sub-5656_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5656/anat/sub-5656_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5660/anat/sub-5660_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5660/anat/sub-5660_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5692/anat/sub-5692_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5692/anat/sub-5692_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5724/anat/sub-5724_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5724/anat/sub-5724_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5739/anat/sub-5739_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5739/anat/sub-5739_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5740/anat/sub-5740_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5740/anat/sub-5740_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5755/anat/sub-5755_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5755/anat/sub-5755_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5787/anat/sub-5787_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5787/anat/sub-5787_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5844/anat/sub-5844_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5844/anat/sub-5844_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5854/anat/sub-5854_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5854/anat/sub-5854_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5907/anat/sub-5907_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5907/anat/sub-5907_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5910/anat/sub-5910_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5910/anat/sub-5910_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5939/anat/sub-5939_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5939/anat/sub-5939_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5941/anat/sub-5941_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5941/anat/sub-5941_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6002/anat/sub-6002_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6002/anat/sub-6002_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6013/anat/sub-6013_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6013/anat/sub-6013_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6025/anat/sub-6025_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6025/anat/sub-6025_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6026/anat/sub-6026_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6026/anat/sub-6026_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6036/anat/sub-6036_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6036/anat/sub-6036_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6092/anat/sub-6092_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6092/anat/sub-6092_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6099/anat/sub-6099_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6099/anat/sub-6099_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6114/anat/sub-6114_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6114/anat/sub-6114_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6155/anat/sub-6155_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6155/anat/sub-6155_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6166/anat/sub-6166_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6166/anat/sub-6166_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6186/anat/sub-6186_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6186/anat/sub-6186_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6198/anat/sub-6198_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6198/anat/sub-6198_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6255/anat/sub-6255_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6255/anat/sub-6255_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6256/anat/sub-6256_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6256/anat/sub-6256_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6257/anat/sub-6257_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6257/anat/sub-6257_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6299/anat/sub-6299_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6299/anat/sub-6299_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6329/anat/sub-6329_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6329/anat/sub-6329_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6363/anat/sub-6363_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6363/anat/sub-6363_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6379/anat/sub-6379_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6379/anat/sub-6379_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6394/anat/sub-6394_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6394/anat/sub-6394_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6418/anat/sub-6418_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6418/anat/sub-6418_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6422/anat/sub-6422_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6422/anat/sub-6422_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6442/anat/sub-6442_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6442/anat/sub-6442_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6444/anat/sub-6444_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6444/anat/sub-6444_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6449/anat/sub-6449_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6449/anat/sub-6449_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6461/anat/sub-6461_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6461/anat/sub-6461_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6462/anat/sub-6462_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6462/anat/sub-6462_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6464/anat/sub-6464_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6464/anat/sub-6464_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6475/anat/sub-6475_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6475/anat/sub-6475_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6505/anat/sub-6505_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6505/anat/sub-6505_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6550/anat/sub-6550_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6550/anat/sub-6550_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6564/anat/sub-6564_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6564/anat/sub-6564_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6574/anat/sub-6574_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6574/anat/sub-6574_T2w_seg-manual.nii.gz"
+        }
+    ],
+    "validation": [
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5575/anat/sub-5575_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5575/anat/sub-5575_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5627/anat/sub-5627_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5627/anat/sub-5627_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5653/anat/sub-5653_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5653/anat/sub-5653_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5694/anat/sub-5694_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5694/anat/sub-5694_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-5725/anat/sub-5725_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-5725/anat/sub-5725_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6143/anat/sub-6143_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6143/anat/sub-6143_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6483/anat/sub-6483_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6483/anat/sub-6483_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-colorado/sub-6577/anat/sub-6577_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-colorado/derivatives/labels/sub-6577/anat/sub-6577_T2w_seg-manual.nii.gz"
+        }
+    ]
+}

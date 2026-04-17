@@ -1,0 +1,572 @@
+{
+    "contrasts": [
+        "T2w"
+    ],
+    "dataset": "sci-zurich",
+    "datasetVersions": {
+        "sci-zurich": "git-master-c6b899adacdefd969f0afe6bdee9a419c0cace7a"
+    },
+    "description": "Datasets for contrast-agnostic spinal cord segmentation",
+    "labels": {
+        "0": "background",
+        "1": "sc-seg"
+    },
+    "license": "MIT",
+    "modality": {
+        "0": "MRI"
+    },
+    "numImagesPerContrast": {
+        "test": {
+            "T2w": 19
+        },
+        "train": {
+            "T2w": 101
+        },
+        "validation": {
+            "T2w": 12
+        }
+    },
+    "numTestImagesTotal": 19,
+    "numTestSubjects": 8,
+    "numTrainingImagesTotal": 101,
+    "numTrainingSubjects": 62,
+    "numValidationImagesTotal": 12,
+    "numValidationSubjects": 8,
+    "reference": "BIDS: Brain Imaging Data Structure",
+    "seed": 50,
+    "tensorImageSize": "3D",
+    "test": [
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh05/ses-01/anat/sub-zh05_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh05/ses-01/anat/sub-zh05_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh05/ses-01/anat/sub-zh05_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh05/ses-01/anat/sub-zh05_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh12/ses-03/anat/sub-zh12_ses-03_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh12/ses-03/anat/sub-zh12_ses-03_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh12/ses-03/anat/sub-zh12_ses-03_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh12/ses-03/anat/sub-zh12_ses-03_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh12/ses-01/anat/sub-zh12_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh12/ses-01/anat/sub-zh12_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh12/ses-01/anat/sub-zh12_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh12/ses-01/anat/sub-zh12_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh12/ses-02/anat/sub-zh12_ses-02_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh12/ses-02/anat/sub-zh12_ses-02_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh12/ses-02/anat/sub-zh12_ses-02_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh12/ses-02/anat/sub-zh12_ses-02_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh37/ses-01/anat/sub-zh37_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh37/ses-01/anat/sub-zh37_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh43/ses-01/anat/sub-zh43_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh43/ses-01/anat/sub-zh43_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh43/ses-01/anat/sub-zh43_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh43/ses-01/anat/sub-zh43_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh47/ses-01/anat/sub-zh47_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh47/ses-01/anat/sub-zh47_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh47/ses-01/anat/sub-zh47_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh47/ses-01/anat/sub-zh47_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh55/ses-01/anat/sub-zh55_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh55/ses-01/anat/sub-zh55_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh55/ses-01/anat/sub-zh55_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh55/ses-01/anat/sub-zh55_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh57/ses-01/anat/sub-zh57_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh57/ses-01/anat/sub-zh57_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh57/ses-01/anat/sub-zh57_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh57/ses-01/anat/sub-zh57_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh93/ses-01/anat/sub-zh93_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh93/ses-01/anat/sub-zh93_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh93/ses-01/anat/sub-zh93_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh93/ses-01/anat/sub-zh93_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        }
+    ],
+    "train": [
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh01/ses-03/anat/sub-zh01_ses-03_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh01/ses-03/anat/sub-zh01_ses-03_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh01/ses-03/anat/sub-zh01_ses-03_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh01/ses-03/anat/sub-zh01_ses-03_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh01/ses-01/anat/sub-zh01_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh01/ses-01/anat/sub-zh01_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh01/ses-01/anat/sub-zh01_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh01/ses-01/anat/sub-zh01_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh01/ses-02/anat/sub-zh01_ses-02_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh01/ses-02/anat/sub-zh01_ses-02_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh01/ses-02/anat/sub-zh01_ses-02_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh01/ses-02/anat/sub-zh01_ses-02_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh02/ses-01/anat/sub-zh02_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh02/ses-01/anat/sub-zh02_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh03/ses-01/anat/sub-zh03_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh03/ses-01/anat/sub-zh03_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh03/ses-01/anat/sub-zh03_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh03/ses-01/anat/sub-zh03_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh04/ses-01/anat/sub-zh04_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh04/ses-01/anat/sub-zh04_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh04/ses-02/anat/sub-zh04_ses-02_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh04/ses-02/anat/sub-zh04_ses-02_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh06/ses-01/anat/sub-zh06_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh06/ses-01/anat/sub-zh06_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh06/ses-02/anat/sub-zh06_ses-02_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh06/ses-02/anat/sub-zh06_ses-02_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh07/ses-01/anat/sub-zh07_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh07/ses-01/anat/sub-zh07_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh09/ses-01/anat/sub-zh09_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh09/ses-01/anat/sub-zh09_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh11/ses-01/anat/sub-zh11_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh11/ses-01/anat/sub-zh11_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh11/ses-02/anat/sub-zh11_ses-02_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh11/ses-02/anat/sub-zh11_ses-02_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh15/ses-01/anat/sub-zh15_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh15/ses-01/anat/sub-zh15_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh15/ses-01/anat/sub-zh15_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh15/ses-01/anat/sub-zh15_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh16/ses-01/anat/sub-zh16_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh16/ses-01/anat/sub-zh16_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh16/ses-01/anat/sub-zh16_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh16/ses-01/anat/sub-zh16_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh16/ses-02/anat/sub-zh16_ses-02_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh16/ses-02/anat/sub-zh16_ses-02_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh16/ses-02/anat/sub-zh16_ses-02_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh16/ses-02/anat/sub-zh16_ses-02_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh18/ses-01/anat/sub-zh18_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh18/ses-01/anat/sub-zh18_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh18/ses-01/anat/sub-zh18_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh18/ses-01/anat/sub-zh18_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh19/ses-01/anat/sub-zh19_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh19/ses-01/anat/sub-zh19_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh20/ses-01/anat/sub-zh20_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh20/ses-01/anat/sub-zh20_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh21/ses-01/anat/sub-zh21_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh21/ses-01/anat/sub-zh21_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh21/ses-02/anat/sub-zh21_ses-02_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh21/ses-02/anat/sub-zh21_ses-02_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh22/ses-01/anat/sub-zh22_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh22/ses-01/anat/sub-zh22_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh22/ses-02/anat/sub-zh22_ses-02_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh22/ses-02/anat/sub-zh22_ses-02_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh23/ses-01/anat/sub-zh23_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh23/ses-01/anat/sub-zh23_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh23/ses-01/anat/sub-zh23_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh23/ses-01/anat/sub-zh23_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh24/ses-01/anat/sub-zh24_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh24/ses-01/anat/sub-zh24_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh25/ses-01/anat/sub-zh25_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh25/ses-01/anat/sub-zh25_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh25/ses-01/anat/sub-zh25_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh25/ses-01/anat/sub-zh25_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh27/ses-01/anat/sub-zh27_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh27/ses-01/anat/sub-zh27_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh29/ses-01/anat/sub-zh29_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh29/ses-01/anat/sub-zh29_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh30/ses-01/anat/sub-zh30_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh30/ses-01/anat/sub-zh30_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh30/ses-01/anat/sub-zh30_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh30/ses-01/anat/sub-zh30_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh34/ses-01/anat/sub-zh34_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh34/ses-01/anat/sub-zh34_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh34/ses-01/anat/sub-zh34_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh34/ses-01/anat/sub-zh34_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh35/ses-01/anat/sub-zh35_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh35/ses-01/anat/sub-zh35_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh36/ses-01/anat/sub-zh36_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh36/ses-01/anat/sub-zh36_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh39/ses-01/anat/sub-zh39_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh39/ses-01/anat/sub-zh39_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh44/ses-01/anat/sub-zh44_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh44/ses-01/anat/sub-zh44_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh44/ses-01/anat/sub-zh44_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh44/ses-01/anat/sub-zh44_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh45/ses-01/anat/sub-zh45_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh45/ses-01/anat/sub-zh45_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh46/ses-01/anat/sub-zh46_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh46/ses-01/anat/sub-zh46_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh53/ses-01/anat/sub-zh53_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh53/ses-01/anat/sub-zh53_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh53/ses-01/anat/sub-zh53_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh53/ses-01/anat/sub-zh53_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh54/ses-01/anat/sub-zh54_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh54/ses-01/anat/sub-zh54_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh54/ses-01/anat/sub-zh54_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh54/ses-01/anat/sub-zh54_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh56/ses-01/anat/sub-zh56_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh56/ses-01/anat/sub-zh56_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh56/ses-01/anat/sub-zh56_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh56/ses-01/anat/sub-zh56_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh59/ses-01/anat/sub-zh59_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh59/ses-01/anat/sub-zh59_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh60/ses-01/anat/sub-zh60_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh60/ses-01/anat/sub-zh60_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh62/ses-01/anat/sub-zh62_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh62/ses-01/anat/sub-zh62_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh62/ses-01/anat/sub-zh62_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh62/ses-01/anat/sub-zh62_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh63/ses-01/anat/sub-zh63_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh63/ses-01/anat/sub-zh63_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh64/ses-01/anat/sub-zh64_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh64/ses-01/anat/sub-zh64_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh64/ses-01/anat/sub-zh64_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh64/ses-01/anat/sub-zh64_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh65/ses-01/anat/sub-zh65_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh65/ses-01/anat/sub-zh65_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh65/ses-01/anat/sub-zh65_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh65/ses-01/anat/sub-zh65_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh66/ses-01/anat/sub-zh66_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh66/ses-01/anat/sub-zh66_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh67/ses-01/anat/sub-zh67_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh67/ses-01/anat/sub-zh67_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh68/ses-01/anat/sub-zh68_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh68/ses-01/anat/sub-zh68_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh69/ses-01/anat/sub-zh69_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh69/ses-01/anat/sub-zh69_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh70/ses-01/anat/sub-zh70_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh70/ses-01/anat/sub-zh70_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh70/ses-01/anat/sub-zh70_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh70/ses-01/anat/sub-zh70_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh71/ses-01/anat/sub-zh71_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh71/ses-01/anat/sub-zh71_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh71/ses-01/anat/sub-zh71_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh71/ses-01/anat/sub-zh71_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh72/ses-01/anat/sub-zh72_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh72/ses-01/anat/sub-zh72_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh73/ses-01/anat/sub-zh73_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh73/ses-01/anat/sub-zh73_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh74/ses-01/anat/sub-zh74_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh74/ses-01/anat/sub-zh74_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh74/ses-01/anat/sub-zh74_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh74/ses-01/anat/sub-zh74_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh75/ses-01/anat/sub-zh75_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh75/ses-01/anat/sub-zh75_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh75/ses-01/anat/sub-zh75_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh75/ses-01/anat/sub-zh75_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh76/ses-01/anat/sub-zh76_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh76/ses-01/anat/sub-zh76_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh77/ses-01/anat/sub-zh77_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh77/ses-01/anat/sub-zh77_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh77/ses-01/anat/sub-zh77_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh77/ses-01/anat/sub-zh77_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh79/ses-01/anat/sub-zh79_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh79/ses-01/anat/sub-zh79_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh81/ses-01/anat/sub-zh81_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh81/ses-01/anat/sub-zh81_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh82/ses-01/anat/sub-zh82_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh82/ses-01/anat/sub-zh82_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh84/ses-01/anat/sub-zh84_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh84/ses-01/anat/sub-zh84_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh84/ses-01/anat/sub-zh84_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh84/ses-01/anat/sub-zh84_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh86/ses-01/anat/sub-zh86_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh86/ses-01/anat/sub-zh86_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh86/ses-01/anat/sub-zh86_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh86/ses-01/anat/sub-zh86_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh87/ses-01/anat/sub-zh87_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh87/ses-01/anat/sub-zh87_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh88/ses-01/anat/sub-zh88_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh88/ses-01/anat/sub-zh88_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh89/ses-01/anat/sub-zh89_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh89/ses-01/anat/sub-zh89_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh89/ses-01/anat/sub-zh89_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh89/ses-01/anat/sub-zh89_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh91/ses-01/anat/sub-zh91_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh91/ses-01/anat/sub-zh91_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh91/ses-01/anat/sub-zh91_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh91/ses-01/anat/sub-zh91_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh94/ses-01/anat/sub-zh94_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh94/ses-01/anat/sub-zh94_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh95/ses-01/anat/sub-zh95_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh95/ses-01/anat/sub-zh95_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh95/ses-01/anat/sub-zh95_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh95/ses-01/anat/sub-zh95_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh96/ses-01/anat/sub-zh96_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh96/ses-01/anat/sub-zh96_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh96/ses-01/anat/sub-zh96_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh96/ses-01/anat/sub-zh96_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh97/ses-01/anat/sub-zh97_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh97/ses-01/anat/sub-zh97_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh97/ses-01/anat/sub-zh97_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh97/ses-01/anat/sub-zh97_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        }
+    ],
+    "validation": [
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh17/ses-01/anat/sub-zh17_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh17/ses-01/anat/sub-zh17_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh51/ses-01/anat/sub-zh51_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh51/ses-01/anat/sub-zh51_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh61/ses-01/anat/sub-zh61_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh61/ses-01/anat/sub-zh61_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh61/ses-01/anat/sub-zh61_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh61/ses-01/anat/sub-zh61_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh83/ses-01/anat/sub-zh83_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh83/ses-01/anat/sub-zh83_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh85/ses-01/anat/sub-zh85_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh85/ses-01/anat/sub-zh85_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh85/ses-01/anat/sub-zh85_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh85/ses-01/anat/sub-zh85_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh90/ses-01/anat/sub-zh90_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh90/ses-01/anat/sub-zh90_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh92/ses-01/anat/sub-zh92_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh92/ses-01/anat/sub-zh92_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh92/ses-01/anat/sub-zh92_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh92/ses-01/anat/sub-zh92_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh98/ses-01/anat/sub-zh98_ses-01_acq-sag_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh98/ses-01/anat/sub-zh98_ses-01_acq-sag_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-zurich/sub-zh98/ses-01/anat/sub-zh98_ses-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-zurich/derivatives/labels/sub-zh98/ses-01/anat/sub-zh98_ses-01_acq-ax_T2w_seg-manual.nii.gz"
+        }
+    ]
+}
