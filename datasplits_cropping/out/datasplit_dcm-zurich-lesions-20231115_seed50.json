@@ -1,0 +1,212 @@
+{
+    "contrasts": [
+        "T2w"
+    ],
+    "dataset": "dcm-zurich-lesions-20231115",
+    "datasetVersions": {
+        "dcm-zurich-lesions-20231115": "git-master-3f55c854226b39ec6e6aa0eb578a15ba5a7d5ab7"
+    },
+    "description": "Datasets for contrast-agnostic spinal cord segmentation",
+    "labels": {
+        "0": "background",
+        "1": "sc-seg"
+    },
+    "license": "MIT",
+    "modality": {
+        "0": "MRI"
+    },
+    "numImagesPerContrast": {
+        "test": {
+            "T2w": 5
+        },
+        "train": {
+            "T2w": 32
+        },
+        "validation": {
+            "T2w": 5
+        }
+    },
+    "numTestImagesTotal": 5,
+    "numTestSubjects": 5,
+    "numTrainingImagesTotal": 32,
+    "numTrainingSubjects": 32,
+    "numValidationImagesTotal": 5,
+    "numValidationSubjects": 5,
+    "reference": "BIDS: Brain Imaging Data Structure",
+    "seed": 50,
+    "tensorImageSize": "3D",
+    "test": [
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-01/anat/sub-01_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-01/anat/sub-01_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-06/anat/sub-06_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-06/anat/sub-06_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-13/anat/sub-13_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-13/anat/sub-13_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-33/anat/sub-33_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-33/anat/sub-33_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-34/anat/sub-34_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-34/anat/sub-34_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        }
+    ],
+    "train": [
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-02/anat/sub-02_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-02/anat/sub-02_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-04/anat/sub-04_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-04/anat/sub-04_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-05/anat/sub-05_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-05/anat/sub-05_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-08/anat/sub-08_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-08/anat/sub-08_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-09/anat/sub-09_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-09/anat/sub-09_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-10/anat/sub-10_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-10/anat/sub-10_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-11/anat/sub-11_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-11/anat/sub-11_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-12/anat/sub-12_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-12/anat/sub-12_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-14/anat/sub-14_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-14/anat/sub-14_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-16/anat/sub-16_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-16/anat/sub-16_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-17/anat/sub-17_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-17/anat/sub-17_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-18/anat/sub-18_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-18/anat/sub-18_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-19/anat/sub-19_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-19/anat/sub-19_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-21/anat/sub-21_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-21/anat/sub-21_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-22/anat/sub-22_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-22/anat/sub-22_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-23/anat/sub-23_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-23/anat/sub-23_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-24/anat/sub-24_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-24/anat/sub-24_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-25/anat/sub-25_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-25/anat/sub-25_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-26/anat/sub-26_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-26/anat/sub-26_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-27/anat/sub-27_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-27/anat/sub-27_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-28/anat/sub-28_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-28/anat/sub-28_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-29/anat/sub-29_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-29/anat/sub-29_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-30/anat/sub-30_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-30/anat/sub-30_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-31/anat/sub-31_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-31/anat/sub-31_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-32/anat/sub-32_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-32/anat/sub-32_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-36/anat/sub-36_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-36/anat/sub-36_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-37/anat/sub-37_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-37/anat/sub-37_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-38/anat/sub-38_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-38/anat/sub-38_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-39/anat/sub-39_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-39/anat/sub-39_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-40/anat/sub-40_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-40/anat/sub-40_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-41/anat/sub-41_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-41/anat/sub-41_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-42/anat/sub-42_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-42/anat/sub-42_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        }
+    ],
+    "validation": [
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-03/anat/sub-03_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-03/anat/sub-03_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-07/anat/sub-07_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-07/anat/sub-07_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-15/anat/sub-15_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-15/anat/sub-15_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-20/anat/sub-20_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-20/anat/sub-20_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/dcm-zurich-lesions-20231115/sub-35/anat/sub-35_acq-ax_T2w.nii.gz",
+            "label": "/home/quentinr/data/dcm-zurich-lesions-20231115/derivatives/labels/sub-35/anat/sub-35_acq-ax_T2w_label-SC_mask-manual.nii.gz"
+        }
+    ]
+}

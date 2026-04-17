@@ -1,0 +1,15 @@
+datasetName,subjectID,sessionID,orientationID,contrastID,pathologyID,split,filename
+dcm-zurich-lesions,sub-01,,acq-ax,T2w,DCM,train,sub-01_acq-ax_T2w_label-SC_mask-manual.nii.gz
+dcm-zurich-lesions,sub-02,,acq-ax,T2w,DCM,train,sub-02_acq-ax_T2w_label-SC_mask-manual.nii.gz
+dcm-zurich-lesions,sub-05,,acq-ax,T2w,DCM,train,sub-05_acq-ax_T2w_label-SC_mask-manual.nii.gz
+dcm-zurich-lesions,sub-06,,acq-ax,T2w,DCM,train,sub-06_acq-ax_T2w_label-SC_mask-manual.nii.gz
+dcm-zurich-lesions,sub-07,,acq-ax,T2w,DCM,train,sub-07_acq-ax_T2w_label-SC_mask-manual.nii.gz
+dcm-zurich-lesions,sub-08,,acq-ax,T2w,DCM,validation,sub-08_acq-ax_T2w_label-SC_mask-manual.nii.gz
+dcm-zurich-lesions,sub-09,,acq-ax,T2w,DCM,test,sub-09_acq-ax_T2w_label-SC_mask-manual.nii.gz
+dcm-zurich-lesions,sub-10,,acq-ax,T2w,DCM,validation,sub-10_acq-ax_T2w_label-SC_mask-manual.nii.gz
+dcm-zurich-lesions,sub-11,,acq-ax,T2w,DCM,train,sub-11_acq-ax_T2w_label-SC_mask-manual.nii.gz
+dcm-zurich-lesions,sub-12,,acq-ax,T2w,DCM,test,sub-12_acq-ax_T2w_label-SC_mask-manual.nii.gz
+dcm-zurich-lesions,sub-13,,acq-ax,T2w,DCM,train,sub-13_acq-ax_T2w_label-SC_mask-manual.nii.gz
+dcm-zurich-lesions,sub-14,,acq-ax,T2w,DCM,train,sub-14_acq-ax_T2w_label-SC_mask-manual.nii.gz
+dcm-zurich-lesions,sub-15,,acq-ax,T2w,DCM,train,sub-15_acq-ax_T2w_label-SC_mask-manual.nii.gz
+dcm-zurich-lesions,sub-16,,acq-ax,T2w,DCM,train,sub-16_acq-ax_T2w_label-SC_mask-manual.nii.gz

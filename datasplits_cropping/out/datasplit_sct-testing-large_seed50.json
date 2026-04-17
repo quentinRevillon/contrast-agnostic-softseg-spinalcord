@@ -1,0 +1,792 @@
+{
+    "contrasts": [
+        "T2star",
+        "T1w",
+        "acq-MTon_MTR"
+    ],
+    "dataset": "sct-testing-large",
+    "datasetVersions": {
+        "sct-testing-large": "git-master-1c33156f548859d3b5fbabed89bec4d6d82a1e05"
+    },
+    "description": "Datasets for contrast-agnostic spinal cord segmentation",
+    "labels": {
+        "0": "background",
+        "1": "sc-seg"
+    },
+    "license": "MIT",
+    "modality": {
+        "0": "MRI"
+    },
+    "numImagesPerContrast": {
+        "test": {
+            "T1w": 1,
+            "T2star": 17,
+            "acq-MTon_MTR": 2
+        },
+        "train": {
+            "T1w": 7,
+            "T2star": 135,
+            "acq-MTon_MTR": 3
+        },
+        "validation": {
+            "T1w": 2,
+            "T2star": 16,
+            "acq-MTon_MTR": 0
+        }
+    },
+    "numTestImagesTotal": 20,
+    "numTestSubjects": 18,
+    "numTrainingImagesTotal": 145,
+    "numTrainingSubjects": 137,
+    "numValidationImagesTotal": 18,
+    "numValidationSubjects": 18,
+    "reference": "BIDS: Brain Imaging Data Structure",
+    "seed": 50,
+    "subjectType": [
+        "ALS",
+        "DCM",
+        "NMO",
+        "MS",
+        "SYR",
+        "SCI"
+    ],
+    "tensorImageSize": "3D",
+    "test": [
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-amuVirginie005/anat/sub-amuVirginie005_acq-inf_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-amuVirginie005/anat/sub-amuVirginie005_acq-inf_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-amuVirginie005/anat/sub-amuVirginie005_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-amuVirginie005/anat/sub-amuVirginie005_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-amuVirginie006/anat/sub-amuVirginie006_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-amuVirginie006/anat/sub-amuVirginie006_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-amuVirginie006/anat/sub-amuVirginie006_acq-inf_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-amuVirginie006/anat/sub-amuVirginie006_acq-inf_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-amuVirginie008/anat/sub-amuVirginie008_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-amuVirginie008/anat/sub-amuVirginie008_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-amuVirginie018/anat/sub-amuVirginie018_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-amuVirginie018/anat/sub-amuVirginie018_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-amuVirginie020/anat/sub-amuVirginie020_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-amuVirginie020/anat/sub-amuVirginie020_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-karoTobiasMS001/ses-01/anat/sub-karoTobiasMS001_ses-01_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-karoTobiasMS001/ses-01/anat/sub-karoTobiasMS001_ses-01_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-karoTobiasMS013/ses-01/anat/sub-karoTobiasMS013_ses-01_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-karoTobiasMS013/ses-01/anat/sub-karoTobiasMS013_ses-01_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-koreajisun010/anat/sub-koreajisun010_acq-MTon_MTR.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-koreajisun010/anat/sub-koreajisun010_acq-MTon_MTR_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-mghCaterina020/anat/sub-mghCaterina020_acq-inf_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-mghCaterina020/anat/sub-mghCaterina020_acq-inf_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-mghCaterina028/anat/sub-mghCaterina028_acq-inf_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-mghCaterina028/anat/sub-mghCaterina028_acq-inf_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh013/anat/sub-twh013_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh013/anat/sub-twh013_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh066/anat/sub-twh066_acq-MTon_MTR.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh066/anat/sub-twh066_acq-MTon_MTR_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh071/anat/sub-twh071_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh071/anat/sub-twh071_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli001/anat/sub-uclCiccarelli001_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli001/anat/sub-uclCiccarelli001_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli016/anat/sub-uclCiccarelli016_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli016/anat/sub-uclCiccarelli016_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli037/anat/sub-uclCiccarelli037_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli037/anat/sub-uclCiccarelli037_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth014/anat/sub-vanderbiltSeth014_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth014/anat/sub-vanderbiltSeth014_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-xuanwuYaou045/anat/sub-xuanwuYaou045_T1w.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-xuanwuYaou045/anat/sub-xuanwuYaou045_T1w_seg-manual.nii.gz"
+        }
+    ],
+    "train": [
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-amuVirginie004/anat/sub-amuVirginie004_acq-inf_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-amuVirginie004/anat/sub-amuVirginie004_acq-inf_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-amuVirginie007/anat/sub-amuVirginie007_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-amuVirginie007/anat/sub-amuVirginie007_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-amuVirginie009/anat/sub-amuVirginie009_acq-inf_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-amuVirginie009/anat/sub-amuVirginie009_acq-inf_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-amuVirginie012/anat/sub-amuVirginie012_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-amuVirginie012/anat/sub-amuVirginie012_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-amuVirginie013/anat/sub-amuVirginie013_acq-inf_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-amuVirginie013/anat/sub-amuVirginie013_acq-inf_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-amuVirginie013/anat/sub-amuVirginie013_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-amuVirginie013/anat/sub-amuVirginie013_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-amuVirginie014/anat/sub-amuVirginie014_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-amuVirginie014/anat/sub-amuVirginie014_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-amuVirginie016/anat/sub-amuVirginie016_acq-inf_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-amuVirginie016/anat/sub-amuVirginie016_acq-inf_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-amuVirginie017/anat/sub-amuVirginie017_acq-inf_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-amuVirginie017/anat/sub-amuVirginie017_acq-inf_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-amuVirginie017/anat/sub-amuVirginie017_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-amuVirginie017/anat/sub-amuVirginie017_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-amuVirginie019/anat/sub-amuVirginie019_acq-inf_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-amuVirginie019/anat/sub-amuVirginie019_acq-inf_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-karoTobiasMS002/ses-01/anat/sub-karoTobiasMS002_ses-01_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-karoTobiasMS002/ses-01/anat/sub-karoTobiasMS002_ses-01_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-karoTobiasMS010/ses-01/anat/sub-karoTobiasMS010_ses-01_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-karoTobiasMS010/ses-01/anat/sub-karoTobiasMS010_ses-01_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-karoTobiasMS011/ses-01/anat/sub-karoTobiasMS011_ses-01_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-karoTobiasMS011/ses-01/anat/sub-karoTobiasMS011_ses-01_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-karoTobiasMS012/ses-01/anat/sub-karoTobiasMS012_ses-01_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-karoTobiasMS012/ses-01/anat/sub-karoTobiasMS012_ses-01_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-karoTobiasMS015/ses-01/anat/sub-karoTobiasMS015_ses-01_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-karoTobiasMS015/ses-01/anat/sub-karoTobiasMS015_ses-01_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-karoTobiasMS032/ses-01/anat/sub-karoTobiasMS032_ses-01_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-karoTobiasMS032/ses-01/anat/sub-karoTobiasMS032_ses-01_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-karoTobiasMS035/ses-01/anat/sub-karoTobiasMS035_ses-01_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-karoTobiasMS035/ses-01/anat/sub-karoTobiasMS035_ses-01_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-karoTobiasMS044/ses-01/anat/sub-karoTobiasMS044_ses-01_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-karoTobiasMS044/ses-01/anat/sub-karoTobiasMS044_ses-01_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-karoTobiasMS052/ses-01/anat/sub-karoTobiasMS052_ses-01_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-karoTobiasMS052/ses-01/anat/sub-karoTobiasMS052_ses-01_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-karoTobiasMS053/ses-01/anat/sub-karoTobiasMS053_ses-01_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-karoTobiasMS053/ses-01/anat/sub-karoTobiasMS053_ses-01_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-mghCaterina012/anat/sub-mghCaterina012_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-mghCaterina012/anat/sub-mghCaterina012_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-mghCaterina014/anat/sub-mghCaterina014_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-mghCaterina014/anat/sub-mghCaterina014_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-mghCaterina015/anat/sub-mghCaterina015_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-mghCaterina015/anat/sub-mghCaterina015_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-mghCaterina016/anat/sub-mghCaterina016_acq-inf_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-mghCaterina016/anat/sub-mghCaterina016_acq-inf_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-mghCaterina017/anat/sub-mghCaterina017_acq-inf_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-mghCaterina017/anat/sub-mghCaterina017_acq-inf_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-mghCaterina017/anat/sub-mghCaterina017_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-mghCaterina017/anat/sub-mghCaterina017_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-mghCaterina018/anat/sub-mghCaterina018_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-mghCaterina018/anat/sub-mghCaterina018_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-mghCaterina019/anat/sub-mghCaterina019_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-mghCaterina019/anat/sub-mghCaterina019_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-mghCaterina021/anat/sub-mghCaterina021_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-mghCaterina021/anat/sub-mghCaterina021_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-milanFilippi003/anat/sub-milanFilippi003_acq-ax_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-milanFilippi003/anat/sub-milanFilippi003_acq-ax_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-milanFilippi005/anat/sub-milanFilippi005_acq-ax_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-milanFilippi005/anat/sub-milanFilippi005_acq-ax_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-milanFilippi008/anat/sub-milanFilippi008_acq-ax_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-milanFilippi008/anat/sub-milanFilippi008_acq-ax_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-milanFilippi010/anat/sub-milanFilippi010_acq-ax_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-milanFilippi010/anat/sub-milanFilippi010_acq-ax_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-milanFilippi011/anat/sub-milanFilippi011_acq-ax_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-milanFilippi011/anat/sub-milanFilippi011_acq-ax_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-milanFilippi022/anat/sub-milanFilippi022_acq-ax_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-milanFilippi022/anat/sub-milanFilippi022_acq-ax_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-milanFilippi029/anat/sub-milanFilippi029_acq-ax_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-milanFilippi029/anat/sub-milanFilippi029_acq-ax_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-milanFilippi033/anat/sub-milanFilippi033_acq-ax_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-milanFilippi033/anat/sub-milanFilippi033_acq-ax_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-milanFilippi074/anat/sub-milanFilippi074_acq-ax_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-milanFilippi074/anat/sub-milanFilippi074_acq-ax_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-milanFilippi097/anat/sub-milanFilippi097_acq-ax_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-milanFilippi097/anat/sub-milanFilippi097_acq-ax_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-milanFilippi102/anat/sub-milanFilippi102_acq-ax_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-milanFilippi102/anat/sub-milanFilippi102_acq-ax_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-milanFilippi117/anat/sub-milanFilippi117_acq-ax_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-milanFilippi117/anat/sub-milanFilippi117_acq-ax_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-nihReich031/anat/sub-nihReich031_acq-inf_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-nihReich031/anat/sub-nihReich031_acq-inf_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-nihReich031/anat/sub-nihReich031_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-nihReich031/anat/sub-nihReich031_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-nihReich032/anat/sub-nihReich032_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-nihReich032/anat/sub-nihReich032_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-nihReich034/anat/sub-nihReich034_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-nihReich034/anat/sub-nihReich034_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-parisPradat004/anat/sub-parisPradat004_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-parisPradat004/anat/sub-parisPradat004_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-parisPradat011/anat/sub-parisPradat011_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-parisPradat011/anat/sub-parisPradat011_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-parisPradat048/anat/sub-parisPradat048_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-parisPradat048/anat/sub-parisPradat048_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-parisPradat049/anat/sub-parisPradat049_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-parisPradat049/anat/sub-parisPradat049_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-parisPradat051/anat/sub-parisPradat051_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-parisPradat051/anat/sub-parisPradat051_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-parisPradat053/anat/sub-parisPradat053_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-parisPradat053/anat/sub-parisPradat053_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-parisPradat060/anat/sub-parisPradat060_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-parisPradat060/anat/sub-parisPradat060_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-parisPradat063/anat/sub-parisPradat063_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-parisPradat063/anat/sub-parisPradat063_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-parisPradat064/anat/sub-parisPradat064_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-parisPradat064/anat/sub-parisPradat064_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-parisPradat066/anat/sub-parisPradat066_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-parisPradat066/anat/sub-parisPradat066_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-parisPradat067/anat/sub-parisPradat067_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-parisPradat067/anat/sub-parisPradat067_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-parisPradat068/anat/sub-parisPradat068_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-parisPradat068/anat/sub-parisPradat068_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-rennesMS001/anat/sub-rennesMS001_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-rennesMS001/anat/sub-rennesMS001_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-rennesMS001/anat/sub-rennesMS001_acq-inf_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-rennesMS001/anat/sub-rennesMS001_acq-inf_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-rennesMS002/anat/sub-rennesMS002_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-rennesMS002/anat/sub-rennesMS002_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-rennesMS018/anat/sub-rennesMS018_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-rennesMS018/anat/sub-rennesMS018_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-rennesMS028/anat/sub-rennesMS028_acq-inf_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-rennesMS028/anat/sub-rennesMS028_acq-inf_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh006/anat/sub-twh006_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh006/anat/sub-twh006_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh007/anat/sub-twh007_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh007/anat/sub-twh007_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh007/anat/sub-twh007_acq-MTon_MTR.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh007/anat/sub-twh007_acq-MTon_MTR_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh015/anat/sub-twh015_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh015/anat/sub-twh015_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh018/anat/sub-twh018_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh018/anat/sub-twh018_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh020/anat/sub-twh020_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh020/anat/sub-twh020_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh024/anat/sub-twh024_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh024/anat/sub-twh024_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh025/anat/sub-twh025_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh025/anat/sub-twh025_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh027/anat/sub-twh027_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh027/anat/sub-twh027_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh029/anat/sub-twh029_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh029/anat/sub-twh029_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh031/anat/sub-twh031_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh031/anat/sub-twh031_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh032/anat/sub-twh032_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh032/anat/sub-twh032_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh034/anat/sub-twh034_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh034/anat/sub-twh034_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh036/anat/sub-twh036_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh036/anat/sub-twh036_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh039/anat/sub-twh039_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh039/anat/sub-twh039_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh041/anat/sub-twh041_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh041/anat/sub-twh041_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh043/anat/sub-twh043_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh043/anat/sub-twh043_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh047/anat/sub-twh047_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh047/anat/sub-twh047_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh049/anat/sub-twh049_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh049/anat/sub-twh049_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh057/anat/sub-twh057_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh057/anat/sub-twh057_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh065/anat/sub-twh065_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh065/anat/sub-twh065_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh067/anat/sub-twh067_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh067/anat/sub-twh067_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh067/anat/sub-twh067_acq-MTon_MTR.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh067/anat/sub-twh067_acq-MTon_MTR_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh070/anat/sub-twh070_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh070/anat/sub-twh070_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh070/anat/sub-twh070_acq-MTon_MTR.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh070/anat/sub-twh070_acq-MTon_MTR_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh072/anat/sub-twh072_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh072/anat/sub-twh072_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh073/anat/sub-twh073_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh073/anat/sub-twh073_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh074/anat/sub-twh074_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh074/anat/sub-twh074_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh075/anat/sub-twh075_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh075/anat/sub-twh075_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh083/anat/sub-twh083_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh083/anat/sub-twh083_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli003/anat/sub-uclCiccarelli003_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli003/anat/sub-uclCiccarelli003_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli004/anat/sub-uclCiccarelli004_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli004/anat/sub-uclCiccarelli004_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli007/anat/sub-uclCiccarelli007_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli007/anat/sub-uclCiccarelli007_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli008/anat/sub-uclCiccarelli008_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli008/anat/sub-uclCiccarelli008_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli009/anat/sub-uclCiccarelli009_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli009/anat/sub-uclCiccarelli009_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli010/anat/sub-uclCiccarelli010_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli010/anat/sub-uclCiccarelli010_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli011/anat/sub-uclCiccarelli011_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli011/anat/sub-uclCiccarelli011_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli014/anat/sub-uclCiccarelli014_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli014/anat/sub-uclCiccarelli014_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli017/anat/sub-uclCiccarelli017_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli017/anat/sub-uclCiccarelli017_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli019/anat/sub-uclCiccarelli019_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli019/anat/sub-uclCiccarelli019_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli021/anat/sub-uclCiccarelli021_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli021/anat/sub-uclCiccarelli021_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli022/anat/sub-uclCiccarelli022_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli022/anat/sub-uclCiccarelli022_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli023/anat/sub-uclCiccarelli023_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli023/anat/sub-uclCiccarelli023_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli024/anat/sub-uclCiccarelli024_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli024/anat/sub-uclCiccarelli024_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli026/anat/sub-uclCiccarelli026_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli026/anat/sub-uclCiccarelli026_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli027/anat/sub-uclCiccarelli027_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli027/anat/sub-uclCiccarelli027_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli028/anat/sub-uclCiccarelli028_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli028/anat/sub-uclCiccarelli028_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli030/anat/sub-uclCiccarelli030_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli030/anat/sub-uclCiccarelli030_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli031/anat/sub-uclCiccarelli031_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli031/anat/sub-uclCiccarelli031_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli033/anat/sub-uclCiccarelli033_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli033/anat/sub-uclCiccarelli033_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli034/anat/sub-uclCiccarelli034_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli034/anat/sub-uclCiccarelli034_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli035/anat/sub-uclCiccarelli035_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli035/anat/sub-uclCiccarelli035_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli036/anat/sub-uclCiccarelli036_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli036/anat/sub-uclCiccarelli036_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli038/anat/sub-uclCiccarelli038_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli038/anat/sub-uclCiccarelli038_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli039/anat/sub-uclCiccarelli039_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli039/anat/sub-uclCiccarelli039_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-unfPain005/anat/sub-unfPain005_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-unfPain005/anat/sub-unfPain005_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth001/anat/sub-vanderbiltSeth001_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth001/anat/sub-vanderbiltSeth001_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth002/anat/sub-vanderbiltSeth002_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth002/anat/sub-vanderbiltSeth002_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth003/anat/sub-vanderbiltSeth003_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth003/anat/sub-vanderbiltSeth003_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth004/anat/sub-vanderbiltSeth004_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth004/anat/sub-vanderbiltSeth004_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth005/anat/sub-vanderbiltSeth005_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth005/anat/sub-vanderbiltSeth005_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth006/anat/sub-vanderbiltSeth006_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth006/anat/sub-vanderbiltSeth006_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth007/anat/sub-vanderbiltSeth007_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth007/anat/sub-vanderbiltSeth007_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth009/anat/sub-vanderbiltSeth009_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth009/anat/sub-vanderbiltSeth009_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth010/anat/sub-vanderbiltSeth010_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth010/anat/sub-vanderbiltSeth010_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth011/anat/sub-vanderbiltSeth011_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth011/anat/sub-vanderbiltSeth011_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth013/anat/sub-vanderbiltSeth013_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth013/anat/sub-vanderbiltSeth013_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth015/anat/sub-vanderbiltSeth015_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth015/anat/sub-vanderbiltSeth015_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth016/anat/sub-vanderbiltSeth016_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth016/anat/sub-vanderbiltSeth016_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth017/anat/sub-vanderbiltSeth017_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth017/anat/sub-vanderbiltSeth017_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth018/anat/sub-vanderbiltSeth018_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth018/anat/sub-vanderbiltSeth018_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth019/anat/sub-vanderbiltSeth019_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth019/anat/sub-vanderbiltSeth019_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth020/anat/sub-vanderbiltSeth020_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth020/anat/sub-vanderbiltSeth020_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth021/anat/sub-vanderbiltSeth021_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth021/anat/sub-vanderbiltSeth021_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth023/anat/sub-vanderbiltSeth023_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth023/anat/sub-vanderbiltSeth023_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-xuanwuYaou034/anat/sub-xuanwuYaou034_T1w.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-xuanwuYaou034/anat/sub-xuanwuYaou034_T1w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-xuanwuYaou038/anat/sub-xuanwuYaou038_T1w.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-xuanwuYaou038/anat/sub-xuanwuYaou038_T1w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-xuanwuYaou039/anat/sub-xuanwuYaou039_T1w.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-xuanwuYaou039/anat/sub-xuanwuYaou039_T1w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-xuanwuYaou041/anat/sub-xuanwuYaou041_T1w.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-xuanwuYaou041/anat/sub-xuanwuYaou041_T1w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-xuanwuYaou042/anat/sub-xuanwuYaou042_T1w.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-xuanwuYaou042/anat/sub-xuanwuYaou042_T1w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-xuanwuYaou044/anat/sub-xuanwuYaou044_T1w.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-xuanwuYaou044/anat/sub-xuanwuYaou044_T1w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-xuanwuYaou047/anat/sub-xuanwuYaou047_T1w.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-xuanwuYaou047/anat/sub-xuanwuYaou047_T1w_seg-manual.nii.gz"
+        }
+    ],
+    "validation": [
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-karoTobiasMS004/ses-01/anat/sub-karoTobiasMS004_ses-01_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-karoTobiasMS004/ses-01/anat/sub-karoTobiasMS004_ses-01_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-karoTobiasMS005/ses-01/anat/sub-karoTobiasMS005_ses-01_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-karoTobiasMS005/ses-01/anat/sub-karoTobiasMS005_ses-01_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-karoTobiasMS009/ses-01/anat/sub-karoTobiasMS009_ses-01_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-karoTobiasMS009/ses-01/anat/sub-karoTobiasMS009_ses-01_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-milanFilippi007/anat/sub-milanFilippi007_acq-ax_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-milanFilippi007/anat/sub-milanFilippi007_acq-ax_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-nihReich035/anat/sub-nihReich035_acq-inf_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-nihReich035/anat/sub-nihReich035_acq-inf_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-parisPradat057/anat/sub-parisPradat057_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-parisPradat057/anat/sub-parisPradat057_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-rennesMS003/anat/sub-rennesMS003_acq-sup_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-rennesMS003/anat/sub-rennesMS003_acq-sup_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh014/anat/sub-twh014_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh014/anat/sub-twh014_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh026/anat/sub-twh026_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh026/anat/sub-twh026_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh063/anat/sub-twh063_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh063/anat/sub-twh063_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-twh076/anat/sub-twh076_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-twh076/anat/sub-twh076_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli018/anat/sub-uclCiccarelli018_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli018/anat/sub-uclCiccarelli018_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-uclCiccarelli032/anat/sub-uclCiccarelli032_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-uclCiccarelli032/anat/sub-uclCiccarelli032_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth008/anat/sub-vanderbiltSeth008_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth008/anat/sub-vanderbiltSeth008_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth012/anat/sub-vanderbiltSeth012_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth012/anat/sub-vanderbiltSeth012_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-vanderbiltSeth022/anat/sub-vanderbiltSeth022_T2star.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-vanderbiltSeth022/anat/sub-vanderbiltSeth022_T2star_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-xuanwuYaou040/anat/sub-xuanwuYaou040_T1w.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-xuanwuYaou040/anat/sub-xuanwuYaou040_T1w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sct-testing-large/sub-xuanwuYaou050/anat/sub-xuanwuYaou050_T1w.nii.gz",
+            "label": "/home/quentinr/data/sct-testing-large/derivatives/labels/sub-xuanwuYaou050/anat/sub-xuanwuYaou050_T1w_seg-manual.nii.gz"
+        }
+    ]
+}

@@ -1,0 +1,100 @@
+{
+    "contrasts": [
+        "T2w"
+    ],
+    "dataset": "sci-paris",
+    "datasetVersions": {
+        "sci-paris": "git-master-2bc35a1a449ca106291aea629a160c841c4c7f8c"
+    },
+    "description": "Datasets for contrast-agnostic spinal cord segmentation",
+    "labels": {
+        "0": "background",
+        "1": "sc-seg"
+    },
+    "license": "MIT",
+    "modality": {
+        "0": "MRI"
+    },
+    "numImagesPerContrast": {
+        "test": {
+            "T2w": 2
+        },
+        "train": {
+            "T2w": 10
+        },
+        "validation": {
+            "T2w": 2
+        }
+    },
+    "numTestImagesTotal": 2,
+    "numTestSubjects": 2,
+    "numTrainingImagesTotal": 10,
+    "numTrainingSubjects": 10,
+    "numValidationImagesTotal": 2,
+    "numValidationSubjects": 2,
+    "reference": "BIDS: Brain Imaging Data Structure",
+    "seed": 50,
+    "tensorImageSize": "3D",
+    "test": [
+        {
+            "image": "/home/quentinr/data/sci-paris/sub-054/anat/sub-054_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-paris/derivatives/labels/sub-054/anat/sub-054_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-paris/sub-064/anat/sub-064_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-paris/derivatives/labels/sub-064/anat/sub-064_T2w_seg-manual.nii.gz"
+        }
+    ],
+    "train": [
+        {
+            "image": "/home/quentinr/data/sci-paris/sub-045/anat/sub-045_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-paris/derivatives/labels/sub-045/anat/sub-045_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-paris/sub-047/anat/sub-047_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-paris/derivatives/labels/sub-047/anat/sub-047_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-paris/sub-049/anat/sub-049_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-paris/derivatives/labels/sub-049/anat/sub-049_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-paris/sub-050/anat/sub-050_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-paris/derivatives/labels/sub-050/anat/sub-050_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-paris/sub-053/anat/sub-053_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-paris/derivatives/labels/sub-053/anat/sub-053_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-paris/sub-057/anat/sub-057_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-paris/derivatives/labels/sub-057/anat/sub-057_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-paris/sub-059/anat/sub-059_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-paris/derivatives/labels/sub-059/anat/sub-059_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-paris/sub-060/anat/sub-060_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-paris/derivatives/labels/sub-060/anat/sub-060_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-paris/sub-065/anat/sub-065_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-paris/derivatives/labels/sub-065/anat/sub-065_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-paris/sub-072/anat/sub-072_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-paris/derivatives/labels/sub-072/anat/sub-072_T2w_seg-manual.nii.gz"
+        }
+    ],
+    "validation": [
+        {
+            "image": "/home/quentinr/data/sci-paris/sub-046/anat/sub-046_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-paris/derivatives/labels/sub-046/anat/sub-046_T2w_seg-manual.nii.gz"
+        },
+        {
+            "image": "/home/quentinr/data/sci-paris/sub-058/anat/sub-058_T2w.nii.gz",
+            "label": "/home/quentinr/data/sci-paris/derivatives/labels/sub-058/anat/sub-058_T2w_seg-manual.nii.gz"
+        }
+    ]
+}
