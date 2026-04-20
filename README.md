@@ -1,6 +1,7 @@
 # Towards Contrast-agnostic Soft Segmentation of the Spinal Cord
 
 [![MedIA](https://img.shields.io/badge/MedIA-10.106/media.2025.103473-darkgreen.svg)](https://doi.org/10.1016/j.media.2025.103473)
+[![ImagingNeuroscience](https://img.shields.io/badge/ImagingNeuroscience-10.1162/IMAG.a.1105-darkgreen.svg)](https://doi.org/10.1162/IMAG.a.1105)
 
 Official repository for contrast-agnostic segmentation of the spinal cord. 
 
@@ -9,7 +10,7 @@ This repo contains all the code for training the contrast-agnostic model. The co
 
 ### Citation Information
 
-If you find this work and/or code useful for your research, please cite our paper:
+If you find this work and/or code useful for your research, please cite our papers:
 
 ```
 @article{BEDARD2025103473,
@@ -26,7 +27,19 @@ note = {Shared authorship -- authors contributed equally}
 }
 ```
 
-**TODO**: add lifelong learning figure
+```
+@article{Karthik2026,
+title = {Monitoring morphometric drift in lifelong learning segmentation of the spinal cord},
+journal = {Imaging Neuroscience},
+volume = {4},
+pages = {IMAG.a.1105},
+year = {2026},
+doi = {https://doi.org/10.1162/IMAG.a.1105},
+author = {Enamundram Naga Karthik and Sandrine Bédard and Jan Valošek and Christoph S Aigner and Elise Bannier and Josef Bednařík and Virginie Callot and Anna Combes and Armin Curt and Gergely David and Falk Eippert and Lynn Farner and Michael G Fehlings and Patrick Freund and Tobias Granberg and Cristina Granziera and Ulrike Horn and Tomáš Horák and Suzanne Humphreys and Markus Hupp and Anne Kerbrat and Nawal Kinany and Shannon Kolind and Petr Kudlička and Anna Lebret and Lisa Eunyoung Lee and Caterina Mainero and Allan R Martin and Megan McGrath and Govind Nair and Kristin P O'Grady and Jiwon Oh and Russell Ouellette and Nikolai Pfender and Dario Pfyffer and Pierre-François Pradat and Alexandre Prat and Emanuele Pravatà and Daniel S Reich and Ilaria Ricchi and Naama Rotem-Kohavi and Simon Schading-Sassenhausen and Maryam Seif and Andrew Smith and Seth A Smith and Grace Sweeney and Roger Tam and Anthony Traboulsee and Constantina Andrada Treaba and Charidimos Tsagkas and Zachary Vavasour and Dimitri Van De Ville and Kenneth Arnold Weber II and Sarath Chandar and Julien Cohen-Adad}
+}
+```
+
+![Lifelong learning figure](imag.a.1105_fig2.png)
 
 
 ## Table of contents
@@ -49,7 +62,7 @@ note = {Shared authorship -- authors contributed equally}
 
 1. Create a conda environment with the following command:
 ```bash
-conda create -n contrast_agnostic python=3.9
+conda create -n contrast_agnostic python=3.9.16
 ```
 
 2. Activate the environment with the following command:
@@ -64,8 +77,8 @@ git clone https://github.com/sct-pipeline/contrast-agnostic-softseg-spinalcord.g
 
 3. Install the required packages with the following command:
 ```bash
-cd contrast-agnostic-softseg-spinalcord/nnUnet
-pip install -r requirements.txt
+cd contrast-agnostic-softseg-spinalcord
+pip install -r nnUnet/requirements.txt
 ```
 
 > **Note**
@@ -74,11 +87,17 @@ pip install -r requirements.txt
 
 ### Step 2: Train the model
 
-The script `scripts/train_contrast_agnostic.sh` downloads the datasets from git-annex, creates datalists, converts them into nnUNet-specific format, and trains the model. More instructions about what variables to set and which datasets to use can be found in the script itself. Once these variables are set, the script can be run simply as follows:
+The script `scripts/train_contrast_agnostic.sh` downloads the datasets from git-annex, creates datalists, converts them into nnUNet-specific format, and trains the model. More instructions about what variables to set and which datasets to use can be found in the script itself. Once these variables are set, run:
 
 ```bash
 bash scripts/train_contrast_agnostic.sh
 ```
+
+> [!IMPORTANT]  
+> The script `train_contrast_agnostic.sh` will NOT run out-of-the-box. User-specific variables such as the path to download datasets and nnUnet repository need to be set. Info about which varibles to set can be found in the script itself.
+
+> [!IMPORTANT]  
+ > You might need to run the `train_contrast_agnostic.sh` script in a virtual terminal such as `tmux` or `screen`.
 <!-- 
 TODO: move to csa_qc_evaluation folder
 ## 5. Computing morphometric measures (CSA)
