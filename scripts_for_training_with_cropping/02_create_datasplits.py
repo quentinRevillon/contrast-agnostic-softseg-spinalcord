@@ -211,7 +211,7 @@ def main():
 
     train_ratio, val_ratio, test_ratio = (0.65, 0.15, 0.2) if dataset_name == 'data-multi-subject' else (0.8, 0.1, 0.1)
 
-    all_subjects = df['subjectID'].unique()
+    all_subjects = sorted(df['subjectID'].unique())
     train_subjects, test_subjects = train_test_split(all_subjects, test_size=test_ratio)
     train_subjects, val_subjects = train_test_split(train_subjects, test_size=val_ratio / (train_ratio + val_ratio))
     train_subjects, val_subjects, test_subjects = sorted(train_subjects), sorted(val_subjects), sorted(test_subjects)

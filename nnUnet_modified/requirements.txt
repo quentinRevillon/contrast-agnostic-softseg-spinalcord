@@ -1,0 +1,15 @@
+nibabel==5.1.0
+seaborn==0.13.2
+matplotlib==3.7.1
+pandas==2.0.1
+numpy<2.0.0
+tqdm
+pyyaml==6.0
+loguru
+scikit-learn==1.2.2
+# Requires cu128 index for NVIDIA Blackwell (sm_120) support:
+# pip install torch==2.8.0 torchvision==0.23.0 --index-url https://download.pytorch.org/whl/cu128
+# After install, apply polylr.py patch: see scripts_modified/ISSUES.md issue #7
+torch==2.8.0
+torchvision==0.23.0
+nnunetv2==2.5.2

@@ -36,10 +36,14 @@ def dataset_name_from_yaml(yaml_path: Path) -> str:
 
 
 def subjects_on_disk(dataset_dir: Path) -> set:
-    """Return set of subject folder names present in dataset_dir."""
+    """Return set of subject folder names present in dataset_dir.
+    For site_007, translates sub-van* → sub-007* to match YAML naming convention."""
     if not dataset_dir.exists():
         return set()
-    return {p.name for p in dataset_dir.iterdir() if p.is_dir() and p.name.startswith("sub-")}
+    subjects = {p.name for p in dataset_dir.iterdir() if p.is_dir() and p.name.startswith("sub-")}
+    if dataset_dir.name == "site_007":
+        subjects = {s.replace("sub-van", "sub-007") for s in subjects}
+    return subjects
 
 
 def missing_pct(subjects_in_yaml: list, subjects_on_disk: set) -> float:
