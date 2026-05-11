@@ -1,10 +1,15 @@
 """
 03_convert_msd_to_nnunet_reorient_cropped.py — MSD → nnUNet conversion with RPI reorientation
-and SC bounding box crop.
+and SC bounding box crop with asymmetric margins.
 
 Identical to 03_convert_msd_to_nnunet_reorient.py with one addition: after reorientation and
-label registration, both image and label are cropped to the spinal cord GT bounding box +
-padding_mm per face. This gives nnUNet a realistic view of the SC field of view, leading to
+label registration, both image and label are cropped to the spinal cord GT bounding box with
+asymmetric padding per axis. Images are in RPI orientation, so:
+  - axis 0 (R→L): --pad-lr mm on each side
+  - axis 1 (P→A): --pad-ap mm on each side
+  - axis 2 (I→S): --pad-sup mm at the superior end (lo), extend to bottom at the inferior end (hi)
+
+This gives nnUNet a realistic but asymmetric view of the SC field of view, leading to
 a more relevant patch size during plan_and_preprocess.
 
 Example:
@@ -13,7 +18,9 @@ Example:
         -o /path/to/nnUNet_raw/folder
         --taskname TempContrastAgnosticCropped
         --tasknumber 998
-        --padding-mm 10.0
+        --pad-lr 20.0
+        --pad-ap 30.0
+        --pad-sup 40.0
         --workers 8
 
 Author: Pierre-Louis Benveniste (adapted by Naga Karthik); SC crop added by Quentin Revillon
@@ -32,7 +39,7 @@ import tqdm
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Convert MSD dataset to nnU-Net format with SC bbox crop')
+    parser = argparse.ArgumentParser(description='Convert MSD dataset to nnU-Net format with asymmetric SC bbox crop')
     parser.add_argument('-i', '--input', type=str, required=True,
                         help='Path to the folder containing MSD json files')
     parser.add_argument('-o', '--output', type=str, required=True,
@@ -41,15 +48,26 @@ def parse_args():
                         help='Name of the task')
     parser.add_argument('--tasknumber', type=int, required=True,
                         help='Number of the task')
-    parser.add_argument('--padding-mm', type=float, default=10.0,
-                        help='Padding added per face of the SC bbox in mm (default: 10)')
+    parser.add_argument('--pad-lr', type=float, default=20.0,
+                        help='Padding left and right of SC bbox in mm (axis 0 in RPI, default: 20)')
+    parser.add_argument('--pad-ap', type=float, default=30.0,
+                        help='Padding anterior and posterior of SC bbox in mm (axis 1 in RPI, default: 30)')
+    parser.add_argument('--pad-sup', type=float, default=40.0,
+                        help='Padding superior of SC bbox in mm (axis 2 lo in RPI, default: 40)')
     parser.add_argument('--workers', type=int, default=None,
                         help='Number of worker processes (default: number of CPU cores)')
     return parser.parse_args()
 
 
-def crop_nifti_to_sc_bbox(image_path: str, label_path: str, padding_mm: float) -> None:
-    """Crop image and label in place to the SC GT bounding box + padding_mm per face."""
+def crop_nifti_to_sc_bbox(image_path: str, label_path: str,
+                          pad_lr: float, pad_ap: float, pad_sup: float) -> None:
+    """Crop image and label in place to the SC GT bounding box with asymmetric margins.
+
+    Images are assumed to be in RPI orientation:
+      axis 0 (R→L): pad_lr mm on each side
+      axis 1 (P→A): pad_ap mm on each side
+      axis 2 (I→S): pad_sup mm at the superior end (lo), extend to the bottom at the inferior end (hi)
+    """
     label_nib = nib.load(label_path)
     image_nib = nib.load(image_path)
 
@@ -67,9 +85,20 @@ def crop_nifti_to_sc_bbox(image_path: str, label_path: str, padding_mm: float) -
     max_coords = coords.max(axis=1)
     shape = np.array(label_data.shape[:3])
 
-    pad_voxels = np.ceil(padding_mm / spacing).astype(int)
-    lo = np.maximum(0, min_coords - pad_voxels)
-    hi = np.minimum(shape - 1, max_coords + pad_voxels)
+    # Per-axis padding in voxels: [LR, AP, sup] (inferior extends to image bottom)
+    pad_lo = np.array([
+        int(np.ceil(pad_lr / spacing[0])),
+        int(np.ceil(pad_ap / spacing[1])),
+        int(np.ceil(pad_sup / spacing[2])),  # superior end = low index in RPI axis 2
+    ])
+    pad_hi = np.array([
+        int(np.ceil(pad_lr / spacing[0])),
+        int(np.ceil(pad_ap / spacing[1])),
+        shape[2] - 1 - max_coords[2],        # extend all the way to the inferior bottom
+    ])
+
+    lo = np.maximum(0, min_coords - pad_lo)
+    hi = np.minimum(shape - 1, max_coords + pad_hi)
 
     slices = tuple(slice(int(lo[i]), int(hi[i]) + 1) for i in range(3))
 
@@ -87,7 +116,7 @@ def crop_nifti_to_sc_bbox(image_path: str, label_path: str, padding_mm: float) -
 
 def process_single_image(args):
     """Reorient to RPI, align label to image, binarize, then crop to SC bbox."""
-    img_dict, counter, path_out_images, path_out_labels, taskname, padding_mm = args
+    img_dict, counter, path_out_images, path_out_labels, taskname, pad_lr, pad_ap, pad_sup = args
 
     image_file_nnunet = os.path.join(path_out_images, f'{taskname}_{counter:03d}_0000.nii.gz')
     label_file_nnunet = os.path.join(path_out_labels, f'{taskname}_{counter:03d}.nii.gz')
@@ -111,8 +140,8 @@ def process_single_image(args):
     # Binarize label
     assert os.system(f"sct_maths -i {str(label_file_nnunet)} -bin 0.5 -o {str(label_file_nnunet)}") == 0
 
-    # Crop both image and label to SC bbox + padding
-    crop_nifti_to_sc_bbox(image_file_nnunet, label_file_nnunet, padding_mm)
+    # Crop both image and label to SC bbox with asymmetric margins
+    crop_nifti_to_sc_bbox(image_file_nnunet, label_file_nnunet, pad_lr, pad_ap, pad_sup)
 
     return {
         'image': str(os.path.abspath(img_dict['image'])),
@@ -123,10 +152,10 @@ def process_single_image(args):
 
 
 def process_dataset_parallel(data_list, path_out_images, path_out_labels, taskname,
-                              start_counter, num_workers, padding_mm):
+                              start_counter, num_workers, pad_lr, pad_ap, pad_sup):
     with Pool(processes=num_workers) as pool:
         work_items = [
-            (item, start_counter + i, path_out_images, path_out_labels, taskname, padding_mm)
+            (item, start_counter + i, path_out_images, path_out_labels, taskname, pad_lr, pad_ap, pad_sup)
             for i, item in enumerate(data_list)
         ]
         results = list(tqdm.tqdm(
@@ -167,18 +196,18 @@ def main():
 
     print(f"Processing {len(datalists_list)} datasets with {args.workers} workers...")
     print(f"Training samples: {len(train_data + val_data)}  |  Test samples: {len(test_data)}")
-    print(f"SC bbox padding: {args.padding_mm} mm")
+    print(f"SC bbox margins — LR: ±{args.pad_lr}mm  AP: ±{args.pad_ap}mm  Sup: +{args.pad_sup}mm  Inf: to bottom")
 
     print("Processing training data...")
     train_results = process_dataset_parallel(
         train_data + val_data, path_out_imagesTr, path_out_labelsTr,
-        args.taskname, 1, args.workers, args.padding_mm
+        args.taskname, 1, args.workers, args.pad_lr, args.pad_ap, args.pad_sup
     )
 
     print("Processing test data...")
     test_results = process_dataset_parallel(
         test_data, path_out_imagesTs, path_out_labelsTs,
-        args.taskname, 1, args.workers, args.padding_mm
+        args.taskname, 1, args.workers, args.pad_lr, args.pad_ap, args.pad_sup
     )
 
     conversion_dict = {}
@@ -191,7 +220,7 @@ def main():
 
     json_dict = OrderedDict({
         'name': args.taskname,
-        'description': f'{args.taskname} — SC bbox crop {args.padding_mm}mm padding',
+        'description': f'{args.taskname} — SC bbox crop LR±{args.pad_lr}mm AP±{args.pad_ap}mm Sup+{args.pad_sup}mm Inf→bottom',
         'tensorImageSize': "3D",
         'reference': "TBD",
         'licence': "TBD",
