@@ -31,7 +31,8 @@ from pathlib import Path
 import nibabel as nib
 import numpy as np
 import onnxruntime as ort
-from scipy.ndimage import gaussian_filter, zoom
+from scipy.ndimage import gaussian_filter
+from skimage.transform import resize as sk_resize
 
 
 def parse_args():
@@ -65,12 +66,14 @@ def get_voxel_spacing(img):
 
 
 def resample_volume(data, orig_spacing, target_spacing, order=3):
-    """Resample 3D array to target spacing using scipy zoom."""
-    zoom_factors = [o / t for o, t in zip(orig_spacing, target_spacing)]
-    if all(abs(z - 1.0) < 1e-4 for z in zoom_factors):
-        return data, zoom_factors
-    resampled = zoom(data, zoom_factors, order=order, prefilter=order > 1)
-    return resampled, zoom_factors
+    """Resample 3D array to target spacing using skimage.transform.resize (matches nnUNet exactly).
+    data is (D, H, W) in [z, y, x]. Spacing is [z, y, x]."""
+    new_shape = tuple(int(round(s * o / t)) for s, o, t in zip(data.shape, orig_spacing, target_spacing))
+    if new_shape == data.shape:
+        return data, new_shape
+    # nnUNet wraps data in a channel dim (c, z, y, x) and calls resize per channel
+    resampled = sk_resize(data.astype(float), new_shape, order=order, mode='edge', anti_aliasing=False)
+    return resampled.astype(np.float32), new_shape
 
 
 def zscore_normalize(data):
@@ -170,7 +173,7 @@ def main():
     t_load = time.perf_counter()
 
     # Resample to target spacing
-    data_rs, zoom_factors = resample_volume(data, orig_spacing, target_spacing, order=3)
+    data_rs, new_shape = resample_volume(data, orig_spacing, target_spacing, order=3)
     t_resample = time.perf_counter()
     print(f'Resampled      : {data_rs.shape}  ({t_resample - t_load:.2f}s)')
 
@@ -195,15 +198,9 @@ def main():
     # Threshold → binary mask
     pred_rs = (prob > 0.5).astype(np.uint8)
 
-    # Resample prediction back to original spacing
-    inv_zoom = [1.0 / z for z in zoom_factors]
-    pred = zoom(pred_rs.astype(np.float32), inv_zoom, order=0)
-    # Match original shape exactly
-    pred = pred[:data.shape[0], :data.shape[1], :data.shape[2]]
-    pad_back = [(0, max(0, s - p)) for s, p in zip(data.shape, pred.shape)]
-    if any(p[1] > 0 for p in pad_back):
-        pred = np.pad(pred, pad_back, mode='constant')
-    pred = pred.astype(np.uint8)
+    # Resample prediction back to original [z,y,x] shape (order=0 = nearest neighbour, matches nnUNet)
+    pred = sk_resize(pred_rs.astype(float), data.shape, order=0, mode='edge', anti_aliasing=False)
+    pred = (pred > 0.5).astype(np.uint8)
     t_post = time.perf_counter()
 
     # Transpose back to nibabel [x, y, z] convention before saving
