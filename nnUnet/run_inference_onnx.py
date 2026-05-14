@@ -21,17 +21,18 @@ Dependencies:
     conda activate sc_crop && pip install sc-crop
 
 Usage:
-    python run_inference_onnx.py \
-        -i image.nii.gz \
-        -o image_seg.nii.gz \
-        --model nnunet_seg.onnx \
-        --plans plans.json
+    python nnUnet/run_inference_onnx.py -i image.nii.gz -o image_seg.nii.gz
+
+Model files expected in ~/nnunet_contrast_agnostic/:
+    nnunet_seg.onnx   — exported with export_nnunet_to_onnx.py
+    plans.json        — from the nnUNet model folder
 
 Author: Quentin Revillon
 """
 
 import argparse
 import json
+import os
 import subprocess
 import time
 
@@ -48,10 +49,13 @@ def parse_args():
         description='Spinal cord segmentation via nnUNet ONNX (standalone, no nnunetv2 required)',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
+    _model_dir = os.path.expanduser('~/nnunet_contrast_agnostic')
     parser.add_argument('-i', required=True, help='Input NIfTI image (.nii or .nii.gz), any orientation')
     parser.add_argument('-o', required=True, help='Output segmentation mask (.nii.gz)')
-    parser.add_argument('--model', required=True, help='Path to nnunet_seg.onnx')
-    parser.add_argument('--plans', required=True, help='Path to plans.json from the nnUNet model folder')
+    parser.add_argument('--model', default=os.path.join(_model_dir, 'nnunet_seg.onnx'),
+                        help='Path to nnunet_seg.onnx')
+    parser.add_argument('--plans', default=os.path.join(_model_dir, 'plans.json'),
+                        help='Path to plans.json')
     parser.add_argument('--pad-rl', type=float, default=20.0, help='sc_crop padding left/right (mm)')
     parser.add_argument('--pad-ap', type=float, default=30.0, help='sc_crop padding anterior/posterior (mm)')
     parser.add_argument('--pad-si', type=float, default=40.0, help='sc_crop padding superior/inferior (mm)')
