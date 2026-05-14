@@ -80,36 +80,47 @@ def zscore_normalize(data):
     return ((data - mean) / max(std, 1e-8)).astype(np.float32)
 
 
-def make_gaussian_map(patch_size):
-    """Gaussian importance map for sliding window aggregation."""
-    sigma = [p / 8.0 for p in patch_size]
-    ones = np.ones(patch_size, dtype=np.float32)
-    g = gaussian_filter(ones, sigma=sigma)
+def make_gaussian_map(patch_size, sigma_scale=1.0 / 8):
+    """Gaussian importance map matching nnUNet's compute_gaussian exactly."""
+    tmp = np.zeros(patch_size, dtype=np.float64)
+    center = tuple(i // 2 for i in patch_size)
+    tmp[center] = 1
+    sigmas = [i * sigma_scale for i in patch_size]
+    g = gaussian_filter(tmp, sigmas, 0, mode='constant', cval=0)
     g = g / g.max()
-    g = g + 1e-8  # avoid zero weights
-    return g
+    # Replace zeros with minimum nonzero value (nnUNet avoids NaNs this way)
+    min_nonzero = g[g > 0].min()
+    g[g == 0] = min_nonzero
+    return g.astype(np.float32)
+
+
+def compute_steps(image_size, patch_size, tile_step):
+    """Compute sliding window start positions matching nnUNet's compute_steps_for_sliding_window."""
+    steps = []
+    for img_s, patch_s in zip(image_size, patch_size):
+        if img_s <= patch_s:
+            steps.append([0])
+            continue
+        num_steps = int(np.ceil((img_s - patch_s) / (patch_s * tile_step))) + 1
+        max_step = img_s - patch_s
+        if num_steps > 1:
+            actual_step = max_step / (num_steps - 1)
+        else:
+            actual_step = 99999
+        steps.append([int(np.round(actual_step * i)) for i in range(num_steps)])
+    return steps
 
 
 def sliding_window_inference(data, session, patch_size, tile_step):
     """
-    Sliding window inference with Gaussian weighting.
-    data:       float32 array (D, H, W), already normalised
-    returns:    float32 array (D, H, W), probability of class 1 (spinal cord)
+    Sliding window inference with Gaussian weighting, matching nnUNet exactly.
+    data:    float32 array (D, H, W) in [z, y, x], already normalised
+    returns: float32 array (D, H, W), probability of class 1 (spinal cord)
     """
     D, H, W = data.shape
     pd, ph, pw = patch_size
-    sd = max(1, int(pd * tile_step))
-    sh = max(1, int(ph * tile_step))
-    sw = max(1, int(pw * tile_step))
 
-    gauss = make_gaussian_map(patch_size)
-    accumulator = np.zeros((D, H, W), dtype=np.float32)
-    weight_map  = np.zeros((D, H, W), dtype=np.float32)
-
-    input_name  = session.get_inputs()[0].name
-    output_name = session.get_outputs()[0].name
-
-    # Pad volume so every patch fits
+    # Pad so image is at least patch size in every dimension
     pad_d = max(0, pd - D)
     pad_h = max(0, ph - H)
     pad_w = max(0, pw - W)
@@ -117,34 +128,28 @@ def sliding_window_inference(data, session, patch_size, tile_step):
         data = np.pad(data, ((0, pad_d), (0, pad_h), (0, pad_w)), mode='constant')
     Dp, Hp, Wp = data.shape
 
-    # Sliding window start positions
-    def steps(size, patch, stride):
-        starts = list(range(0, size - patch + 1, stride))
-        if not starts or starts[-1] + patch < size:
-            starts.append(size - patch)
-        return starts
+    gauss        = make_gaussian_map(patch_size)
+    accumulator  = np.zeros((Dp, Hp, Wp), dtype=np.float32)
+    weight_map   = np.zeros((Dp, Hp, Wp), dtype=np.float32)
+    input_name   = session.get_inputs()[0].name
+    output_name  = session.get_outputs()[0].name
 
-    for dz in steps(Dp, pd, sd):
-        for dy in steps(Hp, ph, sh):
-            for dx in steps(Wp, pw, sw):
+    steps_d, steps_h, steps_w = compute_steps((Dp, Hp, Wp), patch_size, tile_step)
+
+    for dz in steps_d:
+        for dy in steps_h:
+            for dx in steps_w:
                 patch = data[dz:dz+pd, dy:dy+ph, dx:dx+pw]
-                inp   = patch[np.newaxis, np.newaxis]  # (1, 1, D, H, W)
+                inp   = patch[np.newaxis, np.newaxis].astype(np.float32)
                 out   = session.run([output_name], {input_name: inp})[0]  # (1, 2, D, H, W)
-                # softmax class 1 probability
                 logits = out[0]  # (2, D, H, W)
                 exp    = np.exp(logits - logits.max(axis=0, keepdims=True))
                 prob1  = exp[1] / exp.sum(axis=0)
+                accumulator[dz:dz+pd, dy:dy+ph, dx:dx+pw] += prob1 * gauss
+                weight_map [dz:dz+pd, dy:dy+ph, dx:dx+pw] += gauss
 
-                # Only accumulate within original (unpadded) volume
-                d_end = min(dz+pd, D)
-                h_end = min(dy+ph, H)
-                w_end = min(dx+pw, W)
-                ld, lh, lw = d_end-dz, h_end-dy, w_end-dx
-                accumulator[dz:d_end, dy:h_end, dx:w_end] += prob1[:ld, :lh, :lw] * gauss[:ld, :lh, :lw]
-                weight_map [dz:d_end, dy:h_end, dx:w_end] += gauss[:ld, :lh, :lw]
-
-    weight_map = np.where(weight_map == 0, 1.0, weight_map)
-    return accumulator / weight_map
+    prob = (accumulator / weight_map)[:D, :H, :W]
+    return prob
 
 
 def main():
