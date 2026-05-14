@@ -4,10 +4,14 @@ Standalone nnUNet ONNX inference for spinal cord segmentation.
 Takes a NIfTI image (already cropped to the spinal cord region and reoriented to RPI
 by sc_crop), runs segmentation using the exported ONNX model, and saves the binary mask.
 
-No nnunetv2 required — only nibabel, scipy, numpy, onnxruntime.
+Preprocessing pipeline matches nnUNet exactly:
+  load → transpose [x,y,z]→[z,y,x] → crop_to_nonzero → zscore_normalize → resample
+  → sliding_window_inference → resample_seg_back → pad_back → transpose [z,y,x]→[x,y,z]
+
+No nnunetv2 required — only nibabel, scipy, numpy, onnxruntime, scikit-image.
 
 Dependencies:
-    pip install nibabel scipy numpy onnxruntime
+    pip install nibabel scipy numpy onnxruntime scikit-image
 
 Usage:
     # Step 1 — crop with sc_crop (installs via: pip install sc-crop)
@@ -26,12 +30,11 @@ Author: Quentin Revillon
 import argparse
 import json
 import time
-from pathlib import Path
 
 import nibabel as nib
 import numpy as np
 import onnxruntime as ort
-from scipy.ndimage import gaussian_filter
+from scipy.ndimage import binary_fill_holes, gaussian_filter
 from skimage.transform import resize as sk_resize
 
 
@@ -55,75 +58,96 @@ def load_plans(plans_path):
     plans = json.load(open(plans_path))
     cfg = plans['configurations']['3d_fullres']
     return {
-        'target_spacing': cfg['spacing'],       # [z, y, x] in mm
-        'patch_size':     cfg['patch_size'],     # [D, H, W]
+        'target_spacing': cfg['spacing'],   # [z, y, x] in mm
+        'patch_size':     cfg['patch_size'], # [D, H, W]
     }
 
 
-def get_voxel_spacing(img):
-    """Return (z, y, x) voxel spacing in mm — reversed to match nnUNet's SimpleITK convention."""
-    return [float(z) for z in img.header.get_zooms()[:3][::-1]]
+def get_voxel_spacing_zyx(img):
+    """Return (z, y, x) spacing — reversed from nibabel [x,y,z] to match nnUNet's convention."""
+    return [float(v) for v in img.header.get_zooms()[:3][::-1]]
 
 
-def resample_volume(data, orig_spacing, target_spacing, order=3):
-    """Resample 3D array to target spacing using skimage.transform.resize (matches nnUNet exactly).
-    data is (D, H, W) in [z, y, x]. Spacing is [z, y, x]."""
-    new_shape = tuple(int(round(s * o / t)) for s, o, t in zip(data.shape, orig_spacing, target_spacing))
-    if new_shape == data.shape:
-        return data, new_shape
-    # nnUNet wraps data in a channel dim (c, z, y, x) and calls resize per channel
-    resampled = sk_resize(data.astype(float), new_shape, order=order, mode='edge', anti_aliasing=False)
-    return resampled.astype(np.float32), new_shape
+# ── Preprocessing steps matching nnUNet DefaultPreprocessor exactly ───────────
+
+def crop_to_nonzero(data):
+    """
+    Crop (D, H, W) array to bounding box of nonzero voxels.
+    Returns (cropped_data, bbox) where bbox = [[d0,d1],[h0,h1],[w0,w1]].
+    Matches nnUNet's crop_to_nonzero with binary_fill_holes.
+    """
+    mask = binary_fill_holes(data != 0)
+    bbox = []
+    for ax in range(3):
+        # project onto this axis
+        proj = np.any(mask, axis=tuple(i for i in range(3) if i != ax))
+        indices = np.where(proj)[0]
+        if len(indices) == 0:
+            bbox.append([0, data.shape[ax]])
+        else:
+            bbox.append([int(indices[0]), int(indices[-1]) + 1])
+    slicer = tuple(slice(b[0], b[1]) for b in bbox)
+    return data[slicer], bbox
+
+
+def pad_back(pred_cropped, bbox, full_shape):
+    """Pad prediction back to full_shape using the stored bbox."""
+    out = np.zeros(full_shape, dtype=pred_cropped.dtype)
+    slicer = tuple(slice(b[0], b[1]) for b in bbox)
+    out[slicer] = pred_cropped
+    return out
 
 
 def zscore_normalize(data):
-    """ZScore normalisation on all voxels (matches nnUNet ZScoreNormalization with use_mask_for_norm=False)."""
+    """ZScore on all voxels — matches nnUNet ZScoreNormalization with use_mask_for_norm=False."""
     mean = data.mean()
     std  = data.std()
-    return ((data - mean) / max(std, 1e-8)).astype(np.float32)
+    return ((data - mean) / max(float(std), 1e-8)).astype(np.float32)
 
+
+def resample(data, orig_shape, target_shape, order):
+    """Resample using skimage.transform.resize with mode='edge' — matches nnUNet exactly."""
+    if tuple(orig_shape) == tuple(target_shape):
+        return data.astype(np.float32)
+    return sk_resize(data.astype(float), target_shape,
+                     order=order, mode='edge', anti_aliasing=False).astype(np.float32)
+
+
+def compute_new_shape(orig_shape, orig_spacing, target_spacing):
+    return tuple(int(round(s * o / t)) for s, o, t in zip(orig_shape, orig_spacing, target_spacing))
+
+
+# ── Sliding window matching nnUNet ────────────────────────────────────────────
 
 def make_gaussian_map(patch_size, sigma_scale=1.0 / 8):
-    """Gaussian importance map matching nnUNet's compute_gaussian exactly."""
+    """Bell-shaped Gaussian importance map — matches nnUNet's compute_gaussian."""
     tmp = np.zeros(patch_size, dtype=np.float64)
-    center = tuple(i // 2 for i in patch_size)
-    tmp[center] = 1
-    sigmas = [i * sigma_scale for i in patch_size]
-    g = gaussian_filter(tmp, sigmas, 0, mode='constant', cval=0)
-    g = g / g.max()
-    # Replace zeros with minimum nonzero value (nnUNet avoids NaNs this way)
-    min_nonzero = g[g > 0].min()
-    g[g == 0] = min_nonzero
+    tmp[tuple(i // 2 for i in patch_size)] = 1
+    g = gaussian_filter(tmp, [i * sigma_scale for i in patch_size], mode='constant', cval=0)
+    g /= g.max()
+    g[g == 0] = g[g > 0].min()
     return g.astype(np.float32)
 
 
 def compute_steps(image_size, patch_size, tile_step):
-    """Compute sliding window start positions matching nnUNet's compute_steps_for_sliding_window."""
+    """Uniformly distributed start positions — matches nnUNet's compute_steps_for_sliding_window."""
     steps = []
     for img_s, patch_s in zip(image_size, patch_size):
         if img_s <= patch_s:
             steps.append([0])
             continue
-        num_steps = int(np.ceil((img_s - patch_s) / (patch_s * tile_step))) + 1
-        max_step = img_s - patch_s
-        if num_steps > 1:
-            actual_step = max_step / (num_steps - 1)
-        else:
-            actual_step = 99999
-        steps.append([int(np.round(actual_step * i)) for i in range(num_steps)])
+        n = int(np.ceil((img_s - patch_s) / (patch_s * tile_step))) + 1
+        max_val = img_s - patch_s
+        actual = max_val / (n - 1) if n > 1 else 99999
+        steps.append([int(np.round(actual * i)) for i in range(n)])
     return steps
 
 
 def sliding_window_inference(data, session, patch_size, tile_step):
-    """
-    Sliding window inference with Gaussian weighting, matching nnUNet exactly.
-    data:    float32 array (D, H, W) in [z, y, x], already normalised
-    returns: float32 array (D, H, W), probability of class 1 (spinal cord)
-    """
+    """Sliding window with Gaussian weighting — matches nnUNet exactly."""
     D, H, W = data.shape
     pd, ph, pw = patch_size
 
-    # Pad so image is at least patch size in every dimension
     pad_d = max(0, pd - D)
     pad_h = max(0, ph - H)
     pad_w = max(0, pw - W)
@@ -131,95 +155,92 @@ def sliding_window_inference(data, session, patch_size, tile_step):
         data = np.pad(data, ((0, pad_d), (0, pad_h), (0, pad_w)), mode='constant')
     Dp, Hp, Wp = data.shape
 
-    gauss        = make_gaussian_map(patch_size)
-    accumulator  = np.zeros((Dp, Hp, Wp), dtype=np.float32)
-    weight_map   = np.zeros((Dp, Hp, Wp), dtype=np.float32)
-    input_name   = session.get_inputs()[0].name
-    output_name  = session.get_outputs()[0].name
+    gauss       = make_gaussian_map(patch_size)
+    accum       = np.zeros((Dp, Hp, Wp), dtype=np.float32)
+    weight_map  = np.zeros((Dp, Hp, Wp), dtype=np.float32)
+    in_name     = session.get_inputs()[0].name
+    out_name    = session.get_outputs()[0].name
 
-    steps_d, steps_h, steps_w = compute_steps((Dp, Hp, Wp), patch_size, tile_step)
-
-    for dz in steps_d:
-        for dy in steps_h:
-            for dx in steps_w:
-                patch = data[dz:dz+pd, dy:dy+ph, dx:dx+pw]
-                inp   = patch[np.newaxis, np.newaxis].astype(np.float32)
-                out   = session.run([output_name], {input_name: inp})[0]  # (1, 2, D, H, W)
-                logits = out[0]  # (2, D, H, W)
+    for dz in compute_steps((Dp, Hp, Wp), patch_size, tile_step)[0]:
+        for dy in compute_steps((Dp, Hp, Wp), patch_size, tile_step)[1]:
+            for dx in compute_steps((Dp, Hp, Wp), patch_size, tile_step)[2]:
+                patch  = data[dz:dz+pd, dy:dy+ph, dx:dx+pw][np.newaxis, np.newaxis]
+                logits = session.run([out_name], {in_name: patch})[0][0]  # (2, D, H, W)
                 exp    = np.exp(logits - logits.max(axis=0, keepdims=True))
                 prob1  = exp[1] / exp.sum(axis=0)
-                accumulator[dz:dz+pd, dy:dy+ph, dx:dx+pw] += prob1 * gauss
+                accum      [dz:dz+pd, dy:dy+ph, dx:dx+pw] += prob1 * gauss
                 weight_map [dz:dz+pd, dy:dy+ph, dx:dx+pw] += gauss
 
-    prob = (accumulator / weight_map)[:D, :H, :W]
-    return prob
+    return (accum / weight_map)[:D, :H, :W]
 
+
+# ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
     args = parse_args()
     t0 = time.perf_counter()
 
-    plans = load_plans(args.plans)
-    target_spacing = plans['target_spacing']
-    patch_size     = plans['patch_size']
-    print(f'Target spacing : {target_spacing}')
-    print(f'Patch size     : {patch_size}')
+    plans        = load_plans(args.plans)
+    target_sp    = plans['target_spacing']
+    patch_size   = plans['patch_size']
+    print(f'Target spacing : {target_sp}  patch_size : {patch_size}')
 
-    # Load image — transpose to [z, y, x] to match nnUNet's internal convention
-    img = nib.load(args.i)
-    data = img.get_fdata().transpose((2, 1, 0)).astype(np.float32)
-    orig_spacing = get_voxel_spacing(img)  # [z, y, x]
-    print(f'Input shape    : {data.shape}  spacing={orig_spacing}  (z,y,x)')
+    # 1. Load + transpose to [z, y, x]
+    img          = nib.load(args.i)
+    data         = img.get_fdata().transpose((2, 1, 0)).astype(np.float32)
+    orig_spacing = get_voxel_spacing_zyx(img)
+    shape_before_crop = data.shape
+    print(f'Loaded         : {data.shape}  spacing={orig_spacing}  (z,y,x)')
     t_load = time.perf_counter()
 
-    # Resample to target spacing
-    data_rs, new_shape = resample_volume(data, orig_spacing, target_spacing, order=3)
-    t_resample = time.perf_counter()
-    print(f'Resampled      : {data_rs.shape}  ({t_resample - t_load:.2f}s)')
+    # 2. crop_to_nonzero  (nnUNet step 1)
+    data_cropped, bbox = crop_to_nonzero(data)
+    shape_after_crop = data_cropped.shape
+    print(f'Cropped        : {shape_after_crop}  bbox={bbox}')
 
-    # Normalise
-    data_norm = zscore_normalize(data_rs)
-    t_norm = time.perf_counter()
+    # 3. zscore_normalize  (nnUNet step 2 — BEFORE resampling)
+    data_norm = zscore_normalize(data_cropped)
 
-    # ONNX Runtime session
+    # 4. Resample to target spacing  (nnUNet step 3)
+    new_shape = compute_new_shape(shape_after_crop, orig_spacing, target_sp)
+    data_rs   = resample(data_norm, shape_after_crop, new_shape, order=3)
+    t_pre = time.perf_counter()
+    print(f'Resampled      : {data_rs.shape}  ({t_pre - t_load:.2f}s)')
+
+    # 5. Load ONNX model
     sess_options = ort.SessionOptions()
     if args.threads:
         sess_options.intra_op_num_threads = args.threads
     session = ort.InferenceSession(args.model, sess_options=sess_options,
                                    providers=['CPUExecutionProvider'])
     t_model = time.perf_counter()
-    print(f'Model loaded   : ({t_model - t_norm:.2f}s)')
+    print(f'Model loaded   : ({t_model - t_pre:.2f}s)')
 
-    # Sliding window inference
-    prob = sliding_window_inference(data_norm, session, patch_size, args.tile_step)
+    # 6. Sliding window inference
+    prob  = sliding_window_inference(data_rs, session, patch_size, args.tile_step)
+    pred_rs = (prob > 0.5).astype(np.float32)
     t_infer = time.perf_counter()
     print(f'Inference      : ({t_infer - t_model:.2f}s)')
 
-    # Threshold → binary mask
-    pred_rs = (prob > 0.5).astype(np.uint8)
+    # 7. Resample seg back to cropped shape  (order=0, matches nnUNet seg resampling)
+    pred_cropped = resample(pred_rs, new_shape, shape_after_crop, order=0)
+    pred_cropped = (pred_cropped > 0.5).astype(np.uint8)
 
-    # Resample prediction back to original [z,y,x] shape (order=0 = nearest neighbour, matches nnUNet)
-    pred = sk_resize(pred_rs.astype(float), data.shape, order=0, mode='edge', anti_aliasing=False)
-    pred = (pred > 0.5).astype(np.uint8)
-    t_post = time.perf_counter()
+    # 8. Pad back to full shape
+    pred_zyx = pad_back(pred_cropped, bbox, shape_before_crop)
 
-    # Transpose back to nibabel [x, y, z] convention before saving
-    pred = pred.transpose((2, 1, 0))
-
-    # Save
-    out_img = nib.Nifti1Image(pred, img.affine, img.header)
-    out_img.set_data_dtype(np.uint8)
-    nib.save(out_img, args.o)
-    t_save = time.perf_counter()
+    # 9. Transpose back to nibabel [x, y, z] and save
+    pred = pred_zyx.transpose((2, 1, 0)).astype(np.uint8)
+    nib.save(nib.Nifti1Image(pred, img.affine, img.header), args.o)
+    t_end = time.perf_counter()
 
     print()
     print('─' * 40)
-    print(f'  Load + resample : {t_resample - t0:.2f}s')
-    print(f'  Normalise       : {t_norm - t_resample:.2f}s')
-    print(f'  Model load      : {t_model - t_norm:.2f}s')
-    print(f'  Inference       : {t_infer - t_model:.2f}s')
-    print(f'  Post + save     : {t_save - t_infer:.2f}s')
-    print(f'  Total           : {t_save - t0:.2f}s')
+    print(f'  Preprocess  : {t_pre - t_load:.2f}s')
+    print(f'  Model load  : {t_model - t_pre:.2f}s')
+    print(f'  Inference   : {t_infer - t_model:.2f}s')
+    print(f'  Postprocess : {t_end - t_infer:.2f}s')
+    print(f'  Total       : {t_end - t0:.2f}s')
     print('─' * 40)
     print(f'Saved → {args.o}')
 
