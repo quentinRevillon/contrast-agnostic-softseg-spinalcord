@@ -148,11 +148,12 @@ def sliding_window_inference(data, session, patch_size, tile_step):
     D, H, W = data.shape
     pd, ph, pw = patch_size
 
-    pad_d = max(0, pd - D)
-    pad_h = max(0, ph - H)
-    pad_w = max(0, pw - W)
+    # Symmetric padding matches nnUNet's pad_nd_image (pad equally on both sides)
+    pad_d = max(0, pd - D); d0 = pad_d // 2; d1 = pad_d - d0
+    pad_h = max(0, ph - H); h0 = pad_h // 2; h1 = pad_h - h0
+    pad_w = max(0, pw - W); w0 = pad_w // 2; w1 = pad_w - w0
     if pad_d or pad_h or pad_w:
-        data = np.pad(data, ((0, pad_d), (0, pad_h), (0, pad_w)), mode='constant')
+        data = np.pad(data, ((d0, d1), (h0, h1), (w0, w1)), mode='constant')
     Dp, Hp, Wp = data.shape
 
     gauss       = make_gaussian_map(patch_size)
@@ -171,7 +172,7 @@ def sliding_window_inference(data, session, patch_size, tile_step):
                 accum      [dz:dz+pd, dy:dy+ph, dx:dx+pw] += prob1 * gauss
                 weight_map [dz:dz+pd, dy:dy+ph, dx:dx+pw] += gauss
 
-    return (accum / weight_map)[:D, :H, :W]
+    return (accum / weight_map)[d0:d0+D, h0:h0+H, w0:w0+W]
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
