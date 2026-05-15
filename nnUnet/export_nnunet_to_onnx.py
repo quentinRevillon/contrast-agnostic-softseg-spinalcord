@@ -2,7 +2,7 @@
 Export a trained nnUNet model (PlainConvUNet) to ONNX format.
 
 Only the neural network is exported — preprocessing (resampling, normalisation) and
-sliding window inference are handled separately by run_inference_onnx.py.
+sliding window inference are handled separately by run_inference.py.
 
 Requires the contrast_agnostic conda environment (nnunetv2 + torch).
 
