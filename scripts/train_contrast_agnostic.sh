@@ -20,7 +20,7 @@
 PATH_REPO="/home/quentinr/contrast-agnostic-softseg-spinalcord"
 
 # Step to start from (1–10)
-START_STEP=8
+START_STEP=6
 
 
 #  [SKIP] sc_crop detection failed: /home/quentinr/datasets_contrast_agnostic_retraining/canproco/sub-cal175/ses-M0/anat/sub-cal175_ses-M0_STIR.nii.gz
@@ -171,29 +171,33 @@ if [ ${START_STEP} -le 6 ]; then
     PATH_TEST_PRED="${MODEL_DIR}/test_predictions"
     mkdir -p ${PATH_TEST_PRED}
 
-    CUDA_VISIBLE_DEVICES=${cuda_visible_devices} nnUNetv2_predict \
-        -i ${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/imagesTs \
-        -o ${PATH_TEST_PRED} \
-        -d ${DATASET_NUMBER} \
-        -f ${folds[0]} \
-        -c ${configurations[0]} \
-        -tr ${NNUNET_TRAINER} \
-        -p ${NNUNET_PLANS_FILE}
+    if [ -f "${PATH_TEST_PRED}/summary.json" ]; then
+        echo "Step 6 already done (${PATH_TEST_PRED}/summary.json exists), skipping."
+    else
+        CUDA_VISIBLE_DEVICES=${cuda_visible_devices} nnUNetv2_predict \
+            -i ${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/imagesTs \
+            -o ${PATH_TEST_PRED} \
+            -d ${DATASET_NUMBER} \
+            -f ${folds[0]} \
+            -c ${configurations[0]} \
+            -tr ${NNUNET_TRAINER} \
+            -p ${NNUNET_PLANS_FILE}
 
-    nnUNetv2_evaluate_folder \
-        ${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/labelsTs \
-        ${PATH_TEST_PRED} \
-        -djfile ${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/dataset.json \
-        -pfile ${MODEL_DIR}/plans.json
+        nnUNetv2_evaluate_folder \
+            ${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/labelsTs \
+            ${PATH_TEST_PRED} \
+            -djfile ${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/dataset.json \
+            -pfile ${MODEL_DIR}/plans.json
 
-    echo "Oracle test Dice saved to ${PATH_TEST_PRED}/summary.json"
+        echo "Oracle test Dice saved to ${PATH_TEST_PRED}/summary.json"
+    fi
 fi
 
 
 # ====================================
 # STEP 6b — TEST SET EVALUATION (oracle crop, no TTA)
 # ====================================
-# Same as step 6 but with --disable_tta to disable mirroring.
+# Same as step 6 but with --disable_tta (no mirroring).
 # Allows measuring the pure mirroring effect vs ONNX (which has no TTA).
 
 if [ ${START_STEP} -le 6 ]; then
@@ -201,23 +205,27 @@ if [ ${START_STEP} -le 6 ]; then
     PATH_TEST_PRED_NOMIR="${MODEL_DIR}/test_predictions_no_mirror"
     mkdir -p ${PATH_TEST_PRED_NOMIR}
 
-    CUDA_VISIBLE_DEVICES=${cuda_visible_devices} nnUNetv2_predict \
-        -i ${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/imagesTs \
-        -o ${PATH_TEST_PRED_NOMIR} \
-        -d ${DATASET_NUMBER} \
-        -f ${folds[0]} \
-        -c ${configurations[0]} \
-        -tr ${NNUNET_TRAINER} \
-        -p ${NNUNET_PLANS_FILE} \
-        --disable_tta
+    if [ -f "${PATH_TEST_PRED_NOMIR}/summary.json" ]; then
+        echo "Step 6b already done (${PATH_TEST_PRED_NOMIR}/summary.json exists), skipping."
+    else
+        CUDA_VISIBLE_DEVICES=${cuda_visible_devices} nnUNetv2_predict \
+            -i ${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/imagesTs \
+            -o ${PATH_TEST_PRED_NOMIR} \
+            -d ${DATASET_NUMBER} \
+            -f ${folds[0]} \
+            -c ${configurations[0]} \
+            -tr ${NNUNET_TRAINER} \
+            -p ${NNUNET_PLANS_FILE} \
+            --disable_tta
 
-    nnUNetv2_evaluate_folder \
-        ${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/labelsTs \
-        ${PATH_TEST_PRED_NOMIR} \
-        -djfile ${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/dataset.json \
-        -pfile ${MODEL_DIR}/plans.json
+        nnUNetv2_evaluate_folder \
+            ${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/labelsTs \
+            ${PATH_TEST_PRED_NOMIR} \
+            -djfile ${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/dataset.json \
+            -pfile ${MODEL_DIR}/plans.json
 
-    echo "No-TTA test Dice saved to ${PATH_TEST_PRED_NOMIR}/summary.json"
+        echo "No-TTA test Dice saved to ${PATH_TEST_PRED_NOMIR}/summary.json"
+    fi
 fi
 
 
