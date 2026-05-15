@@ -21,7 +21,7 @@ PATH_REPO="/home/quentinr/contrast-agnostic-softseg-spinalcord"
 
 # Step to start from / stop at (1-10)
 START_STEP=6
-END_STEP=10
+END_STEP=6
 
 
 #  [SKIP] sc_crop detection failed: /home/quentinr/datasets_contrast_agnostic_retraining/canproco/sub-cal175/ses-M0/anat/sub-cal175_ses-M0_STIR.nii.gz
