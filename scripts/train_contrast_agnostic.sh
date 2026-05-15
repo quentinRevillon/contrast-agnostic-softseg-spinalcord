@@ -13,14 +13,15 @@
 #   9. ONNX benchmark on GT-crop test set (comparable to step 6)
 #  10. ONNX benchmark on sc_crop test set (comparable to step 7)
 #
-# Set START_STEP to skip completed steps. If starting from step 3+, set PATH_OUT_DATALISTS manually.
+# Set START_STEP/END_STEP to run a specific range of steps. If starting from step 3+, set PATH_OUT_DATALISTS manually.
 
 
 # Define (full) path to the contrast-agnostic repository
 PATH_REPO="/home/quentinr/contrast-agnostic-softseg-spinalcord"
 
-# Step to start from (1–10)
+# Step to start from / stop at (1-10)
 START_STEP=6
+END_STEP=10
 
 
 #  [SKIP] sc_crop detection failed: /home/quentinr/datasets_contrast_agnostic_retraining/canproco/sub-cal175/ses-M0/anat/sub-cal175_ses-M0_STIR.nii.gz
@@ -68,7 +69,7 @@ cuda_visible_devices=0
 # STEP 1 — CLONE DATASETS
 # ====================================
 
-if [ ${START_STEP} -le 1 ]; then
+if [ ${START_STEP} -le 1 ] && [ ${END_STEP} -ge 1 ]; then
     for dataset in ${DATASETS[@]}; do
         if [[ ${dataset} == site_* ]]; then
             if [[ ! -d "${PATH_DATA_BASE}/${dataset}" ]]; then
@@ -89,7 +90,7 @@ fi
 # STEP 2 — CREATE DATALISTS
 # ====================================
 
-if [ ${START_STEP} -le 2 ]; then
+if [ ${START_STEP} -le 2 ] && [ ${END_STEP} -ge 2 ]; then
     for dataset in ${DATASETS[@]}; do
         python ${PATH_REPO}/nnUnet/02_create_msd_data.py \
             --seed ${SEED} \
@@ -107,7 +108,7 @@ fi
 # STEP 3 — CONVERT TO NNUNET FORMAT
 # ====================================
 
-if [ ${START_STEP} -le 3 ]; then
+if [ ${START_STEP} -le 3 ] && [ ${END_STEP} -ge 3 ]; then
     # Without cropping (original pipeline):
     # python ${PATH_REPO}/nnUnet/03_convert_msd_to_nnunet_reorient.py \
     #     --input ${PATH_OUT_DATALISTS} \
@@ -133,7 +134,7 @@ fi
 # STEP 4 — NNUNET PREPROCESSING
 # ====================================
 
-if [ ${START_STEP} -le 4 ]; then
+if [ ${START_STEP} -le 4 ] && [ ${END_STEP} -ge 4 ]; then
     for configuration in ${configurations[@]}; do
         nnUNetv2_plan_and_preprocess -d ${DATASET_NUMBER} --verify_dataset_integrity -c ${configuration}
     done
@@ -144,7 +145,7 @@ fi
 # STEP 5 — NNUNET TRAINING
 # ====================================
 
-if [ ${START_STEP} -le 5 ]; then
+if [ ${START_STEP} -le 5 ] && [ ${END_STEP} -ge 5 ]; then
     for configuration in ${configurations[@]}; do
         for fold in ${folds[@]}; do
             start=$(date +%s)
@@ -166,7 +167,7 @@ fi
 # and evaluates Dice. This is the "oracle" upper bound: crop coordinates are
 # derived from the GT label, not a detection model.
 
-if [ ${START_STEP} -le 6 ]; then
+if [ ${START_STEP} -le 6 ] && [ ${END_STEP} -ge 6 ]; then
     MODEL_DIR="${PATH_NNUNET_RESULTS}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/nnUNetTrainer__${NNUNET_PLANS_FILE}__${configurations[0]}"
     PATH_TEST_PRED="${MODEL_DIR}/test_predictions"
     mkdir -p ${PATH_TEST_PRED}
@@ -200,7 +201,7 @@ fi
 # Same as step 6 but with --disable_tta (no mirroring).
 # Allows measuring the pure mirroring effect vs ONNX (which has no TTA).
 
-if [ ${START_STEP} -le 6 ]; then
+if [ ${START_STEP} -le 6 ] && [ ${END_STEP} -ge 6 ]; then
     MODEL_DIR="${PATH_NNUNET_RESULTS}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/nnUNetTrainer__${NNUNET_PLANS_FILE}__${configurations[0]}"
     PATH_TEST_PRED_NOMIR="${MODEL_DIR}/test_predictions_no_mirror"
     mkdir -p ${PATH_TEST_PRED_NOMIR}
@@ -239,7 +240,7 @@ fi
 
 SC_CROP_ENV="sc_crop"
 
-if [ ${START_STEP} -le 7 ]; then
+if [ ${START_STEP} -le 7 ] && [ ${END_STEP} -ge 7 ]; then
     MODEL_DIR="${PATH_NNUNET_RESULTS}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/nnUNetTrainer__${NNUNET_PLANS_FILE}__${configurations[0]}"
     PATH_SC_CROP_EVAL="${MODEL_DIR}/test_sc_crop"
 
@@ -263,7 +264,7 @@ fi
 # Exports the trained network weights to ONNX (no nnunetv2 required at inference time).
 # Output: ${MODEL_DIR}/onnx/nnunet_seg.onnx
 
-if [ ${START_STEP} -le 8 ]; then
+if [ ${START_STEP} -le 8 ] && [ ${END_STEP} -ge 8 ]; then
     MODEL_DIR="${PATH_NNUNET_RESULTS}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/nnUNetTrainer__${NNUNET_PLANS_FILE}__${configurations[0]}"
     ONNX_DIR="${MODEL_DIR}/onnx"
     mkdir -p ${ONNX_DIR}
@@ -284,7 +285,7 @@ fi
 # ONNX inference on imagesTs (GT bbox crop, same as step 6).
 # Directly comparable to test_predictions/summary.json.
 
-if [ ${START_STEP} -le 9 ]; then
+if [ ${START_STEP} -le 9 ] && [ ${END_STEP} -ge 9 ]; then
     MODEL_DIR="${PATH_NNUNET_RESULTS}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/nnUNetTrainer__${NNUNET_PLANS_FILE}__${configurations[0]}"
     ONNX_DIR="${MODEL_DIR}/onnx"
 
@@ -305,7 +306,7 @@ fi
 # ONNX inference via sc_crop detection pipeline on original test images.
 # Directly comparable to test_sc_crop/metrics_sc_crop.csv (step 7).
 
-if [ ${START_STEP} -le 10 ]; then
+if [ ${START_STEP} -le 10 ] && [ ${END_STEP} -ge 10 ]; then
     MODEL_DIR="${PATH_NNUNET_RESULTS}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/nnUNetTrainer__${NNUNET_PLANS_FILE}__${configurations[0]}"
     ONNX_DIR="${MODEL_DIR}/onnx"
 
