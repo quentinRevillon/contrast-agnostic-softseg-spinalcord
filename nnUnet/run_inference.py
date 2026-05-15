@@ -21,20 +21,19 @@ PT modes require   : nnunetv2, torch (+ the above)
 sc_crop must be installed in the conda env specified by --sc-crop-env.
 
 Usage:
+    # Download model files (first use only)
+    python nnUnet/run_inference.py download
+
     # ONNX (default)
-    python nnUnet/run_inference_onnx.py -i image.nii.gz -o seg.nii.gz
+    python nnUnet/run_inference.py -i image.nii.gz -o seg.nii.gz
 
     # PyTorch without TTA
-    python nnUnet/run_inference_onnx.py -i image.nii.gz -o seg.nii.gz \\
-        --mode pt --model-folder /path/to/nnUNetTrainer__nnUNetPlans__3d_fullres
+    python nnUnet/run_inference.py -i image.nii.gz -o seg.nii.gz --mode pt
 
     # PyTorch with TTA (mirroring)
-    python nnUnet/run_inference_onnx.py -i image.nii.gz -o seg.nii.gz \\
-        --mode pt-tta --model-folder /path/to/nnUNetTrainer__nnUNetPlans__3d_fullres
+    python nnUnet/run_inference.py -i image.nii.gz -o seg.nii.gz --mode pt-tta
 
-Model files expected in ~/nnunet_contrast_agnostic/ for ONNX mode:
-    nnunet_seg.onnx   — exported with export_nnunet_to_onnx.py
-    plans.json        — from the nnUNet model folder
+Model files are downloaded to ~/nnunet_contrast_agnostic/ by the download command.
 
 Author: Quentin Revillon
 """
@@ -43,8 +42,39 @@ import argparse
 import json
 import os
 import subprocess
+import sys
 import tempfile
 import time
+import urllib.request
+
+_MODEL_DIR = os.path.expanduser('~/nnunet_contrast_agnostic')
+_RELEASE_URL = 'https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord/releases/download/v0.0.1'
+_ASSETS = [
+    ('nnunet_seg.onnx',        'onnunet_seg.onnx'),
+    ('plans.json',             'plans.json'),
+    ('dataset.json',           'dataset.json'),
+    ('checkpoint_final.pth',   'fold_0/checkpoint_final.pth'),
+]
+
+
+def download_models(model_dir=_MODEL_DIR):
+    os.makedirs(os.path.join(model_dir, 'fold_0'), exist_ok=True)
+    for asset_name, rel_path in _ASSETS:
+        dest = os.path.join(model_dir, rel_path)
+        if os.path.exists(dest):
+            print(f'  already exists: {dest}')
+            continue
+        url = f'{_RELEASE_URL}/{asset_name}'
+        print(f'  downloading {asset_name} ...', flush=True)
+        urllib.request.urlretrieve(url, dest, reporthook=_progress)
+        print()
+    print(f'Models ready in {model_dir}')
+
+
+def _progress(count, block_size, total_size):
+    pct = min(int(count * block_size * 100 / total_size), 100) if total_size > 0 else 0
+    print(f'\r  {pct}%', end='', flush=True)
+
 
 import nibabel as nib
 import numpy as np
@@ -55,7 +85,10 @@ from skimage.transform import resize as sk_resize
 
 
 def parse_args():
-    _model_dir = os.path.expanduser('~/nnunet_contrast_agnostic')
+    if len(sys.argv) > 1 and sys.argv[1] == 'download':
+        download_models()
+        sys.exit(0)
+
     parser = argparse.ArgumentParser(
         description='Spinal cord segmentation via nnUNet (ONNX or PyTorch)',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -65,17 +98,17 @@ def parse_args():
     parser.add_argument('--mode', default='onnx', choices=['onnx', 'pt', 'pt-tta'],
                         help='Inference mode: onnx (no nnunetv2), pt (PyTorch, no TTA), pt-tta (PyTorch + mirroring)')
     # ONNX-mode args
-    parser.add_argument('--model', default=os.path.join(_model_dir, 'nnunet_seg.onnx'),
+    parser.add_argument('--model', default=os.path.join(_MODEL_DIR, 'nnunet_seg.onnx'),
                         help='[onnx] Path to nnunet_seg.onnx')
-    parser.add_argument('--plans', default=os.path.join(_model_dir, 'plans.json'),
+    parser.add_argument('--plans', default=os.path.join(_MODEL_DIR, 'plans.json'),
                         help='[onnx] Path to plans.json')
     parser.add_argument('--tile-step', type=float, default=0.5,
                         help='[onnx] Sliding window step as fraction of patch size')
     parser.add_argument('--threads', type=int, default=None,
                         help='[onnx] ONNX Runtime intra-op threads (default: auto)')
     # PT-mode args
-    parser.add_argument('--model-folder', default=None,
-                        help='[pt/pt-tta] Path to nnUNetTrainer__nnUNetPlans__3d_fullres folder')
+    parser.add_argument('--model-folder', default=_MODEL_DIR,
+                        help='[pt/pt-tta] Path to model folder (must contain plans.json, dataset.json, fold_0/)')
     parser.add_argument('--fold', type=int, default=0,
                         help='[pt/pt-tta] Fold index')
     parser.add_argument('--device', default='cpu', choices=['cpu', 'cuda', 'mps'],
@@ -318,7 +351,6 @@ def main():
     if args.mode == 'onnx':
         pred_rpi_arr = infer_onnx(crop_rpi, args.model, args.plans, args.tile_step, args.threads)
     else:
-        assert args.model_folder, '--model-folder is required for pt and pt-tta modes'
         pred_rpi_arr = infer_pt(crop_rpi, args.model_folder, args.fold, args.device,
                                 use_mirroring=(args.mode == 'pt-tta'))
     t_infer = time.perf_counter()
