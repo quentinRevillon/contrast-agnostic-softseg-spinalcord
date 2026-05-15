@@ -191,6 +191,37 @@ fi
 
 
 # ====================================
+# STEP 6b — TEST SET EVALUATION (oracle crop, no TTA)
+# ====================================
+# Same as step 6 but with --disable_tta to disable mirroring.
+# Allows measuring the pure mirroring effect vs ONNX (which has no TTA).
+
+if [ ${START_STEP} -le 6 ]; then
+    MODEL_DIR="${PATH_NNUNET_RESULTS}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/nnUNetTrainer__${NNUNET_PLANS_FILE}__${configurations[0]}"
+    PATH_TEST_PRED_NOMIR="${MODEL_DIR}/test_predictions_no_mirror"
+    mkdir -p ${PATH_TEST_PRED_NOMIR}
+
+    CUDA_VISIBLE_DEVICES=${cuda_visible_devices} nnUNetv2_predict \
+        -i ${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/imagesTs \
+        -o ${PATH_TEST_PRED_NOMIR} \
+        -d ${DATASET_NUMBER} \
+        -f ${folds[0]} \
+        -c ${configurations[0]} \
+        -tr ${NNUNET_TRAINER} \
+        -p ${NNUNET_PLANS_FILE} \
+        --disable_tta
+
+    nnUNetv2_evaluate_folder \
+        ${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/labelsTs \
+        ${PATH_TEST_PRED_NOMIR} \
+        -djfile ${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/dataset.json \
+        -pfile ${MODEL_DIR}/plans.json
+
+    echo "No-TTA test Dice saved to ${PATH_TEST_PRED_NOMIR}/summary.json"
+fi
+
+
+# ====================================
 # STEP 7 — TEST SET EVALUATION (sc_crop pipeline)
 # ====================================
 # Runs the realistic inference pipeline on the original (uncropped) test images:
