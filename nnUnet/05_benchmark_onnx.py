@@ -201,12 +201,30 @@ def main():
 
     dices = [r['dice'] for r in rows]
     infs  = [r['inference_time_s'] for r in rows]
+
+    summary = {
+        'N': len(rows),
+        'Dice': {
+            'mean':   round(float(np.mean(dices)),   4),
+            'std':    round(float(np.std(dices)),    4),
+            'median': round(float(np.median(dices)), 4),
+        },
+        'inference_time_s': {
+            'mean': round(float(np.mean(infs)), 2),
+            'std':  round(float(np.std(infs)),  2),
+        },
+    }
+    summary_path = str(args.output).replace('.csv', '_summary.json')
+    with open(summary_path, 'w') as f:
+        json.dump(summary, f, indent=2)
+
     print()
     print(f'N images     : {len(rows)}')
     print(f'Dice mean±std: {np.mean(dices):.4f} ± {np.std(dices):.4f}')
     print(f'Dice median  : {np.median(dices):.4f}')
     print(f'Inf time mean: {np.mean(infs):.2f}s ± {np.std(infs):.2f}s')
     print(f'CSV saved    : {args.output}')
+    print(f'Summary saved: {summary_path}')
 
 
 if __name__ == '__main__':

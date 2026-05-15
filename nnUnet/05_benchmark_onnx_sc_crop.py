@@ -88,6 +88,28 @@ def build_test_mapping(conversion_dict_path):
 
 # ── sc_crop detection ─────────────────────────────────────────────────────────
 
+def per_face_missing_mm(sc_bbox, lbl_nib):
+    """Return dict of missing SC mm per crop face (positive = GT outside crop).
+
+    sc_bbox : (xmin, xmax, ymin, ymax, zmin, zmax) in original image voxels
+    lbl_nib : original GT label NIfTI (same voxel space as sc_bbox)
+    """
+    lbl = np.asarray(lbl_nib.dataobj) > 0.5
+    if not lbl.any():
+        return {f'ax{i}_{s}_mm': 0.0 for i in range(3) for s in ('lo', 'hi')}
+    coords  = np.where(lbl)
+    gt_bbox = [(int(coords[i].min()), int(coords[i].max())) for i in range(3)]
+    sp      = lbl_nib.header.get_zooms()[:3]
+    sc_by_ax = [(sc_bbox[0], sc_bbox[1]),
+                (sc_bbox[2], sc_bbox[3]),
+                (sc_bbox[4], sc_bbox[5])]
+    result = {}
+    for i, (gt_lo, gt_hi), (sc_lo, sc_hi) in zip(range(3), gt_bbox, sc_by_ax):
+        result[f'ax{i}_lo_mm'] = round(max(0, sc_lo - gt_lo) * float(sp[i]), 2)
+        result[f'ax{i}_hi_mm'] = round(max(0, gt_hi - sc_hi) * float(sp[i]), 2)
+    return result
+
+
 def run_sc_crop(image_path, pad_rl, pad_ap, pad_si, sc_crop_env):
     """Run sc_crop and return (xmin, xmax, ymin, ymax, zmin, zmax)."""
     bbox_file = tempfile.mktemp(suffix='_bbox.txt')
@@ -241,8 +263,8 @@ def main():
         t0 = time.perf_counter()
 
         # ── Phase 1: sc_crop detection + crop + RPI ───────────────────────────
-        xmin, xmax, ymin, ymax, zmin, zmax = run_sc_crop(
-            orig_img, args.pad_rl, args.pad_ap, args.pad_si, args.sc_crop_env)
+        sc_bbox = run_sc_crop(orig_img, args.pad_rl, args.pad_ap, args.pad_si, args.sc_crop_env)
+        xmin, xmax, ymin, ymax, zmin, zmax = sc_bbox
 
         lbl_nib = nib.load(orig_label)
         gt_total_count = int((np.asarray(lbl_nib.dataobj) > 0.5).sum())
@@ -281,6 +303,7 @@ def main():
 
         gt_crop_arr = lbl_crop_rpi.get_fdata()
         coverage, dice_within, dice_global = compute_metrics(pred_arr, gt_crop_arr, gt_total_count)
+        missing = per_face_missing_mm(sc_bbox, lbl_nib)
 
         t_total = time.perf_counter() - t0
         rows.append({
@@ -292,23 +315,68 @@ def main():
             'preprocess_time_s': round(t_pre,  3),
             'inference_time_s':  round(t_inf,  3),
             'total_time_s':      round(t_total, 3),
+            **missing,
         })
         print(f'  {nnunet_id}  cov={coverage:.3f}  dice={dice_within:.4f}  '
               f'inf={t_inf:.1f}s  sc_crop={t_sc:.1f}s  total={t_total:.1f}s')
 
     # ── Write CSV ─────────────────────────────────────────────────────────────
+    face_cols  = ['ax0_lo_mm', 'ax0_hi_mm', 'ax1_lo_mm', 'ax1_hi_mm', 'ax2_lo_mm', 'ax2_hi_mm']
     fieldnames = ['image_id', 'coverage', 'dice_within_crop', 'dice_global',
-                  'sc_crop_time_s', 'preprocess_time_s', 'inference_time_s', 'total_time_s']
+                  'sc_crop_time_s', 'preprocess_time_s', 'inference_time_s', 'total_time_s',
+                  *face_cols]
     with open(args.output, 'w', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(rows)
 
-    coverages  = [r['coverage']         for r in rows]
-    dices_w    = [r['dice_within_crop']  for r in rows]
-    dices_g    = [r['dice_global']       for r in rows]
-    infs       = [r['inference_time_s']  for r in rows]
-    totals     = [r['total_time_s']      for r in rows]
+    coverages = [r['coverage']        for r in rows]
+    dices_w   = [r['dice_within_crop'] for r in rows]
+    dices_g   = [r['dice_global']      for r in rows]
+    infs      = [r['inference_time_s'] for r in rows]
+    totals    = [r['total_time_s']     for r in rows]
+
+    # ── Summary JSON ──────────────────────────────────────────────────────────
+    summary = {
+        'N': len(rows),
+        'coverage': {
+            'mean':   round(float(np.mean(coverages)),   4),
+            'std':    round(float(np.std(coverages)),    4),
+        },
+        'dice_within_crop': {
+            'mean':   round(float(np.mean(dices_w)),   4),
+            'std':    round(float(np.std(dices_w)),    4),
+            'median': round(float(np.median(dices_w)), 4),
+        },
+        'dice_global': {
+            'mean':   round(float(np.mean(dices_g)),   4),
+            'std':    round(float(np.std(dices_g)),    4),
+            'median': round(float(np.median(dices_g)), 4),
+        },
+        'inference_time_s': {
+            'mean': round(float(np.mean(infs)),    2),
+            'std':  round(float(np.std(infs)),     2),
+        },
+        'total_time_s': {
+            'mean': round(float(np.mean(totals)),  2),
+            'std':  round(float(np.std(totals)),   2),
+        },
+    }
+    summary_path = str(args.output).replace('.csv', '_summary.json')
+    with open(summary_path, 'w') as f:
+        json.dump(summary, f, indent=2)
+
+    # ── Coverage issues CSV ───────────────────────────────────────────────────
+    issues = [r for r in rows if r['coverage'] < 1.0]
+    if issues:
+        issues_path = str(args.output).replace('.csv', '_coverage_issues.csv')
+        issue_fields = ['image_id', 'coverage', *face_cols]
+        with open(issues_path, 'w', newline='') as f:
+            writer = csv.DictWriter(f, fieldnames=issue_fields,
+                                    extrasaction='ignore')
+            writer.writeheader()
+            writer.writerows(issues)
+        print(f'Coverage issues  : {len(issues)} images → {issues_path}')
 
     print()
     print(f'N images         : {len(rows)}')
@@ -318,6 +386,7 @@ def main():
     print(f'Inference time   : {np.mean(infs):.2f}s ± {np.std(infs):.2f}s')
     print(f'Total time       : {np.mean(totals):.2f}s ± {np.std(totals):.2f}s')
     print(f'CSV saved        : {args.output}')
+    print(f'Summary saved    : {summary_path}')
 
 
 if __name__ == '__main__':
