@@ -24,8 +24,12 @@ Usage:
     # Download model files (first use only)
     python nnUnet/run_inference.py download
 
-    # ONNX (default)
+    # Full image (sc_crop runs internally)
     python nnUnet/run_inference.py -i image.nii.gz -o seg.nii.gz
+
+    # Pre-cropped image (skip sc_crop)
+    sc_crop -i image.nii.gz --crop -o image_crop.nii.gz
+    python nnUnet/run_inference.py -i image_crop.nii.gz -o seg.nii.gz --pre-cropped
 
     # PyTorch without TTA
     python nnUnet/run_inference.py -i image.nii.gz -o seg.nii.gz --mode pt
@@ -41,6 +45,7 @@ Author: Quentin Revillon
 import argparse
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -114,10 +119,13 @@ def parse_args():
     parser.add_argument('--device', default='cpu', choices=['cpu', 'cuda', 'mps'],
                         help='[pt/pt-tta] Inference device')
     # sc_crop args
+    parser.add_argument('--pre-cropped', action='store_true',
+                        help='Input image is already cropped around the SC — skip sc_crop detection')
     parser.add_argument('--pad-rl', type=float, default=20.0, help='sc_crop padding left/right (mm)')
     parser.add_argument('--pad-ap', type=float, default=30.0, help='sc_crop padding anterior/posterior (mm)')
     parser.add_argument('--pad-si', type=float, default=40.0, help='sc_crop padding superior/inferior (mm)')
-    parser.add_argument('--sc-crop-env', default='sc_crop', help='Conda env where sc_crop is installed')
+    parser.add_argument('--sc-crop-env', default='sc_crop',
+                        help='Conda env for sc_crop (used only if sc_crop is not in current PATH)')
     # Output control
     parser.add_argument('--time', action='store_true',
                         help='Print per-step timing breakdown')
@@ -162,12 +170,16 @@ def _parse_bbox_txt(bbox_file):
 
 
 def detect_and_crop(img_path, pad_rl, pad_ap, pad_si, sc_crop_env):
-    """Run sc_crop in its conda env, parse bbox, return (cropped_rpi_img, bbox, orig_ornt, img)."""
+    """Run sc_crop (auto-detects PATH or falls back to conda env), return (cropped_rpi_img, bbox, orig_ornt, img)."""
     bbox_file = tempfile.mktemp(suffix='_bbox.txt')
-    cmd = (f"conda run -n {sc_crop_env} sc_crop -i {img_path} -o {bbox_file} "
-           f"--padding-rl '{pad_rl} {pad_rl}' "
-           f"--padding-ap '{pad_ap} {pad_ap}' "
-           f"--padding-si '{pad_si} {pad_si}'")
+    sc_crop_args = (f"-i {img_path} -o {bbox_file} "
+                    f"--padding-rl '{pad_rl} {pad_rl}' "
+                    f"--padding-ap '{pad_ap} {pad_ap}' "
+                    f"--padding-si '{pad_si} {pad_si}'")
+    if shutil.which('sc_crop'):
+        cmd = f"sc_crop {sc_crop_args}"
+    else:
+        cmd = f"conda run -n {sc_crop_env} sc_crop {sc_crop_args}"
     assert subprocess.call(cmd, shell=True) == 0, f'sc_crop failed: {cmd}'
     xmin, xmax, ymin, ymax, zmin, zmax = _parse_bbox_txt(bbox_file)
     os.remove(bbox_file)
@@ -342,9 +354,14 @@ def main():
     args = parse_args()
     t0   = time.perf_counter()
 
-    # 1. sc_crop detection + crop + reorient to RPI
-    crop_rpi, bbox, orig_ornt, img_orig = detect_and_crop(
-        args.i, args.pad_rl, args.pad_ap, args.pad_si, args.sc_crop_env)
+    # 1. sc_crop detection + crop + reorient to RPI  (or load pre-cropped image directly)
+    if args.pre_cropped:
+        img_orig  = nib.load(args.i)
+        orig_ornt = io_orientation(img_orig.affine)
+        crop_rpi  = reorient_to_rpi(img_orig)
+    else:
+        crop_rpi, bbox, orig_ornt, img_orig = detect_and_crop(
+            args.i, args.pad_rl, args.pad_ap, args.pad_si, args.sc_crop_env)
     t_crop = time.perf_counter()
 
     # 2. Inference
@@ -355,16 +372,18 @@ def main():
                                 use_mirroring=(args.mode == 'pt-tta'))
     t_infer = time.perf_counter()
 
-    # 3. Reorient back to original orientation
-    pred_rpi_nii   = nib.Nifti1Image(pred_rpi_arr, crop_rpi.affine)
-    pred_orig_crop = reorient_back(pred_rpi_nii, orig_ornt)
+    # 3. Reorient segmentation back to original orientation and save
+    pred_rpi_nii = nib.Nifti1Image(pred_rpi_arr, crop_rpi.affine)
+    pred_out     = reorient_back(pred_rpi_nii, orig_ornt)
 
-    # 4. Pad back to full image space
-    xmin, xmax, ymin, ymax, zmin, zmax = bbox
-    pred_full = np.zeros(img_orig.shape[:3], dtype=np.uint8)
-    pred_full[xmin:xmax+1, ymin:ymax+1, zmin:zmax+1] = pred_orig_crop.get_fdata().astype(np.uint8)
+    if not args.pre_cropped:
+        # Pad back to full image space
+        xmin, xmax, ymin, ymax, zmin, zmax = bbox
+        pred_full = np.zeros(img_orig.shape[:3], dtype=np.uint8)
+        pred_full[xmin:xmax+1, ymin:ymax+1, zmin:zmax+1] = pred_out.get_fdata().astype(np.uint8)
+        pred_out = nib.Nifti1Image(pred_full, img_orig.affine, img_orig.header)
 
-    nib.save(nib.Nifti1Image(pred_full, img_orig.affine, img_orig.header), args.o)
+    nib.save(pred_out, args.o)
     t_end = time.perf_counter()
 
     if args.time:
