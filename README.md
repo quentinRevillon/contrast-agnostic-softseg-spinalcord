@@ -43,6 +43,7 @@ author = {Enamundram Naga Karthik and Sandrine Bédard and Jan Valošek and Chri
 
 
 ## Table of contents
+* [Inference](#inference)
 * [Training the model ](#training-the-model)
 * [Lifelong learning for monitoring morphometric drift](#lifelong-learning-for-monitoring-morphometric-drift)
 
@@ -55,6 +56,57 @@ author = {Enamundram Naga Karthik and Sandrine Bédard and Jan Valošek and Chri
     * [7.2. Running QC on predictions from MS-MP2RAGE dataset](#72-running-qc-on-predictions-from-ms-mp2rage-dataset)
     * [7.3. Running QC on predictions from Radiculopathy-EPI dataset](#73-running-qc-on-predictions-from-radiculopathy-epi-dataset) -->
 
+
+## Inference
+
+`nnUnet/run_inference.py` runs standalone spinal cord segmentation on any NIfTI image. It supports three modes:
+
+| Mode | Description |
+|------|-------------|
+| `onnx` (default) | ONNX Runtime — CPU only, no nnunetv2 required |
+| `pt` | PyTorch nnUNet predictor, no TTA |
+| `pt-tta` | PyTorch nnUNet predictor + mirroring (8× slower) |
+
+### Install
+
+```bash
+conda create -n contrast_agnostic python=3.9
+conda activate contrast_agnostic
+pip install nibabel scipy "numpy==1.26.4" "onnxruntime>=1.18.0" scikit-image
+pip install git+https://github.com/ivadomed/sc-crop.git
+```
+
+For `pt` / `pt-tta` modes, also install nnUNetv2 and PyTorch (see [nnUNet installation](https://github.com/MIC-DKFZ/nnUNet/blob/master/documentation/installation_instructions.md)).
+
+### Download the models (first use only)
+
+```bash
+python nnUnet/run_inference.py download   # nnUNet ONNX + weights
+sc_crop download                          # sc_crop YOLO detection model
+```
+
+### Run inference
+
+```bash
+# ONNX — CPU, recommended for local use
+python nnUnet/run_inference.py -i image.nii.gz -o seg.nii.gz
+
+# PyTorch, no TTA
+python nnUnet/run_inference.py -i image.nii.gz -o seg.nii.gz --mode pt --device cpu
+
+# PyTorch + TTA (mirroring)
+python nnUnet/run_inference.py -i image.nii.gz -o seg.nii.gz --mode pt-tta --device cpu
+```
+
+If the image is already cropped around the spinal cord, skip the sc_crop detection step:
+
+```bash
+python nnUnet/run_inference.py -i image_crop.nii.gz -o seg.nii.gz --pre-cropped
+```
+
+Add `--time` to any command to print a per-step timing breakdown.
+
+---
 
 ## Training the model 
 

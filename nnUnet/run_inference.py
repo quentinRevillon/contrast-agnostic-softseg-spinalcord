@@ -16,9 +16,8 @@ Pipeline (all modes):
 Input : any NIfTI image (any orientation, not pre-cropped).
 Output: binary segmentation mask in the same space/orientation as the input.
 
-ONNX mode requires : nibabel, scipy, numpy, onnxruntime, scikit-image
+ONNX mode requires : nibabel, scipy, numpy, onnxruntime, scikit-image, sc-crop
 PT modes require   : nnunetv2, torch (+ the above)
-sc_crop must be installed in the conda env specified by --sc-crop-env.
 
 Usage:
     # Download model files (first use only)
@@ -28,7 +27,6 @@ Usage:
     python nnUnet/run_inference.py -i image.nii.gz -o seg.nii.gz
 
     # Pre-cropped image (skip sc_crop)
-    sc_crop -i image.nii.gz --crop -o image_crop.nii.gz
     python nnUnet/run_inference.py -i image_crop.nii.gz -o seg.nii.gz --pre-cropped
 
     # PyTorch without TTA
@@ -45,8 +43,6 @@ Author: Quentin Revillon
 import argparse
 import json
 import os
-import shutil
-import subprocess
 import sys
 import tempfile
 import time
@@ -55,7 +51,7 @@ import urllib.request
 _MODEL_DIR = os.path.expanduser('~/nnunet_contrast_agnostic')
 _RELEASE_URL = 'https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord/releases/download/v0.0.1'
 _ASSETS = [
-    ('nnunet_seg.onnx',        'onnunet_seg.onnx'),
+    ('nnunet_seg.onnx',        'nnunet_seg.onnx'),
     ('plans.json',             'plans.json'),
     ('dataset.json',           'dataset.json'),
     ('checkpoint_final.pth',   'fold_0/checkpoint_final.pth'),
@@ -124,8 +120,6 @@ def parse_args():
     parser.add_argument('--pad-rl', type=float, default=20.0, help='sc_crop padding left/right (mm)')
     parser.add_argument('--pad-ap', type=float, default=30.0, help='sc_crop padding anterior/posterior (mm)')
     parser.add_argument('--pad-si', type=float, default=40.0, help='sc_crop padding superior/inferior (mm)')
-    parser.add_argument('--sc-crop-env', default='sc_crop',
-                        help='Conda env for sc_crop (used only if sc_crop is not in current PATH)')
     # Output control
     parser.add_argument('--time', action='store_true',
                         help='Print per-step timing breakdown')
@@ -160,29 +154,12 @@ def reorient_back(img_rpi, original_ornt):
 
 # ── sc_crop detection + crop ──────────────────────────────────────────────────
 
-def _parse_bbox_txt(bbox_file):
-    with open(bbox_file) as f:
-        for line in f:
-            if not line.startswith('#'):
-                xmin, xmax, ymin, ymax, zmin, zmax = (int(v) for v in line.split())
-                return xmin, xmax, ymin, ymax, zmin, zmax
-    raise ValueError(f'No bbox data in {bbox_file}')
-
-
-def detect_and_crop(img_path, pad_rl, pad_ap, pad_si, sc_crop_env):
-    """Run sc_crop (auto-detects PATH or falls back to conda env), return (cropped_rpi_img, bbox, orig_ornt, img)."""
-    bbox_file = tempfile.mktemp(suffix='_bbox.txt')
-    sc_crop_args = (f"-i {img_path} -o {bbox_file} "
-                    f"--padding-rl '{pad_rl} {pad_rl}' "
-                    f"--padding-ap '{pad_ap} {pad_ap}' "
-                    f"--padding-si '{pad_si} {pad_si}'")
-    if shutil.which('sc_crop'):
-        cmd = f"sc_crop {sc_crop_args}"
-    else:
-        cmd = f"conda run -n {sc_crop_env} sc_crop {sc_crop_args}"
-    assert subprocess.call(cmd, shell=True) == 0, f'sc_crop failed: {cmd}'
-    xmin, xmax, ymin, ymax, zmin, zmax = _parse_bbox_txt(bbox_file)
-    os.remove(bbox_file)
+def detect_and_crop(img_path, pad_rl, pad_ap, pad_si):
+    from sc_crop import run as _sc_crop_run
+    result = _sc_crop_run(img_path, padding_rl_mm=pad_rl, padding_ap_mm=pad_ap, padding_si_mm=pad_si)
+    xmin, xmax = result['xmin'], result['xmax']
+    ymin, ymax = result['ymin'], result['ymax']
+    zmin, zmax = result['zmin'], result['zmax']
     print(f'sc_crop bbox : x=[{xmin},{xmax}] y=[{ymin},{ymax}] z=[{zmin},{zmax}]')
 
     img       = nib.load(img_path)
@@ -361,7 +338,7 @@ def main():
         crop_rpi  = reorient_to_rpi(img_orig)
     else:
         crop_rpi, bbox, orig_ornt, img_orig = detect_and_crop(
-            args.i, args.pad_rl, args.pad_ap, args.pad_si, args.sc_crop_env)
+            args.i, args.pad_rl, args.pad_ap, args.pad_si)
     t_crop = time.perf_counter()
 
     # 2. Inference
