@@ -81,8 +81,7 @@ For `pt` / `pt-tta` modes, also install nnUNetv2 and PyTorch (see [nnUNet instal
 ### Download the models (first use only)
 
 ```bash
-python nnUnet/run_inference.py download   # nnUNet ONNX + weights
-sc_crop download                          # sc_crop YOLO detection model
+python nnUnet/run_inference.py download   # nnUNet ONNX + weights + sc_crop detection model
 ```
 
 ### Run inference
