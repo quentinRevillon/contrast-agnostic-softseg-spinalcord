@@ -50,7 +50,7 @@ import time
 import urllib.request
 
 _MODEL_DIR = os.path.expanduser('~/nnunet_contrast_agnostic')
-_RELEASE_URL = 'https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord/releases/download/v0.0.1'
+_RELEASE_URL = 'https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord/releases/download/v0.0.2'
 _ASSETS = [
     ('nnunet_seg.onnx',        'nnunet_seg.onnx'),
     ('plans.json',             'plans.json'),
