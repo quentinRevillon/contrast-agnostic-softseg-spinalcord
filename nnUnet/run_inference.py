@@ -61,7 +61,6 @@ _ASSETS = [
 
 def download_models(model_dir=_MODEL_DIR):
     os.makedirs(os.path.join(model_dir, 'fold_0'), exist_ok=True)
-    print('--- nnUNet model ---')
     for asset_name, rel_path in _ASSETS:
         dest = os.path.join(model_dir, rel_path)
         if os.path.exists(dest):
@@ -71,12 +70,8 @@ def download_models(model_dir=_MODEL_DIR):
         print(f'  downloading {asset_name} ...', flush=True)
         urllib.request.urlretrieve(url, dest, reporthook=_progress)
         print()
-    print(f'  ready in {model_dir}')
-    print('--- sc_crop model ---')
-    from sc_crop.download import ensure_model, ensure_cls_model
-    ensure_model()
-    ensure_cls_model()
-    print('All models ready.')
+    print(f'Models ready in {model_dir}')
+    print('(sc_crop models download automatically on first use)')
 
 
 def _progress(count, block_size, total_size):
