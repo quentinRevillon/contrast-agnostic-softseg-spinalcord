@@ -7,11 +7,11 @@ Supports three inference modes via --mode:
   pt-tta   — PyTorch nnUNet predictor, with mirroring (TTA on, 8× slower)
 
 Pipeline (all modes):
-  1. sc_crop detection → bounding box in native space
-  2. Crop + reorient to RPI
+  1. sc_crop detection → crop in original orientation  (sc_crop.detect_and_crop)
+  2. Reorient to RPI
   3. nnUNet inference (ONNX or PyTorch depending on --mode)
   4. Reorient segmentation back to original orientation
-  5. Pad back to full image space
+  5. Restore to full image space                        (sc_crop.restore_segmentation)
 
 Input : any NIfTI image (any orientation, not pre-cropped).
 Output: binary segmentation mask in the same space/orientation as the input.
@@ -36,7 +36,7 @@ Usage:
     python nnUnet/run_inference.py -i image.nii.gz -o seg.nii.gz --mode pt-tta
 
 nnUNet model files are downloaded to ~/nnunet_contrast_agnostic/.
-sc_crop models are downloaded to the sc_crop package's models/ directory.
+sc_crop models are cached in ~/.cache/sc_crop/ (auto-download on first use).
 
 Author: Quentin Revillon
 """
@@ -141,7 +141,7 @@ def get_voxel_spacing_zyx(img):
     return [float(v) for v in img.header.get_zooms()[:3][::-1]]
 
 
-# ── Reorientation ─────────────────────────────────────────────────────────────
+# ── Reorientation helpers ─────────────────────────────────────────────────────
 
 def reorient_to_rpi(img):
     target  = axcodes2ornt(('R', 'P', 'I'))
@@ -157,25 +157,21 @@ def reorient_back(img_rpi, original_ornt):
 # ── sc_crop detection + crop ──────────────────────────────────────────────────
 
 def detect_and_crop(img_path, pad_rl, pad_ap, pad_si):
-    from sc_crop import run as _sc_crop_run
-    result = _sc_crop_run(img_path, padding_rl_mm=pad_rl, padding_ap_mm=pad_ap, padding_si_mm=pad_si)
-    xmin, xmax = result['xmin'], result['xmax']
-    ymin, ymax = result['ymin'], result['ymax']
-    zmin, zmax = result['zmin'], result['zmax']
+    """Detect SC, crop in original orientation, reorient to RPI. Returns (crop_rpi, ctx, orig_ornt)."""
+    from sc_crop import detect_and_crop as _sc_detect_and_crop
+    crop_nii, ctx = _sc_detect_and_crop(
+        img_path,
+        padding_rl_mm=pad_rl,
+        padding_ap_mm=pad_ap,
+        padding_si_mm=pad_si,
+    )
+    xmin, xmax = ctx['xmin'], ctx['xmax']
+    ymin, ymax = ctx['ymin'], ctx['ymax']
+    zmin, zmax = ctx['zmin'], ctx['zmax']
     print(f'sc_crop bbox : x=[{xmin},{xmax}] y=[{ymin},{ymax}] z=[{zmin},{zmax}]')
-
-    img       = nib.load(img_path)
-    orig_ornt = io_orientation(img.affine)
-    data      = img.get_fdata(dtype=np.float32)
-    cropped   = data[xmin:xmax+1, ymin:ymax+1, zmin:zmax+1]
-
-    affine        = img.affine.copy()
-    affine[:3, 3] = (img.affine @ np.array([xmin, ymin, zmin, 1.0]))[:3]
-    crop_nii      = nib.Nifti1Image(cropped, affine)
-
-    crop_rpi = reorient_to_rpi(crop_nii)
-    bbox     = (xmin, xmax, ymin, ymax, zmin, zmax)
-    return crop_rpi, bbox, orig_ornt, img
+    orig_ornt = io_orientation(crop_nii.affine)
+    crop_rpi  = reorient_to_rpi(crop_nii)
+    return crop_rpi, ctx, orig_ornt
 
 
 # ── nnUNet preprocessing ──────────────────────────────────────────────────────
@@ -338,9 +334,9 @@ def main():
         img_orig  = nib.load(args.i)
         orig_ornt = io_orientation(img_orig.affine)
         crop_rpi  = reorient_to_rpi(img_orig)
+        ctx       = None
     else:
-        crop_rpi, bbox, orig_ornt, img_orig = detect_and_crop(
-            args.i, args.pad_rl, args.pad_ap, args.pad_si)
+        crop_rpi, ctx, orig_ornt = detect_and_crop(args.i, args.pad_rl, args.pad_ap, args.pad_si)
     t_crop = time.perf_counter()
 
     # 2. Inference
@@ -351,16 +347,16 @@ def main():
                                 use_mirroring=(args.mode == 'pt-tta'))
     t_infer = time.perf_counter()
 
-    # 3. Reorient segmentation back to original orientation and save
+    # 3. Reorient segmentation back to original orientation
     pred_rpi_nii = nib.Nifti1Image(pred_rpi_arr, crop_rpi.affine)
-    pred_out     = reorient_back(pred_rpi_nii, orig_ornt)
+    pred_crop    = reorient_back(pred_rpi_nii, orig_ornt)
 
-    if not args.pre_cropped:
-        # Pad back to full image space
-        xmin, xmax, ymin, ymax, zmin, zmax = bbox
-        pred_full = np.zeros(img_orig.shape[:3], dtype=np.uint8)
-        pred_full[xmin:xmax+1, ymin:ymax+1, zmin:zmax+1] = pred_out.get_fdata().astype(np.uint8)
-        pred_out = nib.Nifti1Image(pred_full, img_orig.affine, img_orig.header)
+    if ctx is not None:
+        # 4. Restore to full image space
+        from sc_crop import restore_segmentation as _sc_restore
+        pred_out = _sc_restore(pred_crop, ctx)
+    else:
+        pred_out = pred_crop
 
     nib.save(pred_out, args.o)
     t_end = time.perf_counter()
