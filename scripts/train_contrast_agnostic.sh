@@ -1,36 +1,50 @@
 #!/bin/bash
-# Training and evaluation pipeline for contrast-agnostic v3.0.
+# Training and evaluation pipeline for contrast-agnostic spinal cord segmentation.
 #
 # Steps:
 #   1. Clone datasets from git-annex
 #   2. Create datalists (JSON with image/label pairs)
-#   3. Convert to nnUNet format (GT bbox crop + RPI reorientation)
+#   3. Convert to nnUNet format (crop + RPI reorientation)
 #   4. nnUNet plan and preprocess
 #   5. nnUNet training
-#   6. PyTorch inference on GT-crop test set (oracle upper bound)
-#   7. PyTorch inference on sc_crop test set (realistic detection pipeline)
+#   6. PyTorch inference on GT-crop test set  (oracle upper bound)
+#   7. PyTorch inference on sc_crop test set  (realistic detection pipeline)
 #   8. Export trained model to ONNX
-#   9. ONNX benchmark on GT-crop test set (comparable to step 6)
-#  10. ONNX benchmark on sc_crop test set (comparable to step 7)
+#   9. ONNX benchmark on GT-crop test set     (comparable to step 6)
+#  10. ONNX benchmark on sc_crop test set     (comparable to step 7)
 #
-# Set START_STEP/END_STEP to run a specific range of steps. If starting from step 3+, set PATH_OUT_DATALISTS manually.
+# Set START_STEP/END_STEP to run a specific range of steps.
+# If starting from step 3+, set PATH_OUT_DATALISTS manually.
 
 
 # Define (full) path to the contrast-agnostic repository
 PATH_REPO="/home/quentinr/contrast-agnostic-softseg-spinalcord"
 
-# Step to start from / stop at (1-10)
-START_STEP=6
-END_STEP=6
+# Step range
+START_STEP=1
+END_STEP=10
+
+# ── sc-crop toggle ─────────────────────────────────────────────────────────────
+# true  → step 3 uses sc_crop detection (GPU, realistic pipeline).
+#         Training volumes have the same crop as inference → better generalisation,
+#         fewer voxels → faster training. This is the recommended setting.
+# false → step 3 uses GT-bbox crop (oracle, upper bound for benchmarking).
+#         Useful to measure the gap between oracle and detection-based cropping.
+USE_SC_CROP=true
+# ──────────────────────────────────────────────────────────────────────────────
+
+# Padding applied around the detected/GT bbox (mm, each side) — used in steps 3, 7, 10
+PAD_RL=20
+PAD_AP=30
+PAD_SI=40
 
 
-#  [SKIP] sc_crop detection failed: /home/quentinr/datasets_contrast_agnostic_retraining/canproco/sub-cal175/ses-M0/anat/sub-cal175_ses-M0_STIR.nii.gz
 # ====================================
 # VARIABLES FOR DATASET CREATION
 # ====================================
 
-# Set seed for reproducibility. Note seed=50 was used train the contrast-agnostic model 
-# If you're using a different seed, note that you cannot use the predefined random dataset splits (more info below)
+# Set seed for reproducibility. Note seed=50 was used to train the contrast-agnostic model.
+# If you're using a different seed, you cannot use the predefined random dataset splits.
 SEED=50
 
 DATASETS=("data-multi-subject" "basel-mp2rage" "canproco" \
@@ -107,26 +121,34 @@ fi
 # ====================================
 # STEP 3 — CONVERT TO NNUNET FORMAT
 # ====================================
+# USE_SC_CROP=true  → sc_crop detection (GPU batch, matches the inference pipeline)
+# USE_SC_CROP=false → GT-bbox crop (oracle upper bound)
 
 if [ ${START_STEP} -le 3 ] && [ ${END_STEP} -ge 3 ]; then
-    # Without cropping (original pipeline):
-    # python ${PATH_REPO}/nnUnet/03_convert_msd_to_nnunet_reorient.py \
-    #     --input ${PATH_OUT_DATALISTS} \
-    #     --output ${PATH_NNUNET_RAW} \
-    #     --taskname ${DATASET_NAME} \
-    #     --tasknumber ${DATASET_NUMBER} \
-    #     --workers 8
-
-    # With SC bbox cropping (asymmetric per-face padding in mm):
-    python ${PATH_REPO}/nnUnet/03_convert_msd_to_nnunet_reorient_cropped.py \
-        --input ${PATH_OUT_DATALISTS} \
-        --output ${PATH_NNUNET_RAW} \
-        --taskname ${DATASET_NAME} \
-        --tasknumber ${DATASET_NUMBER} \
-        --pad-left 20 --pad-right 20 \
-        --pad-anterior 30 --pad-posterior 30 \
-        --pad-superior 40 --pad-inferior 40 \
-        --workers 8
+    if [ "${USE_SC_CROP}" = "true" ]; then
+        echo "Step 3: sc_crop preprocessing (GPU detection-based crop)"
+        sc_crop preprocess-nnunet \
+            --input        ${PATH_OUT_DATALISTS} \
+            --output       ${PATH_NNUNET_RAW} \
+            --taskname     ${DATASET_NAME} \
+            --tasknumber   ${DATASET_NUMBER} \
+            --pad-left     ${PAD_RL} --pad-right     ${PAD_RL} \
+            --pad-anterior ${PAD_AP} --pad-posterior ${PAD_AP} \
+            --pad-superior ${PAD_SI} --pad-inferior  ${PAD_SI} \
+            --device cuda \
+            --skip-failed
+    else
+        echo "Step 3: GT-bbox crop (oracle upper bound)"
+        python ${PATH_REPO}/nnUnet/03_convert_msd_to_nnunet_reorient_cropped.py \
+            --input        ${PATH_OUT_DATALISTS} \
+            --output       ${PATH_NNUNET_RAW} \
+            --taskname     ${DATASET_NAME} \
+            --tasknumber   ${DATASET_NUMBER} \
+            --pad-left     ${PAD_RL} --pad-right     ${PAD_RL} \
+            --pad-anterior ${PAD_AP} --pad-posterior ${PAD_AP} \
+            --pad-superior ${PAD_SI} --pad-inferior  ${PAD_SI} \
+            --workers 8
+    fi
 fi
 
 
@@ -236,9 +258,6 @@ fi
 # Runs the realistic inference pipeline on the original (uncropped) test images:
 # sc_crop detects the SC bbox → crop → reorient RPI → nnUNet → Dice vs GT.
 # Outputs coverage, dice_within_crop, and dice_global (penalises missed SC).
-# Requires sc_crop installed in a separate conda env (SC_CROP_ENV).
-
-SC_CROP_ENV="sc_crop"
 
 if [ ${START_STEP} -le 7 ] && [ ${END_STEP} -ge 7 ]; then
     MODEL_DIR="${PATH_NNUNET_RESULTS}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/nnUNetTrainer__${NNUNET_PLANS_FILE}__${configurations[0]}"
@@ -248,10 +267,9 @@ if [ ${START_STEP} -le 7 ] && [ ${END_STEP} -ge 7 ]; then
         --dataset-folder ${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME} \
         --model-folder ${MODEL_DIR} \
         --output-dir ${PATH_SC_CROP_EVAL} \
-        --pad-left 20 --pad-right 20 \
-        --pad-anterior 30 --pad-posterior 30 \
-        --pad-superior 40 --pad-inferior 40 \
-        --sc-crop-env ${SC_CROP_ENV} \
+        --pad-left ${PAD_RL} --pad-right ${PAD_RL} \
+        --pad-anterior ${PAD_AP} --pad-posterior ${PAD_AP} \
+        --pad-superior ${PAD_SI} --pad-inferior ${PAD_SI} \
         --use-gpu
 
     echo "sc_crop evaluation results saved to ${PATH_SC_CROP_EVAL}/metrics_sc_crop.csv"
@@ -315,8 +333,9 @@ if [ ${START_STEP} -le 10 ] && [ ${END_STEP} -ge 10 ]; then
         --model          ${ONNX_DIR}/nnunet_seg.onnx \
         --plans          ${ONNX_DIR}/plans.json \
         --output         ${ONNX_DIR}/benchmark_sc_crop.csv \
-        --pad-rl 20 --pad-ap 30 --pad-si 40 \
-        --sc-crop-env    ${SC_CROP_ENV}
+        --pad-left    ${PAD_RL} --pad-right    ${PAD_RL} \
+        --pad-anterior ${PAD_AP} --pad-posterior ${PAD_AP} \
+        --pad-superior ${PAD_SI} --pad-inferior  ${PAD_SI}
 
     echo "ONNX sc_crop results saved to ${ONNX_DIR}/benchmark_sc_crop.csv"
 fi
