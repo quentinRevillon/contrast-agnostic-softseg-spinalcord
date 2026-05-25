@@ -52,15 +52,16 @@ import argparse
 import csv
 import json
 import shutil
-import subprocess
-import tempfile
 from pathlib import Path
 
 import nibabel as nib
 import numpy as np
 import tqdm
 import torch
+from nibabel.orientations import axcodes2ornt, io_orientation, ornt_transform
 from nnunetv2.inference.predict_from_raw_data import nnUNetPredictor
+
+from sc_crop import run as _sc_crop_run
 
 
 def parse_args():
@@ -80,7 +81,8 @@ def parse_args():
     parser.add_argument('--pad-posterior', type=float, default=30.0)
     parser.add_argument('--pad-superior',  type=float, default=40.0)
     parser.add_argument('--pad-inferior',  type=float, default=40.0)
-    parser.add_argument('--sc-crop-env', default='sc_crop')
+    parser.add_argument('--sc-crop-env', default=None,
+                        help='Deprecated — sc_crop is now imported directly (no subprocess). Ignored.')
     parser.add_argument('--use-gpu', action='store_true', default=False)
     return parser.parse_args()
 
@@ -107,39 +109,42 @@ def build_test_mapping(conversion_dict_path):
     return mapping
 
 
-def parse_bbox_txt(bbox_file):
-    """Parse sc_crop bbox.txt and return (xmin, xmax, ymin, ymax, zmin, zmax)."""
-    with open(bbox_file) as f:
-        for line in f:
-            if line.startswith('#'):
-                continue
-            parts = line.strip().split()
-            return tuple(int(p) for p in parts)
-    raise ValueError(f"No bbox data found in {bbox_file}")
+def detect_and_crop_rpi(image_path, label_path, out_image, out_label,
+                        pad_left, pad_right, pad_anterior, pad_posterior,
+                        pad_superior, pad_inferior):
+    """Detect SC bbox with sc_crop (library), crop image + label, reorient to RPI.
+    Returns (xmin, xmax, ymin, ymax, zmin, zmax) in native space, or None on failure."""
+    try:
+        result = _sc_crop_run(
+            input_path    = str(image_path),
+            crop          = False,
+            padding_rl_mm = (pad_left,     pad_right),
+            padding_ap_mm = (pad_anterior, pad_posterior),
+            padding_si_mm = (pad_superior, pad_inferior),
+        )
+    except RuntimeError:
+        return None
 
+    x1, x2 = result["xmin"],     result["xmax"] + 1
+    y1, y2 = result["ymin"],     result["ymax"] + 1
+    z1, z2 = result["zmin"],     result["zmax"] + 1
+    rpi_ornt = axcodes2ornt(("R", "P", "I"))
 
-def run_sc_crop(image_path, output_dir, pad_left, pad_right, pad_anterior, pad_posterior,
-                pad_superior, pad_inferior, sc_crop_env):
-    """Run sc_crop CLI. Returns path to bbox.txt, or None if detection failed."""
-    stem = Path(image_path).name.replace('.nii.gz', '').replace('.nii', '')
-    bbox_file = os.path.join(output_dir, f"{stem}_bbox.txt")
-    cmd = (f"conda run -n {sc_crop_env} sc_crop -i {image_path} -o {bbox_file} "
-           f"--padding-rl '{pad_left} {pad_right}' "
-           f"--padding-ap '{pad_anterior} {pad_posterior}' "
-           f"--padding-si '{pad_superior} {pad_inferior}'")
-    ret = os.system(cmd)
-    return bbox_file if ret == 0 else None
+    def _save_crop(src, dst, is_label):
+        img      = nib.load(src)
+        orig_ornt = io_orientation(img.affine)
+        cropped  = img.slicer[x1:x2, y1:y2, z1:z2]
+        rpi      = cropped.as_reoriented(ornt_transform(io_orientation(cropped.affine), rpi_ornt))
+        data     = rpi.get_fdata(dtype=np.float32)
+        if is_label:
+            data = (data > 0.5).astype(np.uint8)
+        nib.save(nib.Nifti1Image(data, rpi.affine), dst)
 
+    _save_crop(image_path, out_image, is_label=False)
+    if label_path and out_label:
+        _save_crop(label_path, out_label, is_label=True)
 
-def crop_and_reorient_rpi(image_path, xmin, xmax, ymin, ymax, zmin, zmax, output_path):
-    """Crop image to bbox (inclusive voxel indices) and reorient to RPI."""
-    native_tmp = str(output_path).replace('.nii.gz', '_native.nii.gz')
-    crop_cmd = (f"sct_crop_image -i {image_path} "
-                f"-xmin {xmin} -xmax {xmax} -ymin {ymin} -ymax {ymax} -zmin {zmin} -zmax {zmax} "
-                f"-o {native_tmp}")
-    assert os.system(crop_cmd) == 0, f"sct_crop_image failed on {image_path}"
-    assert os.system(f"sct_image -i {native_tmp} -setorient RPI -o {output_path}") == 0
-    os.remove(native_tmp)
+    return result["xmin"], result["xmax"], result["ymin"], result["ymax"], result["zmin"], result["zmax"]
 
 
 def compute_metrics(pred_arr, gt_crop_arr, gt_total_count):
@@ -182,31 +187,25 @@ def main():
 
     # ── Phase 1 : sc_crop + crop all images ──────────────────────────────────
     print("\n── Phase 1 : sc_crop + crop ──")
-    failed     = set()   # nnunet_ids for which sc_crop failed
-    gt_counts  = {}      # nnunet_id → total SC voxel count in original image
-    bbox_tmpdir = tempfile.mkdtemp(prefix="sc_crop_bbox_")
+    failed    = set()   # nnunet_ids for which sc_crop failed
+    gt_counts = {}      # nnunet_id → total SC voxel count in original image
 
     for orig_img, (orig_label, nnunet_id) in tqdm.tqdm(test_mapping.items(), desc="sc_crop"):
         out_stem = f"TempContrastAgnosticCropped_{nnunet_id}"
         gt_counts[nnunet_id] = int((np.asarray(nib.load(orig_label).dataobj) > 0.5).sum())
 
-        bbox_file = run_sc_crop(orig_img, bbox_tmpdir,
-                                args.pad_left, args.pad_right,
-                                args.pad_anterior, args.pad_posterior,
-                                args.pad_superior, args.pad_inferior,
-                                args.sc_crop_env)
-        if bbox_file is None:
+        bbox = detect_and_crop_rpi(
+            orig_img, orig_label,
+            crops_dir / f"{out_stem}_0000.nii.gz",
+            gt_dir    / f"{out_stem}.nii.gz",
+            args.pad_left, args.pad_right,
+            args.pad_anterior, args.pad_posterior,
+            args.pad_superior, args.pad_inferior,
+        )
+        if bbox is None:
             print(f"  [SKIP] sc_crop failed: {orig_img}")
             failed.add(nnunet_id)
-            continue
 
-        xmin, xmax, ymin, ymax, zmin, zmax = parse_bbox_txt(bbox_file)
-        crop_and_reorient_rpi(orig_img,   xmin, xmax, ymin, ymax, zmin, zmax,
-                              crops_dir / f"{out_stem}_0000.nii.gz")
-        crop_and_reorient_rpi(orig_label, xmin, xmax, ymin, ymax, zmin, zmax,
-                              gt_dir / f"{out_stem}.nii.gz")
-
-    shutil.rmtree(bbox_tmpdir)
     print(f"Phase 1 done — {len(test_mapping) - len(failed)} crops, {len(failed)} failed")
 
     # ── Phase 2 : nnUNet batch inference ─────────────────────────────────────

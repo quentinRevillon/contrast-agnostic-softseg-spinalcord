@@ -34,11 +34,10 @@ Author: Quentin Revillon
 import argparse
 import csv
 import json
-import os
-import subprocess
-import tempfile
 import time
 from pathlib import Path
+
+from sc_crop import run as _sc_crop_run
 
 import nibabel as nib
 import numpy as np
@@ -55,10 +54,14 @@ def parse_args():
     parser.add_argument('--model',   required=True, help='Path to nnunet_seg.onnx')
     parser.add_argument('--plans',   required=True, help='Path to plans.json')
     parser.add_argument('--output',  required=True, help='Output CSV path')
-    parser.add_argument('--pad-rl',  type=float, default=20.0, help='sc_crop padding left+right (mm)')
-    parser.add_argument('--pad-ap',  type=float, default=30.0, help='sc_crop padding ant+post (mm)')
-    parser.add_argument('--pad-si',  type=float, default=40.0, help='sc_crop padding sup+inf (mm)')
-    parser.add_argument('--sc-crop-env', default='sc_crop', help='Conda env with sc_crop installed')
+    parser.add_argument('--pad-left',      type=float, default=20.0)
+    parser.add_argument('--pad-right',     type=float, default=20.0)
+    parser.add_argument('--pad-anterior',  type=float, default=30.0)
+    parser.add_argument('--pad-posterior', type=float, default=30.0)
+    parser.add_argument('--pad-superior',  type=float, default=40.0)
+    parser.add_argument('--pad-inferior',  type=float, default=40.0)
+    parser.add_argument('--sc-crop-env', default=None,
+                        help='Deprecated — sc_crop is now imported directly. Ignored.')
     parser.add_argument('--n', type=int, default=None, help='Limit to first N test images')
     return parser.parse_args()
 
@@ -110,21 +113,17 @@ def per_face_missing_mm(sc_bbox, lbl_nib):
     return result
 
 
-def run_sc_crop(image_path, pad_rl, pad_ap, pad_si, sc_crop_env):
-    """Run sc_crop and return (xmin, xmax, ymin, ymax, zmin, zmax)."""
-    bbox_file = tempfile.mktemp(suffix='_bbox.txt')
-    cmd = (f"conda run -n {sc_crop_env} sc_crop -i {image_path} -o {bbox_file} "
-           f"--padding-rl '{pad_rl} {pad_rl}' "
-           f"--padding-ap '{pad_ap} {pad_ap}' "
-           f"--padding-si '{pad_si} {pad_si}'")
-    assert subprocess.call(cmd, shell=True) == 0, f'sc_crop failed: {cmd}'
-    with open(bbox_file) as f:
-        for line in f:
-            if not line.startswith('#'):
-                bbox = tuple(int(v) for v in line.split())
-                os.remove(bbox_file)
-                return bbox
-    raise ValueError(f'No bbox in {bbox_file}')
+def run_sc_crop(image_path, pad_left, pad_right, pad_anterior, pad_posterior, pad_superior, pad_inferior):
+    """Detect SC bbox with sc_crop (library). Returns (xmin, xmax, ymin, ymax, zmin, zmax)."""
+    result = _sc_crop_run(
+        input_path    = str(image_path),
+        crop          = False,
+        padding_rl_mm = (pad_left,     pad_right),
+        padding_ap_mm = (pad_anterior, pad_posterior),
+        padding_si_mm = (pad_superior, pad_inferior),
+    )
+    return (result["xmin"], result["xmax"], result["ymin"],
+            result["ymax"], result["zmin"], result["zmax"])
 
 
 # ── Reorientation ─────────────────────────────────────────────────────────────
@@ -263,7 +262,10 @@ def main():
         t0 = time.perf_counter()
 
         # ── Phase 1: sc_crop detection + crop + RPI ───────────────────────────
-        sc_bbox = run_sc_crop(orig_img, args.pad_rl, args.pad_ap, args.pad_si, args.sc_crop_env)
+        sc_bbox = run_sc_crop(orig_img,
+                              args.pad_left, args.pad_right,
+                              args.pad_anterior, args.pad_posterior,
+                              args.pad_superior, args.pad_inferior)
         xmin, xmax, ymin, ymax, zmin, zmax = sc_bbox
 
         lbl_nib = nib.load(orig_label)
