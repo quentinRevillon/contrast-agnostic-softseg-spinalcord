@@ -7,14 +7,14 @@
 
 ## Branch `sc-crop-v2`
 
-Les images sont préprocessées en découpant autour de la moelle épinière avec sc_crop (détection YOLO, 15 datasets, padding 10/15/30 mm).
+Images are preprocessed by cropping around the spinal cord using sc_crop (YOLO-based detection, 15 datasets, padding 10/15/30 mm).
 
-Script : `nnUnet/03_convert_msd_to_nnunet_reorient_sc_crop.py`
+Script: `nnUnet/03_convert_msd_to_nnunet_reorient_sc_crop.py`
 
-| Méthode | Dice (validation) |
+| | Dice |
 |---|---|
-| Entraînement terminé | **0.9565** |
-| Évaluation CSA/Dice (spine-generic) | en cours |
+| Training complete (validation) | **0.9565** |
+| CSA/Dice evaluation (spine-generic) | in progress |
 
 ---
 
