@@ -39,6 +39,27 @@ fi
 
 
 # ====================================
+# ONNX EXPORT (skipped if already done)
+# ====================================
+
+PATH_ONNX_DIR="${PATH_MODEL}/onnx"
+PATH_ONNX="${PATH_ONNX_DIR}/nnunet_seg.onnx"
+PATH_PLANS_ONNX="${PATH_ONNX_DIR}/plans.json"
+
+if [ -f "${PATH_ONNX}" ]; then
+    echo "ONNX model already exists, skipping export."
+else
+    echo "-----------------------------------"
+    echo "Exporting ONNX model ..."
+    echo "-----------------------------------"
+    conda run -n contrast_agnostic python ${PATH_REPO}/nnUnet/export_nnunet_to_onnx.py \
+        --model-folder ${PATH_MODEL} \
+        --output       ${PATH_ONNX}
+    cp ${PATH_MODEL}/plans.json ${PATH_PLANS_ONNX}
+fi
+
+
+# ====================================
 # EVALUATION (CSA + Dice on spine-generic test set)
 # ====================================
 
@@ -51,13 +72,14 @@ cd -
 
 echo "-----------------------------------"
 echo "Starting evaluation ..."
-echo "Model   : ${PATH_MODEL}"
+echo "Model   : ${PATH_ONNX}"
 echo "Version : ${MODEL_VERSION}"
 echo "Data    : ${PATH_SPINE_GENERIC}"
 echo "-----------------------------------"
 
 bash ${PATH_REPO}/scripts/evaluate_csa_local.sh \
-    --model-folder  ${PATH_MODEL} \
+    --onnx          ${PATH_ONNX} \
+    --plans         ${PATH_PLANS_ONNX} \
     --model-version ${MODEL_VERSION} \
     --data-path     ${PATH_SPINE_GENERIC} \
     --jobs          ${EVAL_JOBS}
