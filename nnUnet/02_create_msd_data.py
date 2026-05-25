@@ -171,7 +171,16 @@ def create_df(args, dataset_path):
     if len(fname_files) == 0:
         logger.info(f"No image/label files found in {dataset_path}")
         return None
-    
+
+    if dataset_name == 'dcm-brno':
+        # The suffix "seg" is too broad — exclude non-SC labels that match *_seg.nii.gz:
+        #   - *_label-canal_seg.nii.gz  : canal (not SC) segmentations
+        #   - *_crop_crop_moco_dwi_mean_seg.nii.gz : processed DWI intermediates
+        # Their derived image paths do not exist, which would break the subject count assertion.
+        fname_files = [f for f in fname_files
+                       if 'label-canal' not in os.path.basename(f)
+                       and 'crop_crop_moco' not in os.path.basename(f)]
+
     # create a dataframe with two columns: filesegname and filename
     df = pd.DataFrame({'filename': fname_files})
     df['datasetName'] = os.path.basename(os.path.normpath(dataset_path))

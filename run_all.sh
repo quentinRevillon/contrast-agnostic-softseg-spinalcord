@@ -181,6 +181,7 @@ fi
 if ! run_step 2; then
     log "STEP 2 — Create datalists"
     mkdir -p ${PATH_OUT_DATALISTS}
+    cd ${PATH_REPO}   # 02_create_msd_data.py writes to datasplits/ relative to CWD
     for dataset in "${DATASETS[@]}"; do
         conda run -n ${CONDA_ENV} python ${PATH_REPO}/nnUnet/02_create_msd_data.py \
             --seed 50 \
