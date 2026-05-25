@@ -38,6 +38,13 @@ bash ${PATH_REPO}/scripts/train_contrast_agnostic.sh
 # ====================================
 
 echo "-----------------------------------"
+echo "Fetching disc labels from git-annex ..."
+echo "-----------------------------------"
+cd ${PATH_SPINE_GENERIC}
+git annex get derivatives/labels/*/anat/*label-discs*.nii.gz
+cd -
+
+echo "-----------------------------------"
 echo "Starting evaluation ..."
 echo "Model   : ${PATH_MODEL}"
 echo "Version : ${MODEL_VERSION}"
