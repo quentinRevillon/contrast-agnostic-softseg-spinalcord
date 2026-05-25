@@ -114,31 +114,13 @@ python nnUnet/03_convert_msd_to_nnunet_reorient_sc_crop.py \
 
 ## CPU Speed benchmark
 
-Single image: `sub-beijingPrisma04_T2w` (T2w · shape 64×320×320 · **CPU only**).  
-Model used: `Dataset1000_TempContrastAgnosticCropped` (Exp 1 ONNX checkpoint).
+Single image: `sub-beijingPrisma04_T2w` (T2w · shape 64×320×320 · **CPU only**).
 
-| Method | Time (CPU) | Dice vs GT | Speedup vs [A] |
-|---|---|---|---|
-| [A] `sct_deepseg spinalcord` (SCT built-in, full volume) | 56 s | 0.9663 | — |
-| [B] sc_crop + ONNX *(no nnunetv2)* | **11 s** | 0.9623 | **×4.9** |
-| [C] sc_crop + PyTorch *(no TTA)* | 25 s | **0.9678** | ×2.2 |
-
-Breakdown for [B] sc_crop + ONNX:
-
-| Step | Time |
-|---|---|
-| sc_crop detection (YOLO ONNX) | ~1 s |
-| ONNX nnUNet sliding-window inference | ~10 s |
-| **Total** | **~11 s** |
-
-Reproduce with:
-```bash
-python nnUnet/benchmark_cpu.py \
-    -i image.nii.gz -gt seg_gt.nii.gz \
-    --model        ~/nnunet-v2/nnUNet_results/Dataset1000_TempContrastAgnosticCropped/nnUNetTrainer__nnUNetPlans__3d_fullres/onnx/nnunet_seg.onnx \
-    --plans        ~/nnunet-v2/nnUNet_results/Dataset1000_TempContrastAgnosticCropped/nnUNetTrainer__nnUNetPlans__3d_fullres/onnx/plans.json \
-    --model-folder ~/nnunet-v2/nnUNet_results/Dataset1000_TempContrastAgnosticCropped/nnUNetTrainer__nnUNetPlans__3d_fullres
-```
+| Pipeline | Time (CPU) | Dice vs GT |
+|---|---|---|
+| Paper baseline — `sct_deepseg spinalcord` (full volume) | 56 s | 0.9663 |
+| sc_crop + PyTorch *(no TTA)* | 25 s | **0.9678** |
+| **sc_crop + ONNX** *(no nnunetv2)* | **11 s** | 0.9623 |
 
 ---
 
