@@ -57,7 +57,7 @@ def crop_nifti(img: nib.Nifti1Image, xmin, xmax, ymin, ymax, zmin, zmax) -> nib.
 
 def process_single_image(args):
     """Reorient to RPI, sc_crop detection-based crop, then save in nnUNet format."""
-    img_dict, counter, path_out_images, path_out_labels, taskname, pad_rl, pad_ap, pad_si, skip_failed = args
+    img_dict, counter, path_out_images, path_out_labels, taskname, pad_rl, pad_ap, pad_si = args
 
     image_file_nnunet = os.path.join(path_out_images, f'{taskname}_{counter:03d}_0000.nii.gz')
     label_file_nnunet = os.path.join(path_out_labels, f'{taskname}_{counter:03d}.nii.gz')
@@ -109,31 +109,18 @@ def process_single_image(args):
     }
 
 
-def process_single_image_safe(args):
-    """Wrapper that catches sc_crop failures when --skip-failed is set."""
-    *inner_args, skip_failed = args
-    try:
-        return process_single_image((*inner_args, skip_failed))
-    except Exception as e:
-        img_dict = inner_args[0]
-        print(f"WARNING: sc_crop failed for {img_dict['image']}: {e} — skipping.")
-        return None
-
-
 def process_dataset_parallel(data_list, path_out_images, path_out_labels, taskname,
-                              start_counter, num_workers, pad_rl, pad_ap, pad_si, skip_failed):
+                              start_counter, num_workers, pad_rl, pad_ap, pad_si):
     """Process a dataset in parallel using multiple workers."""
     work_items = [
         (item, start_counter + i, path_out_images, path_out_labels, taskname,
-         pad_rl, pad_ap, pad_si, skip_failed)
+         pad_rl, pad_ap, pad_si)
         for i, item in enumerate(data_list)
     ]
 
-    fn = process_single_image_safe if skip_failed else process_single_image
-
     with Pool(processes=num_workers) as pool:
         results = list(tqdm.tqdm(
-            pool.imap(fn, work_items),
+            pool.imap(process_single_image, work_items),
             total=len(work_items),
             desc="Processing images",
         ))
@@ -170,15 +157,16 @@ def main():
         test_data  += load_json_datalist(os.path.join(args.input, datalist), key_to_extract="test")
 
     print(f"Processing {len(datalists_list)} datasets with {args.workers} workers...")
-    print(f"Training samples : {len(train_data) + len(val_data)}")
-    print(f"Test samples     : {len(test_data)}")
+    print(f"Number of training samples: {len(train_data)}")
+    print(f"Number of validation samples: {len(val_data)}")
+    print(f"Number of testing samples: {len(test_data)}")
 
     print("Processing training data...")
     train_results = process_dataset_parallel(
         train_data + val_data,
         str(path_out_imagesTr), str(path_out_labelsTr),
         args.taskname, 1, args.workers,
-        args.pad_rl, args.pad_ap, args.pad_si, args.skip_failed,
+        args.pad_rl, args.pad_ap, args.pad_si,
     )
 
     print("Processing test data...")
@@ -186,7 +174,7 @@ def main():
         test_data,
         str(path_out_imagesTs), str(path_out_labelsTs),
         args.taskname, 1, args.workers,
-        args.pad_rl, args.pad_ap, args.pad_si, args.skip_failed,
+        args.pad_rl, args.pad_ap, args.pad_si,
     )
 
     conversion_dict = {}
@@ -217,7 +205,7 @@ def main():
     with open(path_out / "dataset.json", "w") as f:
         json.dump(json_dict, f, indent=4)
 
-    print(f"Done! {len(train_results)} training and {len(test_results)} test images saved to {path_out}")
+    print("Conversion completed successfully!")
 
 
 if __name__ == '__main__':

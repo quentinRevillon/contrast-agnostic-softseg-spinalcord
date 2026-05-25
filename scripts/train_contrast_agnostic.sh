@@ -152,8 +152,7 @@ python ${PATH_REPO}/nnUnet/03_convert_msd_to_nnunet_reorient_sc_crop.py \
     --output ${PATH_NNUNET_RAW} \
     --taskname ${DATASET_NAME} \
     --tasknumber ${DATASET_NUMBER} \
-    --workers 8 \
-    --skip-failed
+    --workers 8
 
 echo "-----------------------------------"
 echo "Done! Converted datasets can be found in ${PATH_NNUNET_RAW}/${DATASET_NAME}."
