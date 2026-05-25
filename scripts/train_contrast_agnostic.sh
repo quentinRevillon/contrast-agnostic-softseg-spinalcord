@@ -1,17 +1,18 @@
 #!/bin/bash
 # Training and evaluation pipeline for contrast-agnostic spinal cord segmentation.
+# Preprocessing uses sc_crop (YOLO-based detection) — no GT segmentation mask required.
 #
 # Steps:
 #   1. Clone datasets from git-annex
 #   2. Create datalists (JSON with image/label pairs)
-#   3. Convert to nnUNet format (crop + RPI reorientation)
+#   3. Convert to nnUNet format via sc_crop detection (GPU, matches inference pipeline)
 #   4. nnUNet plan and preprocess
 #   5. nnUNet training
-#   6. PyTorch inference on GT-crop test set  (oracle upper bound)
-#   7. PyTorch inference on sc_crop test set  (realistic detection pipeline)
+#   6. PyTorch inference on sc_crop-preprocessed test set
+#   7. PyTorch inference end-to-end (sc_crop detection on original images)
 #   8. Export trained model to ONNX
-#   9. ONNX benchmark on GT-crop test set     (comparable to step 6)
-#  10. ONNX benchmark on sc_crop test set     (comparable to step 7)
+#   9. ONNX benchmark on sc_crop-preprocessed test set  (comparable to step 6)
+#  10. ONNX benchmark end-to-end (sc_crop detection on original images)
 #
 # Set START_STEP/END_STEP to run a specific range of steps.
 # If starting from step 3+, set PATH_OUT_DATALISTS manually.
@@ -24,16 +25,7 @@ PATH_REPO="/home/quentinr/contrast-agnostic-softseg-spinalcord"
 START_STEP=1
 END_STEP=10
 
-# ── sc-crop toggle ─────────────────────────────────────────────────────────────
-# true  → step 3 uses sc_crop detection (GPU, realistic pipeline).
-#         Training volumes have the same crop as inference → better generalisation,
-#         fewer voxels → faster training. This is the recommended setting.
-# false → step 3 uses GT-bbox crop (oracle, upper bound for benchmarking).
-#         Useful to measure the gap between oracle and detection-based cropping.
-USE_SC_CROP=true
-# ──────────────────────────────────────────────────────────────────────────────
-
-# Padding applied around the detected/GT bbox (mm, each side) — used in steps 3, 7, 10
+# Padding applied around the sc_crop detected bbox (mm, each side) — used in steps 3, 7, 10
 PAD_RL=20
 PAD_AP=30
 PAD_SI=40
@@ -121,34 +113,21 @@ fi
 # ====================================
 # STEP 3 — CONVERT TO NNUNET FORMAT
 # ====================================
-# USE_SC_CROP=true  → sc_crop detection (GPU batch, matches the inference pipeline)
-# USE_SC_CROP=false → GT-bbox crop (oracle upper bound)
+# sc_crop detects the spinal cord bbox on each volume (GPU batch inference).
+# No GT segmentation mask required — identical to the inference pipeline.
 
 if [ ${START_STEP} -le 3 ] && [ ${END_STEP} -ge 3 ]; then
-    if [ "${USE_SC_CROP}" = "true" ]; then
-        echo "Step 3: sc_crop preprocessing (GPU detection-based crop)"
-        sc_crop preprocess-nnunet \
-            --input        ${PATH_OUT_DATALISTS} \
-            --output       ${PATH_NNUNET_RAW} \
-            --taskname     ${DATASET_NAME} \
-            --tasknumber   ${DATASET_NUMBER} \
-            --pad-left     ${PAD_RL} --pad-right     ${PAD_RL} \
-            --pad-anterior ${PAD_AP} --pad-posterior ${PAD_AP} \
-            --pad-superior ${PAD_SI} --pad-inferior  ${PAD_SI} \
-            --device cuda \
-            --skip-failed
-    else
-        echo "Step 3: GT-bbox crop (oracle upper bound)"
-        python ${PATH_REPO}/nnUnet/03_convert_msd_to_nnunet_reorient_cropped.py \
-            --input        ${PATH_OUT_DATALISTS} \
-            --output       ${PATH_NNUNET_RAW} \
-            --taskname     ${DATASET_NAME} \
-            --tasknumber   ${DATASET_NUMBER} \
-            --pad-left     ${PAD_RL} --pad-right     ${PAD_RL} \
-            --pad-anterior ${PAD_AP} --pad-posterior ${PAD_AP} \
-            --pad-superior ${PAD_SI} --pad-inferior  ${PAD_SI} \
-            --workers 8
-    fi
+    echo "Step 3: sc_crop preprocessing (GPU detection-based crop)"
+    sc_crop preprocess-nnunet \
+        --input        ${PATH_OUT_DATALISTS} \
+        --output       ${PATH_NNUNET_RAW} \
+        --taskname     ${DATASET_NAME} \
+        --tasknumber   ${DATASET_NUMBER} \
+        --pad-left     ${PAD_RL} --pad-right     ${PAD_RL} \
+        --pad-anterior ${PAD_AP} --pad-posterior ${PAD_AP} \
+        --pad-superior ${PAD_SI} --pad-inferior  ${PAD_SI} \
+        --device cuda \
+        --skip-failed
 fi
 
 
@@ -183,11 +162,10 @@ fi
 
 
 # ====================================
-# STEP 6 — TEST SET EVALUATION (oracle crop)
+# STEP 6 — TEST SET EVALUATION (sc_crop-preprocessed)
 # ====================================
-# Runs inference on imagesTs (preprocessed with GT bbox crop, same as training)
-# and evaluates Dice. This is the "oracle" upper bound: crop coordinates are
-# derived from the GT label, not a detection model.
+# Runs inference on imagesTs (preprocessed with sc_crop, same as training)
+# and evaluates Dice. Crop coordinates come from the YOLO detector, not GT masks.
 
 if [ ${START_STEP} -le 6 ] && [ ${END_STEP} -ge 6 ]; then
     MODEL_DIR="${PATH_NNUNET_RESULTS}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/nnUNetTrainer__${NNUNET_PLANS_FILE}__${configurations[0]}"
@@ -218,7 +196,7 @@ fi
 
 
 # ====================================
-# STEP 6b — TEST SET EVALUATION (oracle crop, no TTA)
+# STEP 6b — TEST SET EVALUATION (sc_crop-preprocessed, no TTA)
 # ====================================
 # Same as step 6 but with --disable_tta (no mirroring).
 # Allows measuring the pure mirroring effect vs ONNX (which has no TTA).
@@ -298,9 +276,9 @@ fi
 
 
 # ====================================
-# STEP 9 — ONNX BENCHMARK (GT-crop)
+# STEP 9 — ONNX BENCHMARK (sc_crop-preprocessed)
 # ====================================
-# ONNX inference on imagesTs (GT bbox crop, same as step 6).
+# ONNX inference on imagesTs (sc_crop-preprocessed, same as step 6).
 # Directly comparable to test_predictions/summary.json.
 
 if [ ${START_STEP} -le 9 ] && [ ${END_STEP} -ge 9 ]; then
