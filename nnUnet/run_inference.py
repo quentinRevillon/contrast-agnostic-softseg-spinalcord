@@ -38,6 +38,11 @@ Usage:
 nnUNet model files are downloaded to ~/nnunet_contrast_agnostic/.
 sc_crop models are cached in ~/.cache/sc_crop/ (auto-download on first use).
 
+Resampling matches nnUNet's resample_data_or_seg_to_shape exactly:
+  - Isotropic images  : skimage.transform.resize with order=3/0, mode='edge'
+  - Anisotropic images: skimage.transform.resize in-plane + scipy.ndimage.map_coordinates
+                        on the thick axis with order_z=0 (nearest-neighbour), per plans.json
+
 Author: Quentin Revillon
 """
 
@@ -83,8 +88,10 @@ import nibabel as nib
 import numpy as np
 import onnxruntime as ort
 from nibabel.orientations import axcodes2ornt, io_orientation, ornt_transform
-from scipy.ndimage import binary_fill_holes, gaussian_filter
+from scipy.ndimage import binary_fill_holes, gaussian_filter, map_coordinates
 from skimage.transform import resize as sk_resize
+
+_ANISO_THRESHOLD = 3
 
 
 def parse_args():
@@ -200,11 +207,97 @@ def zscore_normalize(data):
     return ((data - mean) / max(float(std), 1e-8)).astype(np.float32)
 
 
-def resample(data, orig_shape, target_shape, order):
-    if tuple(orig_shape) == tuple(target_shape):
+def _get_lowres_axis(spacing):
+    """Return indices where spacing == max(spacing) — the anisotropic axis."""
+    return np.where(max(spacing) / np.array(spacing) == 1)[0]
+
+
+def _do_separate_z(spacing):
+    return (max(spacing) / min(spacing)) > _ANISO_THRESHOLD
+
+
+def _determine_sep_z_axis(current_spacing, new_spacing):
+    """Mirrors nnUNet determine_do_sep_z_and_axis with force_separate_z=None."""
+    if _do_separate_z(current_spacing):
+        axis = _get_lowres_axis(current_spacing)
+    elif _do_separate_z(new_spacing):
+        axis = _get_lowres_axis(new_spacing)
+    else:
+        return False, None
+    if len(axis) in (2, 3):   # ambiguous — fall back to isotropic resampling
+        return False, None
+    return True, int(axis[0])
+
+
+def resample(data, new_shape, current_spacing, new_spacing, order=3, order_z=0):
+    """Resample 3D data matching nnUNet's resample_data_or_seg_to_shape exactly.
+
+    For isotropic images uses skimage.transform.resize (order=3 / mode='edge').
+    For anisotropic images resamples the thick axis separately with
+    scipy.ndimage.map_coordinates at order_z=0, matching plans.json config.
+
+    Args:
+        data:            3D numpy array in ZYX order.
+        new_shape:       Target shape as (Z, Y, X) tuple/array.
+        current_spacing: Voxel spacing of data in ZYX order.
+        new_spacing:     Target voxel spacing in ZYX order.
+        order:           Interpolation order for in-plane resampling (default 3).
+        order_z:         Interpolation order for the anisotropic axis (default 0).
+    """
+    old_shape = np.array(data.shape)
+    new_shape  = np.array(new_shape)
+
+    if np.all(old_shape == new_shape):
         return data.astype(np.float32)
-    return sk_resize(data.astype(float), target_shape,
-                     order=order, mode='edge', anti_aliasing=False).astype(np.float32)
+
+    do_sep, axis = _determine_sep_z_axis(current_spacing, new_spacing)
+    data_f = data.astype(float)
+
+    if not do_sep:
+        return sk_resize(data_f, new_shape, order=order,
+                         mode='edge', anti_aliasing=False).astype(np.float32)
+
+    # ── Separate Z path (anisotropic image) ──────────────────────────────────
+    if axis == 0:
+        new_shape_2d = new_shape[1:]
+    elif axis == 1:
+        new_shape_2d = new_shape[[0, 2]]
+    else:
+        new_shape_2d = new_shape[:-1]
+
+    # Step 1: resample in-plane with order=3
+    tmp_shape = new_shape.copy()
+    tmp_shape[axis] = old_shape[axis]
+    reshaped = np.zeros(tmp_shape, dtype=float)
+    for idx in range(old_shape[axis]):
+        if axis == 0:
+            reshaped[idx] = sk_resize(data_f[idx], new_shape_2d, order=order,
+                                      mode='edge', anti_aliasing=False)
+        elif axis == 1:
+            reshaped[:, idx] = sk_resize(data_f[:, idx], new_shape_2d, order=order,
+                                         mode='edge', anti_aliasing=False)
+        else:
+            reshaped[:, :, idx] = sk_resize(data_f[:, :, idx], new_shape_2d, order=order,
+                                            mode='edge', anti_aliasing=False)
+
+    # Step 2: resample anisotropic axis with order_z using map_coordinates
+    if old_shape[axis] == new_shape[axis]:
+        return reshaped.astype(np.float32)
+
+    rows, cols, dim = new_shape[0], new_shape[1], new_shape[2]
+    orig_rows, orig_cols, orig_dim = reshaped.shape
+
+    row_scale = float(orig_rows) / rows
+    col_scale = float(orig_cols) / cols
+    dim_scale = float(orig_dim)  / dim
+
+    map_r, map_c, map_d = np.mgrid[:rows, :cols, :dim]
+    map_r = row_scale * (map_r + 0.5) - 0.5
+    map_c = col_scale * (map_c + 0.5) - 0.5
+    map_d = dim_scale * (map_d + 0.5) - 0.5
+
+    coord_map = np.array([map_r, map_c, map_d])
+    return map_coordinates(reshaped, coord_map, order=order_z, mode='nearest').astype(np.float32)
 
 
 def compute_new_shape(orig_shape, orig_spacing, target_spacing):
@@ -281,7 +374,7 @@ def infer_onnx(crop_rpi, model_path, plans_path, tile_step, threads):
     data_cropped, nnunet_bbox = crop_to_nonzero(data)
     data_norm                 = zscore_normalize(data_cropped)
     new_shape                 = compute_new_shape(data_cropped.shape, orig_spacing, target_sp)
-    data_rs                   = resample(data_norm, data_cropped.shape, new_shape, order=3)
+    data_rs                   = resample(data_norm, new_shape, orig_spacing, target_sp, order=3, order_z=0)
 
     sess_options = ort.SessionOptions()
     if threads:
@@ -291,7 +384,7 @@ def infer_onnx(crop_rpi, model_path, plans_path, tile_step, threads):
 
     prob         = sliding_window_inference(data_rs, session, patch_size, tile_step)
     pred_rs      = (prob > 0.5).astype(np.float32)
-    pred_cropped = resample(pred_rs, new_shape, data_cropped.shape, order=0)
+    pred_cropped = resample(pred_rs, data_cropped.shape, target_sp, orig_spacing, order=0, order_z=0)
     pred_cropped = (pred_cropped > 0.5).astype(np.uint8)
     pred_zyx     = pad_back(pred_cropped, nnunet_bbox, shape_before)
     return pred_zyx.transpose((2, 1, 0)).astype(np.uint8)
