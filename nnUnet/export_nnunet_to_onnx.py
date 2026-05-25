@@ -11,6 +11,12 @@ Usage:
     python export_nnunet_to_onnx.py \
         --model-folder /path/to/nnUNetTrainer__nnUNetPlans__3d_fullres \
         --output nnunet_seg.onnx
+
+    # External model with checkpoint_best (e.g. v3.0 baseline):
+    python export_nnunet_to_onnx.py \
+        --model-folder /path/to/nnUNetTrainer__nnUNetPlans__3d_fullres \
+        --checkpoint checkpoint_best.pth \
+        --output baseline_v3.onnx
 """
 
 import argparse
@@ -27,6 +33,8 @@ def parse_args():
                         help='Output ONNX file path (default: nnunet_seg.onnx)')
     parser.add_argument('--fold', type=int, default=0,
                         help='Fold to export (default: 0)')
+    parser.add_argument('--checkpoint', default='checkpoint_final.pth',
+                        help='Checkpoint filename inside fold_N/ (default: checkpoint_final.pth)')
     return parser.parse_args()
 
 
@@ -41,7 +49,7 @@ def main():
     predictor.initialize_from_trained_model_folder(
         args.model_folder,
         use_folds=[args.fold],
-        checkpoint_name='checkpoint_final.pth',
+        checkpoint_name=args.checkpoint,
     )
 
     net = predictor.network
