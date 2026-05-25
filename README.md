@@ -3,6 +3,30 @@
 [![MedIA](https://img.shields.io/badge/MedIA-10.106/media.2025.103473-darkgreen.svg)](https://doi.org/10.1016/j.media.2025.103473)
 [![ImagingNeuroscience](https://img.shields.io/badge/ImagingNeuroscience-10.1162/IMAG.a.1105-darkgreen.svg)](https://doi.org/10.1162/IMAG.a.1105)
 
+---
+
+## Branch `sc-crop-v2` — Experiment 2: sc_crop-based preprocessing (full dataset)
+
+Builds on `sc-crop` (Exp. 1) with the full 15-dataset corpus and tighter SC padding. Training complete; CSA/Dice evaluation in progress.
+
+**Changes vs Exp. 1:** 3 missing datasets restored (glob bug fixed) · tighter padding (RL 10 / AP 15 / SI 30 mm) · `run_all.sh` one-click pipeline
+
+**Dataset:** 15 datasets · 2 944 train+val volumes · 510 test volumes · padding RL 10 / AP 15 / SI 30 mm
+
+| Step | Status |
+|---|---|
+| Training (1 000 epochs, fold 0, 3d_fullres) | ✅ done — val Dice **0.9565** |
+| CSA + Dice evaluation (spine-generic, 49 subjects) | 🔄 in progress |
+
+**One-click pipeline:**
+```bash
+bash run_all.sh   # train (skipped if done) + evaluate
+```
+
+See [`PROGRESS.md`](PROGRESS.md) and [`EXPERIMENTS.md`](EXPERIMENTS.md) for full details.
+
+---
+
 Official repository for contrast-agnostic segmentation of the spinal cord. 
 
 This repo contains all the code for training the contrast-agnostic model. The code for training is based on the [nnUNetv2 framework](https://github.com/MIC-DKFZ/nnUNet). The segmentation model is available as part of [Spinal Cord Toolbox (SCT)](https://spinalcordtoolbox.com/stable/user_section/command-line/deepseg/spinalcord.html) via the `sct_deepseg` functionality.
