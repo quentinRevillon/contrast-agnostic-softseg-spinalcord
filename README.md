@@ -3,6 +3,26 @@
 [![MedIA](https://img.shields.io/badge/MedIA-10.106/media.2025.103473-darkgreen.svg)](https://doi.org/10.1016/j.media.2025.103473)
 [![ImagingNeuroscience](https://img.shields.io/badge/ImagingNeuroscience-10.1162/IMAG.a.1105-darkgreen.svg)](https://doi.org/10.1162/IMAG.a.1105)
 
+---
+
+## Branch `sc-crop` — Experiment 1: sc_crop-based preprocessing
+
+Integrates [`sc_crop`](https://github.com/ivadomed/sc-crop) (YOLO-based SC detector) into the training and inference pipeline so that train and test volumes are cropped to the same bounding box around the spinal cord. No GT segmentation mask required at preprocessing or inference time.
+
+**Dataset:** 12 datasets · 2 563 train+val volumes · 510 test volumes · padding RL 20 / AP 30 / SI 40 mm
+
+| Pipeline | Dice | CPU time |
+|---|---|---|
+| Paper baseline (`sct_deepseg`) | 0.9500 | 56 s |
+| sc_crop + PyTorch (no TTA) | **0.9537** | 25 s |
+| sc_crop + ONNX (CPU, no nnunetv2) | 0.9448 | **11 s** (×4.9 faster) |
+
+**New files:** `nnUnet/03_convert_msd_to_nnunet_reorient_sc_crop.py` · `nnUnet/run_inference.py` · `nnUnet/export_nnunet_to_onnx.py` · `nnUnet/04_evaluate_with_sc_crop.py` · `nnUnet/05_benchmark_onnx_sc_crop.py`
+
+See [`PROGRESS.md`](PROGRESS.md) and [`EXPERIMENTS.md`](EXPERIMENTS.md) for full results and reproducibility details.
+
+---
+
 Official repository for contrast-agnostic segmentation of the spinal cord. 
 
 This repo contains all the code for training the contrast-agnostic model. The code for training is based on the [nnUNetv2 framework](https://github.com/MIC-DKFZ/nnUNet). The segmentation model is available as part of [Spinal Cord Toolbox (SCT)](https://spinalcordtoolbox.com/stable/user_section/command-line/deepseg/spinalcord.html) via the `sct_deepseg` functionality.
