@@ -95,13 +95,38 @@ $nnUNet_results/Dataset1000_TempContrastAgnosticCropped/
     plans.json
 ```
 
+### Evaluation — PyTorch sc_crop end-to-end (N=466 test volumes)
+
+Script: `nnUnet/04_evaluate_with_sc_crop.py` (branch `sc-crop`, commit `35f88ce`)
+
+```bash
+python nnUnet/04_evaluate_with_sc_crop.py \
+    --dataset-folder $nnUNet_raw/Dataset1000_TempContrastAgnosticCropped \
+    --model-folder   $nnUNet_results/Dataset1000_TempContrastAgnosticCropped/nnUNetTrainer__nnUNetPlans__3d_fullres \
+    --pad-left 20 --pad-right 20 --pad-anterior 30 --pad-posterior 30 \
+    --pad-superior 40 --pad-inferior 40
+```
+
+Results written to:
+```
+$nnUNet_results/Dataset1000_TempContrastAgnosticCropped/
+  nnUNetTrainer__nnUNetPlans__3d_fullres/test_sc_crop/
+    metrics_sc_crop.csv          ← per-image: coverage, dice_within_crop, dice_global
+    summary.json                 ← nnUNet standard eval (Dice in crop space)
+```
+
+Overall Dice (dice_global, full image space): **0.9531**  
+Overall Dice (summary.json, crop space): **0.9537**
+
 ### Evaluation — ONNX sc_crop end-to-end (N=466 test volumes)
+
+Script: `nnUnet/05_benchmark_onnx_sc_crop.py` (branch `sc-crop`, commit `35f88ce`)
 
 ```bash
 python nnUnet/05_benchmark_onnx_sc_crop.py \
     --dataset-folder $nnUNet_raw/Dataset1000_TempContrastAgnosticCropped \
-    --model   .../onnx/nnunet_seg.onnx \
-    --plans   .../onnx/plans.json \
+    --model   $nnUNet_results/Dataset1000_TempContrastAgnosticCropped/nnUNetTrainer__nnUNetPlans__3d_fullres/onnx/nnunet_seg.onnx \
+    --plans   $nnUNet_results/Dataset1000_TempContrastAgnosticCropped/nnUNetTrainer__nnUNetPlans__3d_fullres/onnx/plans.json \
     --output  benchmark_sc_crop.csv
 ```
 
@@ -109,11 +134,13 @@ Results written to:
 ```
 $nnUNet_results/Dataset1000_TempContrastAgnosticCropped/
   nnUNetTrainer__nnUNetPlans__3d_fullres/onnx/
-    benchmark_sc_crop.csv
-    benchmark_sc_crop_summary.json    ← Dice mean/std, timing, coverage
-    benchmark_gt_crop.csv
+    benchmark_sc_crop.csv              ← per-image: coverage, dice_global, timing
+    benchmark_sc_crop_summary.json     ← Dice mean/std, SC coverage, timing stats
+    benchmark_gt_crop.csv              ← same metrics with GT crop instead of sc_crop
     benchmark_gt_crop_summary.json
 ```
+
+Overall Dice (dice_global, full image space): **0.9448**
 
 ---
 
@@ -150,19 +177,29 @@ python nnUnet/03_convert_msd_to_nnunet_reorient_sc_crop.py \
     --pad-rl 10 --pad-ap 15 --pad-si 30
 ```
 
-### One-click pipeline
+### Scripts
 
+| Step | Script |
+|---|---|
+| 1–3. Clone + datalists + sc_crop conversion | `scripts/train_contrast_agnostic.sh` |
+| 4–5. Preprocessing + training | `scripts/train_contrast_agnostic.sh` (continued) |
+| Full pipeline (train + evaluate) | `run_all.sh` |
+| Evaluation (CSA + Dice) | `scripts/evaluate_csa_local.sh` |
+| Per-subject CSA computation | `scripts/compute_csa_local.sh` |
+| ANIMA Dice metrics | `anima_metrics/compute_anima_metrics_spine_generic.py` |
+
+One-click:
 ```bash
-# Full pipeline: train + evaluate
 bash run_all.sh
-
-# Or step by step:
-bash scripts/train_contrast_agnostic.sh
-bash scripts/evaluate_csa_local.sh
 ```
 
-`train_contrast_agnostic.sh` runs steps 1–5 above in sequence.  
-The only difference from the original `main` branch script is the 3 lines for sc_crop preprocessing (see `PROGRESS.md`).
+Step by step:
+```bash
+bash scripts/train_contrast_agnostic.sh   # steps 1–5
+bash scripts/evaluate_csa_local.sh        # evaluation
+```
+
+`train_contrast_agnostic.sh` differs from `main` by only 3 lines (sc_crop preprocessing — see `PROGRESS.md`).
 
 ### Training command (launched by train_contrast_agnostic.sh)
 
@@ -193,7 +230,9 @@ CUDA_VISIBLE_DEVICES=0 nnUNetv2_train 2000 3d_fullres 0 \
               sub-beijingPrisma04_T2w_desc-softseg_label-SC_seg.nii.gz
 ```
 
-### Reproduce
+### Script
+
+`nnUnet/benchmark_cpu.py` (branch `sc-crop-v2`, commit `2d42742`)
 
 ```bash
 python nnUnet/benchmark_cpu.py \
