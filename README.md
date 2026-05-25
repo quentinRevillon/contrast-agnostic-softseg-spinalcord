@@ -5,25 +5,16 @@
 
 ---
 
-## Branch `sc-crop-v2` — Experiment 2: sc_crop-based preprocessing (full dataset)
+## Branch `sc-crop-v2`
 
-Builds on `sc-crop` (Exp. 1) with the full 15-dataset corpus and tighter SC padding. Training complete; CSA/Dice evaluation in progress.
+Les images sont préprocessées en découpant autour de la moelle épinière avec sc_crop (détection YOLO, 15 datasets, padding 10/15/30 mm).
 
-**Changes vs Exp. 1:** 3 missing datasets restored (glob bug fixed) · tighter padding (RL 10 / AP 15 / SI 30 mm) · `run_all.sh` one-click pipeline
+Script : `nnUnet/03_convert_msd_to_nnunet_reorient_sc_crop.py`
 
-**Dataset:** 15 datasets · 2 944 train+val volumes · 510 test volumes · padding RL 10 / AP 15 / SI 30 mm
-
-| Step | Status |
+| Méthode | Dice (validation) |
 |---|---|
-| Training (1 000 epochs, fold 0, 3d_fullres) | ✅ done — val Dice **0.9565** |
-| CSA + Dice evaluation (spine-generic, 49 subjects) | 🔄 in progress |
-
-**One-click pipeline:**
-```bash
-bash run_all.sh   # train (skipped if done) + evaluate
-```
-
-See [`PROGRESS.md`](PROGRESS.md) and [`EXPERIMENTS.md`](EXPERIMENTS.md) for full details.
+| Entraînement terminé | **0.9565** |
+| Évaluation CSA/Dice (spine-generic) | en cours |
 
 ---
 
