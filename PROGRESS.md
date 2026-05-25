@@ -47,22 +47,23 @@ python nnUnet/03_convert_msd_to_nnunet_reorient_sc_crop.py \
 | sc_crop + PyTorch end-to-end | **0.9537** | +0.37 pt |
 | sc_crop + ONNX end-to-end · CPU | **0.9448** | −0.52 pt |
 
-### Per-dataset Dice — ONNX sc_crop end-to-end (N=466)
+### Per-dataset Dice — sc_crop end-to-end (N=466)
 
-| Dataset | N | Dice |
-|---|---|---|
-| data-multi-subject | 294 | 0.9563 |
-| canproco | 85 | 0.9515 |
-| sct-testing-large | 36 | 0.9599 |
-| sci-zurich | 14 | 0.8958 |
-| basel-mp2rage | 11 | 0.9547 |
-| sci-colorado | 8 | 0.9313 |
-| lumbar-vanderbilt | 6 | 0.9395 |
-| dcm-zurich-lesions-20231115 | 5 | 0.9608 |
-| lumbar-epfl | 3 | 0.9360 |
-| sci-paris | 2 | 0.9607 |
-| site_006 / site_007 | 2 | 0.9419 |
-| **OVERALL** | **466** | **0.9448** |
+| Dataset | N | PyTorch | ONNX |
+|---|---|---|---|
+| data-multi-subject | 294 | 0.9563 | 0.9518 |
+| canproco | 85 | 0.9515 | 0.9389 |
+| sct-testing-large | 36 | 0.9599 | 0.9451 |
+| sci-zurich | 14 | 0.8958 | 0.8701 |
+| basel-mp2rage | 11 | 0.9547 | 0.9481 |
+| sci-colorado | 8 | 0.9313 | 0.9111 |
+| lumbar-vanderbilt | 6 | 0.9395 | 0.9242 |
+| dcm-zurich-lesions-20231115 | 5 | 0.9608 | 0.9377 |
+| lumbar-epfl | 3 | 0.9360 | 0.9196 |
+| sci-paris | 2 | 0.9607 | 0.9425 |
+| site_006 | 1 | 0.9486 | 0.9253 |
+| site_007 | 1 | 0.9352 | 0.9157 |
+| **OVERALL** | **466** | **0.9531** | **0.9448** |
 
 ### Inference speed — ONNX · CPU · N=466
 
