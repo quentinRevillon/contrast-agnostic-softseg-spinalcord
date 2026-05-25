@@ -7,13 +7,13 @@
 
 ## Branch `sc-crop`
 
-Les images sont préprocessées en découpant autour de la moelle épinière à partir du masque GT (bounding box des labels, 12 datasets, padding 20/30/40 mm).
+Images are preprocessed by cropping around the spinal cord using the GT bounding box (12 datasets, padding 20/30/40 mm).
 
-Script : `nnUnet/03_convert_msd_to_nnunet_reorient_cropped.py`
+Script: `nnUnet/03_convert_msd_to_nnunet_reorient_cropped.py`
 
-| Méthode | Dice |
+| Method | Dice |
 |---|---|
-| Baseline papier (`sct_deepseg`) | 0.9500 |
+| Paper baseline (`sct_deepseg`) | 0.9500 |
 | sc_crop + PyTorch | **0.9537** |
 | sc_crop + ONNX (CPU) | 0.9448 |
 
