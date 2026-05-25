@@ -1,7 +1,12 @@
 #!/bin/bash
 # Full pipeline: train + evaluate.
-# Calls train_contrast_agnostic.sh (steps 1–5) then evaluate_csa_local.sh (CSA + Dice).
-# All dataset/model configuration is defined in train_contrast_agnostic.sh.
+# Steps:
+#   1. train_contrast_agnostic.sh  — nnUNet training
+#   2. export_nnunet_to_onnx.py   — ONNX export
+#   3. evaluate_test_set.sh        — Dice on nnUNet test set (imagesTs vs labelsTs)
+#   4. evaluate_csa_local.sh       — CSA drift on spine-generic
+#
+# Each step is skipped if already complete.
 #
 # Usage:
 #   bash run_all.sh
@@ -16,6 +21,7 @@ PATH_REPO="/home/quentinr/contrast-agnostic-softseg-spinalcord"
 
 PATH_DATA_BASE="/home/quentinr/datasets_contrast_agnostic_retraining"
 PATH_NNUNET_RESULTS="/home/quentinr/nnunet-v2/nnUNet_results"
+PATH_NNUNET_RAW="/home/quentinr/nnunet-v2/nnUNet_raw"
 DATASET_NUMBER=2000
 DATASET_NAME="ContrastAgnosticScCrop"
 NNUNET_PLANS_FILE="nnUNetPlans"
@@ -60,7 +66,18 @@ fi
 
 
 # ====================================
-# EVALUATION (CSA + Dice on spine-generic test set)
+# TEST SET DICE (nnUNet imagesTs vs labelsTs)
+# ====================================
+
+bash ${PATH_REPO}/scripts/evaluate_test_set.sh \
+    --dataset-number ${DATASET_NUMBER} \
+    --dataset-name   ${DATASET_NAME} \
+    --results-dir    ${PATH_NNUNET_RESULTS} \
+    --raw-dir        ${PATH_NNUNET_RAW}
+
+
+# ====================================
+# CSA EVALUATION (spine-generic test set)
 # ====================================
 
 echo "-----------------------------------"
