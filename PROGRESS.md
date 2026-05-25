@@ -41,14 +41,11 @@ python nnUnet/03_convert_msd_to_nnunet_reorient_sc_crop.py \
 
 ### Dice vs paper baseline (~0.950)
 
-| Configuration | Dice | ΔDice |
+| Pipeline | Dice | ΔDice vs paper |
 |---|---|---|
 | Paper v3.0 (baseline) | 0.9500 | — |
-| PyTorch · GT crop · TTA | **0.9586** | +0.86 pt |
-| PyTorch · GT crop · no TTA | 0.9574 | +0.74 pt |
-| PyTorch · sc_crop end-to-end | **0.9537** | +0.37 pt |
-| ONNX · GT crop · CPU | 0.9487 | −0.13 pt |
-| ONNX · sc_crop end-to-end · CPU | **0.9448** | −0.52 pt |
+| sc_crop + PyTorch end-to-end | **0.9537** | +0.37 pt |
+| sc_crop + ONNX end-to-end · CPU | **0.9448** | −0.52 pt |
 
 ### Per-dataset Dice — ONNX sc_crop end-to-end (N=466)
 
