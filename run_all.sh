@@ -27,10 +27,15 @@ PATH_SPINE_GENERIC="${PATH_DATA_BASE}/data-multi-subject"
 
 
 # ====================================
-# TRAINING (steps 1–5, auto-resumes)
+# TRAINING (steps 1–5, auto-resumes, skipped if already complete)
 # ====================================
 
-bash ${PATH_REPO}/scripts/train_contrast_agnostic.sh
+CHECKPOINT="${PATH_MODEL}/fold_0/checkpoint_final.pth"
+if [ -f "${CHECKPOINT}" ]; then
+    echo "Training already complete (checkpoint_final.pth found), skipping."
+else
+    bash ${PATH_REPO}/scripts/train_contrast_agnostic.sh
+fi
 
 
 # ====================================
