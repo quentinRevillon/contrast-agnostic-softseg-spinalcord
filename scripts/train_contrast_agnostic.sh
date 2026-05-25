@@ -6,7 +6,7 @@ set -e   # stop immediately on any command failure
 # 2. Creates datalists (i.e. json files with image/label pairs) based on pre-defined or random dataset splits
 # 3. Converts the json files for each dataset into one aggregated dataset in the nnUNet format
 # 4. Runs nnUNet preprocessing and training based on the defined configurations (2D/3D).
-# 5. Evaluates the trained model on the spine-generic test set (CSA + Dice via ANIMA).
+# For the full pipeline including evaluation, use run_all.sh instead.
 
 
 # Define (full) path to the contrast-agnostic repository
@@ -94,28 +94,16 @@ PAD_RL=10
 PAD_AP=15
 PAD_SI=30
 
-# ====================================
-# VARIABLES FOR EVALUATION (step 6)
-# ====================================
-
-# Path to the spine-generic test dataset (used for CSA and Dice evaluation)
-PATH_SPINE_GENERIC="${PATH_DATA_BASE}/data-multi-subject"
-
-# Short tag used for output folder naming and result identification
-MODEL_VERSION="sc-crop-v2"
-
-# Number of parallel workers for sct_run_batch
-EVAL_JOBS=4
-
 
 # ====================================
 # STEP CONTROL — auto-detects where to resume, or override with START_STEP
-# Steps: 1=clone  2=datalists  3=convert  4=preprocess  5=train  6=evaluate
+# Steps: 1=clone  2=datalists  3=convert  4=preprocess  5=train
 # Usage: bash train_contrast_agnostic.sh            (auto-resume from last completed step)
 #        START_STEP=4 bash train_contrast_agnostic.sh   (force resume from step 4)
 #        START_STEP=4 END_STEP=4 bash train_contrast_agnostic.sh   (step 4 only)
+# For full pipeline (train + evaluate), use run_all.sh
 # ====================================
-END_STEP=${END_STEP:-6}
+END_STEP=${END_STEP:-5}
 
 if [ -z "${START_STEP}" ]; then
     # Auto-detect: find the first step that is not yet complete
@@ -123,9 +111,7 @@ if [ -z "${START_STEP}" ]; then
     NNUNET_PREPROCESSED_DIR="${nnUNet_preprocessed}/Dataset${DATASET_NUMBER}_${DATASET_NAME}"
     NNUNET_RAW_DIR="${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}"
 
-    if [ -f "${NNUNET_RESULTS_DIR}/nnUNetTrainer__nnUNetPlans__${configurations[0]}/fold_0/checkpoint_final.pth" ]; then
-        START_STEP=6   # training complete, run evaluation
-    elif [ -d "${NNUNET_RESULTS_DIR}/nnUNetTrainer__nnUNetPlans__${configurations[0]}" ]; then
+    if [ -d "${NNUNET_RESULTS_DIR}/nnUNetTrainer__nnUNetPlans__${configurations[0]}" ]; then
         START_STEP=5   # training started (possibly resuming mid-training)
     elif [ -f "${NNUNET_PREPROCESSED_DIR}/nnUNetPlans.json" ]; then
         START_STEP=5   # preprocessing done (plans.json present), start training
@@ -324,35 +310,6 @@ if [ ${START_STEP} -le 5 ] && [ ${END_STEP} -ge 5 ]; then
     echo "-------------------------------------------"
     echo "STEP 5 done — training on all folds completed."
     echo "Model can be found in ${PATH_NNUNET_RESULTS}/Dataset${DATASET_NUMBER}_${DATASET_NAME}"
-    echo "-------------------------------------------"
-
-fi
-
-
-# ====================================
-# STEP 6 — EVALUATION (CSA + Dice)
-# ====================================
-
-if [ ${START_STEP} -le 6 ] && [ ${END_STEP} -ge 6 ]; then
-
-    PATH_MODEL="${PATH_NNUNET_RESULTS}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/nnUNetTrainer__${NNUNET_PLANS_FILE}__${configurations[0]}"
-
-    echo "-------------------------------------------"
-    echo "Running evaluation on spine-generic test set ..."
-    echo "Model   : ${PATH_MODEL}"
-    echo "Data    : ${PATH_SPINE_GENERIC}"
-    echo "Version : ${MODEL_VERSION}"
-    echo "-------------------------------------------"
-
-    bash ${PATH_REPO}/scripts/evaluate_csa_local.sh \
-        --model-folder  ${PATH_MODEL} \
-        --model-version ${MODEL_VERSION} \
-        --data-path     ${PATH_SPINE_GENERIC} \
-        --jobs          ${EVAL_JOBS}
-
-    echo "-------------------------------------------"
-    echo "STEP 6 done — evaluation complete."
-    echo "Results : logs_results_${MODEL_VERSION}/"
     echo "-------------------------------------------"
 
 fi
