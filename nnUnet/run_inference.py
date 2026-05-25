@@ -330,10 +330,18 @@ def compute_steps(image_size, patch_size, tile_step):
 
 
 def sliding_window_inference(data, session, patch_size, tile_step):
-    """Sliding window with Gaussian weighting and symmetric padding — matches nnUNet exactly."""
+    """Sliding window with Gaussian weighting — accumulates logits, matches nnUNet exactly.
+
+    nnUNet accumulates logits (not softmax probabilities) across overlapping patches and
+    divides by the Gaussian weight map once at the end. Applying softmax before accumulation
+    (as averaging probabilities) gives different results from averaging logits then softmax.
+
+    Returns averaged logits of shape (2, D, H, W).
+    """
     D, H, W = data.shape
     pd, ph, pw = patch_size
 
+    # Pad so every spatial dim is at least the patch size (same convention as pad_nd_image)
     pad_d = max(0, pd - D); d0 = pad_d // 2; d1 = pad_d - d0
     pad_h = max(0, ph - H); h0 = pad_h // 2; h1 = pad_h - h0
     pad_w = max(0, pw - W); w0 = pad_w // 2; w1 = pad_w - w0
@@ -341,8 +349,9 @@ def sliding_window_inference(data, session, patch_size, tile_step):
         data = np.pad(data, ((d0, d1), (h0, h1), (w0, w1)), mode='constant')
     Dp, Hp, Wp = data.shape
 
-    gauss      = make_gaussian_map(patch_size)
-    accum      = np.zeros((Dp, Hp, Wp), dtype=np.float32)
+    gauss      = make_gaussian_map(patch_size)                            # (pd, ph, pw)
+    n_classes  = 2
+    accum      = np.zeros((n_classes, Dp, Hp, Wp), dtype=np.float32)     # logit accumulator
     weight_map = np.zeros((Dp, Hp, Wp), dtype=np.float32)
     in_name    = session.get_inputs()[0].name
     out_name   = session.get_outputs()[0].name
@@ -351,13 +360,12 @@ def sliding_window_inference(data, session, patch_size, tile_step):
         for dy in compute_steps((Dp, Hp, Wp), patch_size, tile_step)[1]:
             for dx in compute_steps((Dp, Hp, Wp), patch_size, tile_step)[2]:
                 patch  = data[dz:dz+pd, dy:dy+ph, dx:dx+pw][np.newaxis, np.newaxis]
-                logits = session.run([out_name], {in_name: patch})[0][0]
-                exp    = np.exp(logits - logits.max(axis=0, keepdims=True))
-                prob1  = exp[1] / exp.sum(axis=0)
-                accum      [dz:dz+pd, dy:dy+ph, dx:dx+pw] += prob1 * gauss
-                weight_map [dz:dz+pd, dy:dy+ph, dx:dx+pw] += gauss
+                logits = session.run([out_name], {in_name: patch})[0][0]  # (2, pd, ph, pw)
+                accum      [:, dz:dz+pd, dy:dy+ph, dx:dx+pw] += logits * gauss
+                weight_map [dz:dz+pd, dy:dy+ph, dx:dx+pw]    += gauss
 
-    return (accum / weight_map)[d0:d0+D, h0:h0+H, w0:w0+W]
+    avg_logits = (accum / weight_map)[:, d0:d0+D, h0:h0+H, w0:w0+W]  # (2, D, H, W)
+    return avg_logits
 
 
 # ── ONNX inference ────────────────────────────────────────────────────────────
@@ -382,10 +390,18 @@ def infer_onnx(crop_rpi, model_path, plans_path, tile_step, threads):
     session = ort.InferenceSession(model_path, sess_options=sess_options,
                                    providers=['CPUExecutionProvider'])
 
-    prob         = sliding_window_inference(data_rs, session, patch_size, tile_step)
-    pred_rs      = (prob > 0.5).astype(np.float32)
-    pred_cropped = resample(pred_rs, data_cropped.shape, target_sp, orig_spacing, order=0, order_z=0)
-    pred_cropped = (pred_cropped > 0.5).astype(np.uint8)
+    # sliding window → averaged logits (2, Z, Y, X) at target_spacing
+    avg_logits = sliding_window_inference(data_rs, session, patch_size, tile_step)
+
+    # resample logits back to original spacing with order=1 (resampling_fn_probabilities_kwargs)
+    # then apply softmax and threshold — matches nnUNet's convert_predicted_logits_to_segmentation
+    logits_back = np.stack([
+        resample(avg_logits[c], data_cropped.shape, target_sp, orig_spacing, order=1, order_z=0)
+        for c in range(avg_logits.shape[0])
+    ])  # (2, Z_orig, Y_orig, X_orig)
+    exp          = np.exp(logits_back - logits_back.max(axis=0, keepdims=True))
+    prob1        = exp[1] / exp.sum(axis=0)                 # softmax class 1
+    pred_cropped = (prob1 > 0.5).astype(np.uint8)
     pred_zyx     = pad_back(pred_cropped, nnunet_bbox, shape_before)
     return pred_zyx.transpose((2, 1, 0)).astype(np.uint8)
 
