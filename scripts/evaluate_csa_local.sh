@@ -1,0 +1,109 @@
+#!/bin/bash
+#
+# Run the CSA morphometric evaluation locally without a GitHub release.
+# Equivalent to the automated GitHub Actions workflow but uses a local nnUNet
+# model folder instead of downloading from a release URL.
+#
+# Usage:
+#   bash scripts/evaluate_csa_local.sh \
+#       --model-folder /path/to/nnUNetTrainer__nnUNetPlans__3d_fullres \
+#       --model-version my-sc-crop-v1 \
+#       --data-path /path/to/data-multi-subject
+#
+# Outputs:
+#   logs_results/results/csa_c2c3.csv  — CSA per subject/contrast (GT + model)
+#   logs_results/qc/                   — QC reports
+#
+# Requirements:
+#   - SCT (sct_run_batch, sct_process_segmentation, sct_deepseg_sc for QC)
+#   - contrast_agnostic conda environment (nnunetv2)
+#   - spine-generic data-multi-subject at --data-path
+#     (see scripts/download_spine_generic_test_data.sh to download it)
+#
+# Author: Quentin Revillon
+
+set -e
+
+# ==============================
+# PARSE ARGUMENTS
+# ==============================
+
+PATH_MODEL=""
+MODEL_VERSION="local"
+PATH_DATA="data-multi-subject"
+NUM_WORKERS=4
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --model-folder)  PATH_MODEL="$2";    shift 2 ;;
+    --model-version) MODEL_VERSION="$2"; shift 2 ;;
+    --data-path)     PATH_DATA="$2";     shift 2 ;;
+    --jobs)          NUM_WORKERS="$2";   shift 2 ;;
+    *) echo "Unknown argument: $1"; exit 1 ;;
+  esac
+done
+
+if [[ -z "${PATH_MODEL}" ]]; then
+  echo "ERROR: --model-folder is required"
+  echo "Usage: bash $0 --model-folder /path/to/nnUNetTrainer__nnUNetPlans__3d_fullres [--model-version v1] [--data-path data-multi-subject] [--jobs 4]"
+  exit 1
+fi
+
+# ==============================
+# VARIABLES
+# ==============================
+
+CWD=${PWD}
+PATH_REPO="$(cd "$(dirname "$0")/.." && pwd)"
+PATH_NNUNET_SCRIPT="${PATH_REPO}/nnUnet/run_inference_single_subject.py"
+PATH_OUTPUT="csa-analysis-local-${MODEL_VERSION}"
+
+# Frozen 49-subject test split (same as GitHub Actions)
+SUBJECTS_FILE="${PATH_REPO}/scripts/spine_generic_test_split_for_csa_drift_monitoring.yaml"
+TEST_SUBJECTS=$(python3 -c "
+import yaml
+with open('${SUBJECTS_FILE}') as f:
+    d = yaml.safe_load(f)
+print(' '.join(d.get('test', d.get('subjects', []))))
+")
+
+echo "=============================="
+echo "Local CSA evaluation"
+echo "Model folder : ${PATH_MODEL}"
+echo "Model version: ${MODEL_VERSION}"
+echo "Data path    : ${PATH_DATA}"
+echo "Subjects     : $(echo ${TEST_SUBJECTS} | wc -w) subjects"
+echo "Output       : ${PATH_OUTPUT}"
+echo "=============================="
+
+# ==============================
+# RUN BATCH ANALYSIS
+# ==============================
+
+path_out_run_batch="${PATH_OUTPUT}/batch_processing_results"
+
+sct_run_batch \
+    -path-data   ${PATH_DATA} \
+    -path-output ${path_out_run_batch} \
+    -jobs        ${NUM_WORKERS} \
+    -script      ${PATH_REPO}/scripts/compute_csa_local.sh \
+    -script-args "${MODEL_VERSION} ${PATH_NNUNET_SCRIPT} ${PATH_MODEL}" \
+    -include-list ${TEST_SUBJECTS}
+
+# ==============================
+# COPY RESULTS
+# ==============================
+
+mkdir -p ${CWD}/logs_results_${MODEL_VERSION}
+cp -r ${path_out_run_batch}/log     ${CWD}/logs_results_${MODEL_VERSION}/
+cp -r ${path_out_run_batch}/results ${CWD}/logs_results_${MODEL_VERSION}/
+
+echo "=============================="
+echo "Done. Results saved to logs_results_${MODEL_VERSION}/"
+echo "CSA CSV: logs_results_${MODEL_VERSION}/results/csa_c2c3.csv"
+echo ""
+echo "To generate plots across versions, run:"
+echo "  python csa_generate_figures/analyse_csa_across_releases.py --path-results logs_results_*"
+echo "=============================="
+
+cd ${CWD}
