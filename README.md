@@ -5,21 +5,17 @@
 
 ---
 
-## Branch `sc-crop` — Experiment 1: sc_crop-based preprocessing
+## Branch `sc-crop`
 
-Integrates [`sc_crop`](https://github.com/ivadomed/sc-crop) (YOLO-based SC detector) into the training and inference pipeline so that train and test volumes are cropped to the same bounding box around the spinal cord. No GT segmentation mask required at preprocessing or inference time.
+Les images sont préprocessées en découpant autour de la moelle épinière avec sc_crop (détection YOLO, 12 datasets, padding 20/30/40 mm).
 
-**Dataset:** 12 datasets · 2 563 train+val volumes · 510 test volumes · padding RL 20 / AP 30 / SI 40 mm
+Script : `nnUnet/03_sc_crop_nnunet_preprocessing.py`
 
-| Pipeline | Dice | CPU time |
-|---|---|---|
-| Paper baseline (`sct_deepseg`) | 0.9500 | 56 s |
-| sc_crop + PyTorch (no TTA) | **0.9537** | 25 s |
-| sc_crop + ONNX (CPU, no nnunetv2) | 0.9448 | **11 s** (×4.9 faster) |
-
-**New files:** `nnUnet/03_convert_msd_to_nnunet_reorient_sc_crop.py` · `nnUnet/run_inference.py` · `nnUnet/export_nnunet_to_onnx.py` · `nnUnet/04_evaluate_with_sc_crop.py` · `nnUnet/05_benchmark_onnx_sc_crop.py`
-
-See [`PROGRESS.md`](PROGRESS.md) and [`EXPERIMENTS.md`](EXPERIMENTS.md) for full results and reproducibility details.
+| Méthode | Dice |
+|---|---|
+| Baseline papier (`sct_deepseg`) | 0.9500 |
+| sc_crop + PyTorch | **0.9537** |
+| sc_crop + ONNX (CPU) | 0.9448 |
 
 ---
 
