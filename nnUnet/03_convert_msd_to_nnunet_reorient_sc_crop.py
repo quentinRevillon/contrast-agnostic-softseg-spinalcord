@@ -42,7 +42,6 @@ def parse_args():
     parser.add_argument('--pad-rl', type=float, default=10.0, help='Right-Left padding in mm (default: 10)')
     parser.add_argument('--pad-ap', type=float, default=15.0, help='Anterior-Posterior padding in mm (default: 15)')
     parser.add_argument('--pad-si', type=float, default=30.0, help='Superior-Inferior padding in mm (default: 30)')
-    parser.add_argument('--skip-failed', action='store_true', help='Skip images where sc_crop detection fails instead of crashing')
     return parser.parse_args()
 
 
@@ -53,6 +52,22 @@ def crop_nifti(img: nib.Nifti1Image, xmin, xmax, ymin, ymax, zmin, zmax) -> nib.
     affine = img.affine.copy()
     affine[:3, 3] = (img.affine @ np.array([xmin, ymin, zmin, 1.0]))[:3]
     return nib.Nifti1Image(cropped, affine, img.header)
+
+
+def force_orthonormal_affine(img: nib.Nifti1Image) -> nib.Nifti1Image:
+    """Force direction cosines to be exactly orthonormal (SVD).
+
+    SimpleITK/ITK rejects NIfTI files whose direction cosines are not
+    orthonormal (e.g. oblique acquisitions where floating-point rounding
+    survives sct_image -setorient RPI). SVD gives the nearest orthonormal
+    matrix while preserving voxel spacing and origin.
+    """
+    affine = img.affine.copy()
+    R = affine[:3, :3]
+    spacing = np.linalg.norm(R, axis=0)
+    U, _, Vt = np.linalg.svd(R)
+    affine[:3, :3] = (U @ Vt) * spacing
+    return nib.Nifti1Image(np.asarray(img.dataobj), affine, img.header)
 
 
 def process_single_image(args):
@@ -100,6 +115,10 @@ def process_single_image(args):
 
     # Binarize label
     assert os.system(f"sct_maths -i {label_file_nnunet} -bin 0.5 -o {label_file_nnunet}") == 0
+
+    # Force orthonormal direction cosines — SimpleITK/ITK rejects oblique affines
+    for path in [image_file_nnunet, label_file_nnunet]:
+        nib.save(force_orthonormal_affine(nib.load(path)), path)
 
     return {
         'image': str(os.path.abspath(img_dict['image'])),
