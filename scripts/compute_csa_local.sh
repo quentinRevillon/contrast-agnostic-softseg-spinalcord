@@ -49,7 +49,8 @@ label_vertebrae(){
   FILESEG="${file}_softseg_bin"
   FILELABEL="${file}_discs"
 
-  sct_label_vertebrae -i ${FILESEG}.nii.gz -discfile ${FILELABEL}.nii.gz -o ${FILESEG}_labeled.nii.gz
+  sct_label_vertebrae -i ${file}.nii.gz -s ${FILESEG}.nii.gz -c ${contrast} \
+      -discfile ${FILELABEL}.nii.gz -o ${FILESEG}_labeled.nii.gz
 }
 
 copy_gt_disc_labels(){
