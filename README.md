@@ -7,9 +7,13 @@
 
 ## Branch `sc-crop`
 
-Images are preprocessed by cropping around the spinal cord using the GT bounding box (12 datasets, padding 20/30/40 mm).
-
+**Training preprocessing:** images are cropped around the spinal cord using the GT segmentation bounding box (RL ±20 mm / AP ±30 mm / SI ±40 mm).
 Script: `nnUnet/03_convert_msd_to_nnunet_reorient_cropped.py`
+
+**Evaluation preprocessing:** images are cropped using sc_crop (YOLO-based detection, same padding).
+Script: `nnUnet/04_evaluate_with_sc_crop.py`
+
+12 datasets · 2 563 training volumes.
 
 | Method | Dice |
 |---|---|
