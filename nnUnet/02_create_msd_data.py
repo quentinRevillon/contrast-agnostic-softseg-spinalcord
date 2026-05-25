@@ -293,13 +293,15 @@ def create_df(args, dataset_path):
         fname_image = fname_label.replace(f'/derivatives/{labels_folder}', '').replace(f'_{labels_suffix}.nii.gz', '.nii.gz')
         gitannex_cmd_image = f'cd {dataset_path}; git annex get {fname_image}'
 
-        try:
+        # Skip git-annex download if the file is already on disk (content available).
+        # os.path.isfile follows symlinks: False for undownloaded git-annex symlinks,
+        # True for already-downloaded files and hard links not tracked by git-annex.
+        if not os.path.isfile(fname_label):
             subprocess.run(gitannex_cmd_label, shell=True, check=True)
-            subprocess.run(gitannex_cmd_image, shell=True, check=True)
             logger.info(f"Downloaded {os.path.basename(fname_label)} from git-annex")
-            logger.info(f"Downloaded {os.path.basename(fname_image)} from git-annex")
-        except subprocess.CalledProcessError as e:
-            logger.error(f"Error in downloading {file} from git-annex: {e}")    
+        if not os.path.isfile(fname_image):
+            subprocess.run(gitannex_cmd_image, shell=True, check=True)
+            logger.info(f"Downloaded {os.path.basename(fname_image)} from git-annex")    
 
     # get image stats
     df['shape'], df['imgOrientation'], df['spacing'] = zip(*df['filename'].map(get_image_stats))
