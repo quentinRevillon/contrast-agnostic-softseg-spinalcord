@@ -67,7 +67,7 @@ echo "-----------------------------------"
 echo "Fetching disc labels from git-annex ..."
 echo "-----------------------------------"
 cd ${PATH_SPINE_GENERIC}
-git annex get derivatives/labels/*/anat/*label-discs*.nii.gz
+git annex get derivatives/labels/*/*/*.nii.gz
 cd -
 
 echo "-----------------------------------"
