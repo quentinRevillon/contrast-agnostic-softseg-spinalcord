@@ -1,2 +1,4 @@
 *.idea
 *__pycache__/
+# run_all.sh resume tracker
+.last_completed_step
