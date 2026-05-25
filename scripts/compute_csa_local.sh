@@ -50,7 +50,7 @@ label_vertebrae(){
   FILELABEL="${file}_discs"
 
   sct_label_vertebrae -i ${file}.nii.gz -s ${FILESEG}.nii.gz -c ${contrast} \
-      -discfile ${FILELABEL}.nii.gz -o ${FILESEG}_labeled.nii.gz
+      -discfile ${FILELABEL}.nii.gz
 }
 
 copy_gt_disc_labels(){
