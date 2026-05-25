@@ -147,12 +147,13 @@ echo "-----------------------------------"
 # But, the good part is, once this is done, there is no way nnUNet will throw an error regarding 
 # image/label header mismatch. 
 
-python ${PATH_REPO}/nnUnet/03_convert_msd_to_nnunet_reorient.py \
+python ${PATH_REPO}/nnUnet/03_convert_msd_to_nnunet_reorient_sc_crop.py \
     --input ${PATH_OUT_DATALISTS} \
     --output ${PATH_NNUNET_RAW} \
     --taskname ${DATASET_NAME} \
     --tasknumber ${DATASET_NUMBER} \
-    --workers 8
+    --workers 8 \
+    --skip-failed
 
 echo "-----------------------------------"
 echo "Done! Converted datasets can be found in ${PATH_NNUNET_RAW}/${DATASET_NAME}."
