@@ -107,8 +107,8 @@ def get_parser():
     parser.add_argument('-dname', '--dataset-name', required=True, type=str, choices=STANDARD_DATASETS,
                         help='Dataset name used for storing on git-annex. For region-based metrics, '
                              'append "-region" to the dataset name. Default: spine-generic')
-    parser.add_argument('--method', required=True, type=str, default='monai', 
-                        choices=['monai', 'synthseg', 'deepseg2d', 'deepseg3d', 'propseg', 'v20', 'v30', 'scisegv2'],
+    parser.add_argument('--method', required=True, type=str, default='monai',
+                        choices=['monai', 'synthseg', 'deepseg2d', 'deepseg3d', 'propseg', 'v20', 'v30', 'scisegv2', 'sc-crop'],
                         help='Segmentation method to compute metrics for. Default: monai')
 
     return parser
@@ -120,14 +120,15 @@ def get_test_metrics_by_dataset(pred_folder, output_folder, anima_binaries_path,
     and GT images by running the "animaSegPerfAnalyzer" command
     """
     if method == 'v20':
-        pred_suffix = 'seg_v20' # '_pred.nii.gz'
+        pred_suffix = 'seg_v20'
     elif method == 'v30':
-        # pred_suffix = 'seg_nnunet-AllRandInit3D_bin'
         pred_suffix = 'seg_nnunet-AllRandInit3D'
     elif method == 'deepseg2d':
         pred_suffix = 'seg_deepseg_2d'
     elif method == 'scisegv2':
         pred_suffix = 'seg_scisegv2'
+    elif method == 'sc-crop':
+        pred_suffix = 'seg_sc-crop'
     gt_suffix = "label-SC_seg" #'seg-manual' # 'softseg_bin'
     if data_set in STANDARD_DATASETS:
         # glob all the predictions and GTs and get the last three digits of the filename

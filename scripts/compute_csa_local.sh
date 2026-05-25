@@ -104,17 +104,16 @@ segment_sc(){
   local model_basename="$3"
   local contrast="$4"
 
-  FILESEG="${file%%_*}_${contrast}_seg_${model_basename}"
+  FILESEG="${file%%_*}_${contrast}_seg_sc-crop"
 
   start_time=$(date +%s)
 
-  # Run SC segmentation with local nnUNet model via run_inference_single_subject.py
+  # Run SC segmentation: sc_crop detection → nnUNet → reproject to original space
   python ${PATH_NNUNET_SCRIPT} \
       -i ${file}.nii.gz \
       -o ${FILESEG}.nii.gz \
       -path-model ${PATH_NNUNET_MODEL} \
-      -pred-type sc \
-      -use-best-checkpoint
+      -pred-type sc
 
   end_time=$(date +%s)
   execution_time=$(python3 -c "print($end_time - $start_time)")
