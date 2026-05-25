@@ -208,12 +208,12 @@ def main():
     print(f"Saving ANIMA performance metrics to {output_folder}")
 
     # Get all XML filepaths where ANIMA performance metrics are saved for each hold-out subject
-    if method in ['monai', 'synthseg', 'v20', 'deepseg2d', 'v30', 'scisegv2']:
+    if method in ['monai', 'synthseg', 'v20', 'deepseg2d', 'v30', 'scisegv2', 'sc-crop']:
         if args.out_folder:
             subject_filepaths = [os.path.join(output_folder, f) for f in os.listdir(output_folder) if f.endswith('.xml')]
         else:
             print("Computing ANIMA metrics from scratch as no output folder is provided!")
-            subject_filepaths = get_test_metrics_by_dataset(pred_folder, output_folder, anima_binaries_path, 
+            subject_filepaths = get_test_metrics_by_dataset(pred_folder, output_folder, anima_binaries_path,
                                                             data_set=dataset_name, method=method)
     elif method in ['deepseg3d', 'propseg']:
         subject_filepaths = sorted(glob.glob(f"{pred_folder}/*.xml"))
