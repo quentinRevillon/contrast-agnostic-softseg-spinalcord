@@ -138,17 +138,17 @@ run_all.sh  =  bash train_contrast_agnostic.sh
 
 ---
 
-## CPU Speed benchmark — sc_crop+ONNX vs sct_deepseg
+## CPU Speed benchmark — sc_crop+ONNX / sc_crop+PT vs sct_deepseg
 
-Comparison on `sub-beijingPrisma04_T2w` (T2w, shape 64×320×320), **CPU only**.
+Comparison on `sub-beijingPrisma04_T2w` (T2w, shape 64×320×320), **CPU only** (no GPU).
 
-| Method | Time (CPU) | Dice vs GT |
-|---|---|---|
-| `sct_deepseg spinalcord` (SCT built-in, full volume) | ~55 s | 0.9663 |
-| **sc_crop + ONNX nnUNet (this work)** | **~11 s** | **0.9623** |
-| **Speedup** | **×4.9 faster** | −0.004 pt |
+| Method | Time (CPU) | Dice vs GT | Speedup |
+|---|---|---|---|
+| [A] `sct_deepseg spinalcord` (SCT, full volume) | ~56 s | 0.9663 | — |
+| [B] **sc_crop + ONNX** (deployment, no nnunetv2) | **~11 s** | **0.9623** | **×4.9** |
+| [C] sc_crop + PyTorch (dev, no TTA) | ~25 s | **0.9678** | ×2.2 |
 
-Breakdown for sc_crop+ONNX:
+Breakdown for sc_crop+ONNX (Method B):
 
 | Step | Time |
 |---|---|
@@ -156,16 +156,18 @@ Breakdown for sc_crop+ONNX:
 | ONNX nnUNet inference | ~10 s |
 | **Total** | **~11 s** |
 
-> Note: `sct_deepseg` is the current SCT contrast-agnostic model (also nnUNet-based), running on the
-> full uncropped volume. The sc_crop+ONNX pipeline is **5× faster** with negligible Dice loss (−0.004).
+> `sct_deepseg` is the current SCT contrast-agnostic model (also nnUNet-based), running on the
+> full uncropped volume. sc_crop+ONNX is **5× faster** with −0.004 Dice.  
+> sc_crop+PT is 2× faster with +0.002 Dice (better accuracy, heavier dependency).
 
 Script: `nnUnet/benchmark_cpu.py` — reproduces this on any image with optional GT Dice.
 
 ```bash
 python nnUnet/benchmark_cpu.py \
     -i image.nii.gz -gt seg_gt.nii.gz \
-    --model /path/to/nnunet_seg.onnx \
-    --plans /path/to/plans.json
+    --model        /path/to/nnunet_seg.onnx \
+    --plans        /path/to/plans.json \
+    --model-folder /path/to/nnUNetTrainer__nnUNetPlans__3d_fullres
 ```
 
 ---
@@ -174,7 +176,7 @@ python nnUnet/benchmark_cpu.py \
 
 1. **Dice on par with the paper** (0.9586 PyTorch, 0.9537 end-to-end) with full train/test consistency.
 2. **ONNX deployment** costs only −0.52 Dice points and runs fully on CPU in ~11 s per volume.
-3. **5× faster than sct_deepseg** on CPU (×4.9 on T2w 64×320×320).
+3. **5× faster than sct_deepseg** on CPU (×4.9 ONNX, ×2.2 PyTorch vs 56 s for sct_deepseg).
 4. **sc_crop is extremely reliable**: 99.87% SC coverage on 466 test volumes.
 5. **Integration is minimal**: 3 lines of code in the training script, 1 new Python file.
 6. **v2 in progress**: all 15 datasets now included (+14% more data), results expected within ~24 h.
