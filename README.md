@@ -15,11 +15,13 @@ Script: `nnUnet/04_evaluate_with_sc_crop.py`
 
 12 datasets · 2 563 training volumes.
 
-| Method | Dice |
-|---|---|
-| Paper baseline (`sct_deepseg`) | 0.9500 |
-| sc_crop + PyTorch | **0.9537** |
-| sc_crop + ONNX (CPU) | 0.9448 |
+Results on the test set (510 volumes):
+
+| Method | Dice | CPU time |
+|---|---|---|
+| Paper baseline (`sct_deepseg`) | 0.9500 ± 0.03 | 56 s |
+| sc_crop + PyTorch | **0.9537** | 25 s (×2.2 faster) |
+| sc_crop + ONNX (CPU) | 0.9448 | 11 s (×4.9 faster) |
 
 ---
 
