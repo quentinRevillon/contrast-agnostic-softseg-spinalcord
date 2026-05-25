@@ -7,9 +7,9 @@
 
 ## Branch `sc-crop`
 
-Les images sont préprocessées en découpant autour de la moelle épinière avec sc_crop (détection YOLO, 12 datasets, padding 20/30/40 mm).
+Les images sont préprocessées en découpant autour de la moelle épinière à partir du masque GT (bounding box des labels, 12 datasets, padding 20/30/40 mm).
 
-Script : `nnUnet/03_sc_crop_nnunet_preprocessing.py`
+Script : `nnUnet/03_convert_msd_to_nnunet_reorient_cropped.py`
 
 | Méthode | Dice |
 |---|---|
