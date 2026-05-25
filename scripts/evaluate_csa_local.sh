@@ -6,8 +6,9 @@
 #
 # Usage:
 #   bash scripts/evaluate_csa_local.sh \
-#       --model-folder /path/to/nnUNetTrainer__nnUNetPlans__3d_fullres \
-#       --model-version my-sc-crop-v1 \
+#       --onnx    /path/to/nnunet_seg.onnx \
+#       --plans   /path/to/plans.json \
+#       --model-version my-sc-crop-v2 \
 #       --data-path /path/to/data-multi-subject
 #
 # Outputs:
@@ -16,7 +17,7 @@
 #
 # Requirements:
 #   - SCT (sct_run_batch, sct_process_segmentation, sct_deepseg_sc for QC)
-#   - contrast_agnostic conda environment (nnunetv2)
+#   - contrast_agnostic conda environment (onnxruntime, sc-crop)
 #   - spine-generic data-multi-subject at --data-path
 #     (see scripts/download_spine_generic_test_data.sh to download it)
 #
@@ -28,14 +29,16 @@ set -e
 # PARSE ARGUMENTS
 # ==============================
 
-PATH_MODEL=""
+PATH_ONNX=""
+PATH_PLANS=""
 MODEL_VERSION="local"
 PATH_DATA="data-multi-subject"
 NUM_WORKERS=4
 
 while [[ $# -gt 0 ]]; do
   case $1 in
-    --model-folder)  PATH_MODEL="$2";    shift 2 ;;
+    --onnx)          PATH_ONNX="$2";     shift 2 ;;
+    --plans)         PATH_PLANS="$2";    shift 2 ;;
     --model-version) MODEL_VERSION="$2"; shift 2 ;;
     --data-path)     PATH_DATA="$2";     shift 2 ;;
     --jobs)          NUM_WORKERS="$2";   shift 2 ;;
@@ -43,9 +46,9 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ -z "${PATH_MODEL}" ]]; then
-  echo "ERROR: --model-folder is required"
-  echo "Usage: bash $0 --model-folder /path/to/nnUNetTrainer__nnUNetPlans__3d_fullres [--model-version v1] [--data-path data-multi-subject] [--jobs 4]"
+if [[ -z "${PATH_ONNX}" ]] || [[ -z "${PATH_PLANS}" ]]; then
+  echo "ERROR: --onnx and --plans are required"
+  echo "Usage: bash $0 --onnx /path/to/nnunet_seg.onnx --plans /path/to/plans.json [--model-version v1] [--data-path data-multi-subject] [--jobs 4]"
   exit 1
 fi
 
@@ -55,7 +58,7 @@ fi
 
 CWD=${PWD}
 PATH_REPO="$(cd "$(dirname "$0")/.." && pwd)"
-PATH_NNUNET_SCRIPT="${PATH_REPO}/nnUnet/run_inference_sc_crop.py"
+PATH_NNUNET_SCRIPT="${PATH_REPO}/nnUnet/run_inference.py"
 PATH_OUTPUT="csa-analysis-local-${MODEL_VERSION}"
 
 # Frozen 49-subject test split (same as GitHub Actions)
@@ -69,7 +72,8 @@ print(' '.join(d.get('test', d.get('subjects', []))))
 
 echo "=============================="
 echo "Local CSA evaluation"
-echo "Model folder : ${PATH_MODEL}"
+echo "ONNX model   : ${PATH_ONNX}"
+echo "Plans        : ${PATH_PLANS}"
 echo "Model version: ${MODEL_VERSION}"
 echo "Data path    : ${PATH_DATA}"
 echo "Subjects     : $(echo ${TEST_SUBJECTS} | wc -w) subjects"
@@ -87,7 +91,7 @@ sct_run_batch \
     -path-output ${path_out_run_batch} \
     -jobs        ${NUM_WORKERS} \
     -script      ${PATH_REPO}/scripts/compute_csa_local.sh \
-    -script-args "${MODEL_VERSION} ${PATH_NNUNET_SCRIPT} ${PATH_MODEL}" \
+    -script-args "${MODEL_VERSION} ${PATH_NNUNET_SCRIPT} ${PATH_ONNX} ${PATH_PLANS}" \
     -include-list ${TEST_SUBJECTS}
 
 # ==============================

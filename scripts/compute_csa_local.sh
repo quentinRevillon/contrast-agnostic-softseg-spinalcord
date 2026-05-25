@@ -28,13 +28,15 @@ echo "PATH_QC: ${PATH_QC}"
 # Variable passed by `sct_run_batch -script-args`
 SUBJECT=$1
 MODEL_VERSION=$2
-PATH_NNUNET_SCRIPT=$3   # path to run_inference_single_subject.py
-PATH_NNUNET_MODEL=$4    # path to the nnUNet model folder (contains fold_0/, plans.json, dataset.json)
+PATH_NNUNET_SCRIPT=$3   # path to run_inference.py
+PATH_ONNX=$4            # path to nnunet_seg.onnx
+PATH_PLANS=$5           # path to plans.json
 
 echo "SUBJECT: ${SUBJECT}"
 echo "MODEL_VERSION: ${MODEL_VERSION}"
 echo "PATH_NNUNET_SCRIPT: ${PATH_NNUNET_SCRIPT}"
-echo "PATH_NNUNET_MODEL: ${PATH_NNUNET_MODEL}"
+echo "PATH_ONNX: ${PATH_ONNX}"
+echo "PATH_PLANS: ${PATH_PLANS}"
 
 # ------------------------------------------------------------------------------
 # CONVENIENCE FUNCTIONS  (identical to compute_csa.sh)
@@ -108,12 +110,13 @@ segment_sc(){
 
   start_time=$(date +%s)
 
-  # Run SC segmentation: sc_crop detection → nnUNet → reproject to original space
-  python ${PATH_NNUNET_SCRIPT} \
-      -i ${file}.nii.gz \
-      -o ${FILESEG}.nii.gz \
-      -path-model ${PATH_NNUNET_MODEL} \
-      -pred-type sc
+  # Run SC segmentation: sc_crop detection → nnUNet ONNX → reproject to original space
+  conda run -n contrast_agnostic python ${PATH_NNUNET_SCRIPT} \
+      -i     ${file}.nii.gz \
+      -o     ${FILESEG}.nii.gz \
+      --mode onnx \
+      --model  ${PATH_ONNX} \
+      --plans  ${PATH_PLANS}
 
   end_time=$(date +%s)
   execution_time=$(python3 -c "print($end_time - $start_time)")
