@@ -213,11 +213,9 @@ if [ ${START_STEP} -le 3 ] && [ ${END_STEP} -ge 3 ]; then
     echo "Converting the datalists to nnUNetv2-specific format ..."
     echo "-----------------------------------"
 
-    # NOTE: When using all the datasets, this commands takes a while (8-10 hours) because of the conversion
-    # to RPI and ensuring the alignment of images and labels. While this is already using multiprocessing,
-    # depending on sct commands is what is takes a long time (e.g. sct_register_multimodal).
-    # But, the good part is, once this is done, there is no way nnUNet will throw an error regarding
-    # image/label header mismatch.
+    # NOTE: When using all the datasets, this command takes a while (8-10 hours) because of the conversion
+    # to RPI and ensuring the alignment of images and labels (sct_register_multimodal).
+    # Once done, nnUNet will not throw any error regarding image/label header mismatch.
 
     # [sc_crop] Original pipeline (no cropping):
     # python ${PATH_REPO}/nnUnet/03_convert_msd_to_nnunet_reorient.py \
@@ -233,7 +231,6 @@ if [ ${START_STEP} -le 3 ] && [ ${END_STEP} -ge 3 ]; then
         --output ${PATH_NNUNET_RAW} \
         --taskname ${DATASET_NAME} \
         --tasknumber ${DATASET_NUMBER} \
-        --workers 8 \
         --pad-rl ${PAD_RL} \
         --pad-ap ${PAD_AP} \
         --pad-si ${PAD_SI}
