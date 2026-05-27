@@ -2,10 +2,11 @@
 Run inference on a single subject using a nnUNet model trained with sc_crop preprocessing.
 
 Pipeline:
-  1. sc_crop detects the spinal cord bounding box (YOLO, no GT mask required)
-  2. Image is cropped to the detected bbox
+  1. Reorient input to RPI
+  2. sc_crop detects the spinal cord bounding box and crops the volume
   3. nnUNet inference runs on the cropped volume (PyTorch checkpoint)
-  4. Segmentation is reprojected into the original full-image space
+  4. Segmentation is restored to the original full-image space with sc_crop.uncrop()
+  5. Reorient output back to the original orientation
 
 This is the training-time evaluation equivalent of run_inference.py (ONNX).
 Use this script during development (before ONNX export) for CSA/Dice evaluation.
@@ -24,6 +25,7 @@ import os
 import shutil
 import argparse
 import glob
+import subprocess
 import time
 import tempfile
 
@@ -32,13 +34,13 @@ import nibabel as nib
 import torch
 from nnunetv2.inference.predict_from_raw_data import nnUNetPredictor
 
-from sc_crop import run as sc_crop_run
+from sc_crop import detect, crop, uncrop
 
 
 def get_parser():
-    parser = argparse.ArgumentParser(description='nnUNet inference with sc_crop detection and full-space reprojection')
-    parser.add_argument('-i', required=True, help='Input image. Example: sub-001_T2w.nii.gz')
-    parser.add_argument('-o', required=True, help='Output segmentation. Example: sub-001_T2w_seg.nii.gz')
+    parser = argparse.ArgumentParser(description='nnUNet inference with sc_crop detection and full-space restoration')
+    parser.add_argument('-i',   required=True, help='Input image. Example: sub-001_T2w.nii.gz')
+    parser.add_argument('-o',   required=True, help='Output segmentation. Example: sub-001_T2w_seg.nii.gz')
     parser.add_argument('-path-model', required=True, type=str,
                         help='Path to nnUNet model folder (contains fold_0/, plans.json, dataset.json)')
     parser.add_argument('-pred-type', choices=['sc', 'lesion'], default='sc',
@@ -55,68 +57,38 @@ def get_parser():
     return parser
 
 
-def add_suffix(fname, suffix):
-    stem, ext = os.path.splitext(fname)
-    if ext == '.gz':
-        stem, ext2 = os.path.splitext(stem)
-        ext = ext2 + ext
-    return stem + suffix + ext
-
-
-def restore_to_full_space(seg_cropped: nib.Nifti1Image, original_img: nib.Nifti1Image,
-                          xmin, xmax, ymin, ymax, zmin, zmax) -> nib.Nifti1Image:
-    """Paste cropped segmentation back into the full original image space."""
-    full = np.zeros(original_img.shape[:3], dtype=np.uint8)
-    seg_arr = np.asarray(seg_cropped.dataobj).astype(np.uint8)
-    full[xmin:xmax + 1, ymin:ymax + 1, zmin:zmax + 1] = seg_arr
-    return nib.Nifti1Image(full, original_img.affine, original_img.header)
+def get_orientation(fname):
+    return subprocess.check_output(
+        f"sct_image -i {fname} -header | grep -E 'qform_[xyz]' | "
+        "awk '{printf \"%s\", substr($2, 1, 1)}'",
+        shell=True,
+    ).decode('utf-8')
 
 
 def main():
     args = get_parser().parse_args()
 
-    fname_in  = args.i
-    fname_out = args.o
-
     with tempfile.TemporaryDirectory() as tmpdir:
+
         # ── Step 1: reorient input to RPI ─────────────────────────────────────
         fname_rpi = os.path.join(tmpdir, 'input_rpi.nii.gz')
-        shutil.copyfile(fname_in, fname_rpi)
+        shutil.copyfile(args.i, fname_rpi)
 
-        import subprocess
-        result = subprocess.run(['sct_image', '-i', fname_rpi, '-header'],
-                                capture_output=True, text=True)
-        orig_orientation = subprocess.check_output(
-            f"sct_image -i {fname_rpi} -header | grep -E 'qform_[xyz]' | "
-            "awk '{printf \"%s\", substr($2, 1, 1)}'",
-            shell=True
-        ).decode('utf-8')
-
+        orig_orientation = get_orientation(fname_rpi)
         if orig_orientation != 'RPI':
             os.system(f'sct_image -i {fname_rpi} -setorient RPI -o {fname_rpi}')
 
-        original_img = nib.load(fname_rpi)
-
-        # ── Step 2: sc_crop detection → crop ──────────────────────────────────
+        # ── Step 2: sc_crop detect + crop ─────────────────────────────────────
         print('Running sc_crop detection...')
-        result = sc_crop_run(
-            fname_rpi,
-            padding_rl_mm=args.pad_rl,
-            padding_ap_mm=args.pad_ap,
-            padding_si_mm=(args.pad_si, args.pad_si),
-        )
-        xmin, xmax = result['xmin'], result['xmax']
-        ymin, ymax = result['ymin'], result['ymax']
-        zmin, zmax = result['zmin'], result['zmax']
-
-        data = np.asarray(original_img.dataobj)
-        affine = original_img.affine.copy()
-        affine[:3, 3] = (original_img.affine @ np.array([xmin, ymin, zmin, 1.0]))[:3]
-        cropped_img = nib.Nifti1Image(data[xmin:xmax+1, ymin:ymax+1, zmin:zmax+1], affine)
+        bbox     = detect(fname_rpi, pad_left=args.pad_rl, pad_right=args.pad_rl,
+                          pad_anterior=args.pad_ap, pad_posterior=args.pad_ap,
+                          pad_superior=args.pad_si, pad_inferior=args.pad_si)
+        img_rpi  = nib.load(fname_rpi)
+        crop_img = crop(img_rpi, bbox)
+        print(f'Cropped: {img_rpi.shape} → {crop_img.shape}')
 
         fname_crop = os.path.join(tmpdir, 'input_crop.nii.gz')
-        nib.save(cropped_img, fname_crop)
-        print(f'Cropped: {original_img.shape} → {cropped_img.shape}')
+        nib.save(crop_img, fname_crop)
 
         # ── Step 3: nnUNet inference on cropped volume ─────────────────────────
         folds_avail = [int(f.split('_')[-1]) for f in os.listdir(args.path_model) if f.startswith('fold_')]
@@ -150,32 +122,25 @@ def main():
         )
         print(f'Inference done in {time.time() - start:.1f}s')
 
+        # ── Step 4: restore to full image space ───────────────────────────────
         pred_file = glob.glob(os.path.join(tmpdir_pred, '*.nii.gz'))[0]
-        seg_crop = nib.load(pred_file)
+        seg_crop  = nib.load(pred_file)
+        seg_full  = uncrop(seg_crop, bbox)
 
-        # ── Step 4: reproject to original full-image space ─────────────────────
-        print('Reprojecting segmentation to original space...')
-        seg_full = restore_to_full_space(seg_crop, original_img, xmin, xmax, ymin, ymax, zmin, zmax)
-
-        # Binarize (keep SC class)
+        # Binarize
         seg_data = np.asarray(seg_full.dataobj)
-        if args.pred_type == 'sc':
-            seg_bin = (seg_data > 0).astype(np.uint8)
-        else:
-            seg_bin = (seg_data == 2).astype(np.uint8)
+        seg_bin  = (seg_data > 0).astype(np.uint8) if args.pred_type == 'sc' else (seg_data == 2).astype(np.uint8)
+        seg_out  = nib.Nifti1Image(seg_bin, seg_full.affine, seg_full.header)
 
-        seg_out = nib.Nifti1Image(seg_bin, seg_full.affine, seg_full.header)
-
-        # Reorient back to original orientation
+        # ── Step 5: reorient back to original orientation ─────────────────────
+        fname_seg_rpi = os.path.join(tmpdir, 'seg_rpi.nii.gz')
+        nib.save(seg_out, fname_seg_rpi)
         if orig_orientation != 'RPI':
-            fname_seg_rpi = os.path.join(tmpdir, 'seg_rpi.nii.gz')
-            nib.save(seg_out, fname_seg_rpi)
             os.system(f'sct_image -i {fname_seg_rpi} -setorient {orig_orientation} -o {fname_seg_rpi}')
-            seg_out = nib.load(fname_seg_rpi)
 
-        nib.save(seg_out, fname_out)
+        shutil.copyfile(fname_seg_rpi, args.o)
 
-    print(f'Segmentation saved → {fname_out}')
+    print(f'Segmentation saved → {args.o}')
 
 
 if __name__ == '__main__':
