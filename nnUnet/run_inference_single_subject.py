@@ -36,6 +36,9 @@ import glob
 import time
 import tempfile
 
+import nibabel as nib
+from sc_crop import detect, crop, restore_segmentation
+
 # from nnunetv2.inference.predict_from_raw_data import predict_from_raw_data as predictor
 from nnunetv2.inference.predict_from_raw_data import nnUNetPredictor
 
@@ -138,6 +141,10 @@ def main():
     shutil.copyfile(fname_file, fname_file_tmp)
     print(f'Copied {fname_file} to {fname_file_tmp}')
 
+    # sc_crop: detect SC bbox and crop (works in any orientation, no GT mask required)
+    bbox = detect(nib.load(fname_file_tmp))
+    nib.save(crop(nib.load(fname_file_tmp), bbox), fname_file_tmp)
+
     # Get the original orientation of the image, for example LPI
     orig_orientation = get_orientation(fname_file_tmp)
 
@@ -219,6 +226,9 @@ def main():
         # reorient the image to the original orientation using SCT
         os.system('sct_image -i {} -setorient {} -o {}'.format(fname_prediction, orig_orientation, fname_prediction))
         print(f'Reorientation to original orientation {orig_orientation} done.')
+
+    # sc_crop: restore segmentation to original (full) image space
+    nib.save(restore_segmentation(nib.load(fname_prediction), bbox), fname_prediction)
 
     # split the predictions into sc-seg and lesion-seg
     if args.pred_type == 'sc':
