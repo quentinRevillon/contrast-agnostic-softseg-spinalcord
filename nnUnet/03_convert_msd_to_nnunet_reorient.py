@@ -1,17 +1,19 @@
 """
-This script takes a folder containing a list of datalist json files in MSD format dataset for each dataset used 
-to train the contrast-agnostic model and converts it to the nnU-Net format (with reorientation to RPI).
-Includes multiprocessing to spread the dataset conversion tasks across multiple workers
+Convert MSD datalists to nnU-Net format with RPI reorientation and sc_crop detection-based cropping.
+
+Each image is reoriented to RPI, then the spinal cord is detected with sc_crop (YOLO-based, no GT
+mask required) and both the image and label are cropped to the detected bounding box before saving
+in nnU-Net format. This ensures train/test consistency: inference also runs sc_crop before nnUNet.
 
 Example:
-    python convert_msd_to_nnunet_reorient.py 
-        -i /path/to/MSD/datalists/folder 
-        -o /path/to/nnUNet_raw/folder 
-        --taskname contrastAgnosticAllData 
-        --tasknumber 716
+    python 03_convert_msd_to_nnunet_reorient.py \
+        -i /path/to/MSD/datalists/folder \
+        -o /path/to/nnUNet_raw/folder \
+        --taskname ContrastAgnosticScCrop \
+        --tasknumber 2000 \
         --workers 8
 
-Author: Pierre-Louis Benveniste (adapted for multiprocessing by Naga Karthik)
+Author: Pierre-Louis Benveniste (adapted for multiprocessing by Naga Karthik; sc_crop by Quentin Revillon)
 """
 
 import os
@@ -21,6 +23,9 @@ from pathlib import Path
 import tqdm
 from collections import OrderedDict
 from multiprocessing import Pool, cpu_count
+
+import nibabel as nib
+from sc_crop import detect, crop
 
 
 def parse_args():
@@ -36,27 +41,30 @@ def parse_args():
 def process_single_image(args):
     """Process a single image and its corresponding label"""
     img_dict, counter, path_out_images, path_out_labels, taskname = args
-    
+
     image_file_nnunet = os.path.join(path_out_images, f'{taskname}_{counter:03d}_0000.nii.gz')
     label_file_nnunet = os.path.join(path_out_labels, f'{taskname}_{counter:03d}.nii.gz')
-    
-    # Reorient image to RPI
+
+    # Reorient image and label to RPI
     assert os.system(f"sct_image -i {img_dict['image']} -setorient RPI -o {image_file_nnunet}") == 0
-    
-    # Reorient label to RPI
     assert os.system(f"sct_image -i {img_dict['label']} -setorient RPI -o {label_file_nnunet}") == 0
-    
+
+    # sc_crop: detect SC bbox on image (no GT mask), crop image and label with the same bbox
+    bbox = detect(nib.load(image_file_nnunet))
+    nib.save(crop(nib.load(image_file_nnunet), bbox), image_file_nnunet)
+    nib.save(crop(nib.load(label_file_nnunet), bbox), label_file_nnunet)
+
     # Put label to image to match dimension, resolution and orientation
     # '-identity 1': registration optimization (e.g. translations, rotations, deformations) is skipped
     assert os.system(f"sct_register_multimodal -i {str(label_file_nnunet)} -d {str(image_file_nnunet)} "
                     f"-identity 1 -o {str(label_file_nnunet)} -owarp file_to_delete_{counter}.nii.gz "
                     f"-owarpinv file_to_delete_2_{counter}.nii.gz") == 0
-    
+
     # Clean up temporary files
     os.system(f"rm file_to_delete_{counter}.nii.gz file_to_delete_2_{counter}.nii.gz")
     other_file_to_remove = str(label_file_nnunet).replace('.nii.gz', '_inv.nii.gz')
     os.system(f"rm {other_file_to_remove}")
-    
+
     # Binarize label
     assert os.system(f"sct_maths -i {str(label_file_nnunet)} -bin 0.5 -o {str(label_file_nnunet)}") == 0
     
