@@ -144,6 +144,36 @@ Both commands print a timing breakdown. To visualise the result:
 fsleyes t2.nii.gz seg_pt.nii.gz -cm red seg_onnx.nii.gz -cm blue &
 ```
 
+### Comparison: v3.0 model (main branch, Naga) with `run_inference_single_subject.py`
+
+The v3.0 model was trained without sc-crop cropping. It uses SCT (`sct_image`) for reorientation. Requires SCT and the `contrast_agnostic` conda environment.
+
+```bash
+# Download v3.0 model
+curl -L https://github.com/sct-pipeline/contrast-agnostic-softseg-spinalcord/releases/download/v3.0/model_contrast_agnostic_20250123.zip \
+    -o model_contrast_agnostic_20250123.zip
+unzip model_contrast_agnostic_20250123.zip
+
+# Clone the repo to get the inference script (main branch)
+git clone https://github.com/sct-pipeline/contrast-agnostic-softseg-spinalcord.git --branch main --depth 1 ca-main
+
+# Run inference (requires SCT + contrast_agnostic env)
+conda activate contrast_agnostic
+python ca-main/nnUnet/run_inference_single_subject.py \
+    -i t2.nii.gz \
+    -o seg_v3.nii.gz \
+    -path-model model_contrast_agnostic_20250123/nnUNetTrainer__nnUNetPlans__3d_fullres \
+    -pred-type sc \
+    -use-best-checkpoint \
+    -tile-step-size 0.5
+```
+
+To visualise all three results side by side:
+
+```bash
+fsleyes t2.nii.gz seg_v3.nii.gz -cm red seg_pt.nii.gz -cm blue seg_onnx.nii.gz -cm green &
+```
+
 ### Step 2: Train the model
 
 The script `scripts/train_contrast_agnostic.sh` downloads the datasets from git-annex, creates datalists, converts them into nnUNet-specific format, and trains the model. More instructions about what variables to set and which datasets to use can be found in the script itself. Once these variables are set, run:
