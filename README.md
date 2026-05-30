@@ -60,29 +60,25 @@ author = {Enamundram Naga Karthik and Sandrine Bédard and Jan Valošek and Chri
 
 ### Step 1: Configuring the environment
 
-1. Create a conda environment with the following command:
+1. Create a conda environment:
 ```bash
-conda create -n contrast_agnostic python=3.10
+conda create -n contrast_agnostic_310 python=3.10
+conda activate contrast_agnostic_310
 ```
 
-2. Activate the environment with the following command:
+2. Clone the repository (sc-crop-v4 branch):
 ```bash
-conda activate contrast_agnostic
-```
-
-3. Clone the repository with the following command:
-```bash
-git clone https://github.com/sct-pipeline/contrast-agnostic-softseg-spinalcord.git
-```
-
-4. Install the required packages (includes nnUNet and PyTorch):
-```bash
+git clone https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord.git --branch sc-crop-v4
 cd contrast-agnostic-softseg-spinalcord
+```
+
+3. Install the required packages (includes nnUNet and PyTorch):
+```bash
 pip install -r nnUnet/requirements.txt
 ```
 
 > **Note**
-> `requirements.txt` now includes nnUNet (pinned to a specific GitHub commit compatible with PyTorch 2.8) and PyTorch 2.8+cu128. PyTorch 2.8 is required for Blackwell GPUs (sm_120, e.g. RTX PRO 6000). PyPI `nnunetv2==2.5.2` is broken with PyTorch>=2.4 due to a removed `verbose` parameter in `_LRScheduler`.
+> `requirements.txt` pins nnUNet to a specific GitHub commit (v2.6.0) compatible with PyTorch 2.8+cu128. PyTorch 2.8 is required for Blackwell GPUs (sm_120, e.g. RTX PRO 6000). PyPI `nnunetv2==2.5.2` is broken with PyTorch>=2.4 due to a removed `verbose` parameter in `_LRScheduler`.
 
 
 ## Running inference on a trained model
@@ -164,6 +160,24 @@ bash scripts/train_contrast_agnostic.sh
 
 > [!IMPORTANT]  
  > You might need to run the `train_contrast_agnostic.sh` script in a virtual terminal such as `tmux` or `screen`.
+
+### Step 3: Evaluate on the test set
+
+Once training is complete, run inference on the test set and compute Dice scores:
+
+```bash
+bash scripts/test_contrast_agnostic.sh
+```
+
+By default uses `checkpoint_best.pth`. Results are saved in:
+`nnUNet_results/Dataset4000_ContrastAgnosticScCrop/nnUNetTrainer__nnUNetPlans__3d_fullres/predictions_test_fold0_checkpoint_best/summary.json`
+
+To use the final checkpoint instead:
+```bash
+CHECKPOINT=checkpoint_final.pth bash scripts/test_contrast_agnostic.sh
+```
+
+> Dice results for this branch are documented in [issue #3](https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord/issues/3).
 <!-- 
 TODO: move to csa_qc_evaluation folder
 ## 5. Computing morphometric measures (CSA)
