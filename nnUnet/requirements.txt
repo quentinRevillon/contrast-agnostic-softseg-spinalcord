@@ -1,5 +1,12 @@
+--extra-index-url https://download.pytorch.org/whl/cu128
+torch==2.8.0+cu128
+
+# nnUNet from GitHub: PyPI v2.5.2 broken with PyTorch>=2.4 (verbose removed from _LRScheduler)
+# v2.6.0 commit (2025-04-02) fixes polylr.py — requires Python>=3.10
+nnunetv2 @ git+https://github.com/MIC-DKFZ/nnUNet.git@503b1d21c5e12787518c94cffe206e74f49eab9b
+
 nibabel==5.1.0
-sc-crop @ git+https://github.com/ivadomed/sc-crop.git@v0.1.6
+sc-crop @ git+https://github.com/ivadomed/sc-crop.git@v0.1.9
 seaborn==0.13.2
 matplotlib==3.7.1
 pandas==2.0.1

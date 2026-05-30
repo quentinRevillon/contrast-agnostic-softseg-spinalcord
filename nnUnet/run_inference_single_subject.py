@@ -37,7 +37,7 @@ import time
 import tempfile
 
 import nibabel as nib
-from sc_crop import detect, crop, restore_segmentation
+from sc_crop import detect, crop, uncrop as restore_segmentation
 
 # from nnunetv2.inference.predict_from_raw_data import predict_from_raw_data as predictor
 from nnunetv2.inference.predict_from_raw_data import nnUNetPredictor
