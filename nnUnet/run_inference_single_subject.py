@@ -197,8 +197,8 @@ def main():
         output_folder_or_list_of_truncated_output_files=tmpdir_nnunet,
         save_probabilities=True if args.save_probs else False,
         overwrite=True,
-        num_processes_preprocessing=8,
-        num_processes_segmentation_export=8,
+        num_processes_preprocessing=1,
+        num_processes_segmentation_export=1,
         folder_with_segs_from_prev_stage=None,
         num_parts=1,
         part_id=0
@@ -210,7 +210,7 @@ def main():
     print('Total inference time: {} minute(s) {} seconds'.format(int(total_time // 60), int(round(total_time % 60))))
 
     # Copy .nii.gz file from tmpdir_nnunet to tmpdir
-    pred_file = glob.glob(os.path.join(tmpdir_nnunet, '*.nii.gz'))[0]
+    pred_file = [os.path.join(tmpdir_nnunet, f) for f in os.listdir(tmpdir_nnunet) if f.endswith('.nii.gz')][0]
     shutil.copyfile(pred_file, fname_prediction)
 
     if args.save_probs:
