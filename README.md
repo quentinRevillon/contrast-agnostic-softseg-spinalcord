@@ -97,7 +97,7 @@ conda create -n sc_crop python=3.10 -y
 conda activate sc_crop
 pip install \
     "sc-crop @ git+https://github.com/ivadomed/sc-crop.git" \
-    "nnunet-onnx @ git+https://github.com/ivadomed/nnunet-onnx.git" \
+    "nnunet-onnx @ git+https://github.com/quentinRevillon/nnunet-onnx.git" \
     torch nnunetv2 onnxscript onnx
 ```
 
