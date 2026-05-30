@@ -89,7 +89,7 @@ pip install -r nnUnet/requirements.txt
 
 All steps below are copy-paste ready and have been tested end-to-end.
 
-### Step 1: Set up the environment and clone the repo
+### Step 1: Set up the environment
 
 ```bash
 conda create -n sc_crop python=3.10 -y
@@ -98,21 +98,19 @@ pip install \
     "sc-crop @ git+https://github.com/ivadomed/sc-crop.git" \
     "nnunet-onnx @ git+https://github.com/quentinRevillon/nnunet-onnx.git" \
     torch nnunetv2 onnxscript onnx
-
-mkdir ~/ca-inference-test && cd ~/ca-inference-test
-git clone https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord.git --branch sc-crop-v4 --depth 1 repo
 ```
 
-### Step 2: Download the example image and the models
+### Step 2: Download the example image and the v4.0 model
 
 ```bash
+mkdir ~/ca-inference-test && cd ~/ca-inference-test
+
 # Example T2w image (from sc-crop test data)
 curl -L https://github.com/ivadomed/sc-crop/releases/download/test-data/t2.nii.gz -o t2.nii.gz
 
-# v4.0 model (this branch, sc-crop-based training)
+# v4.0 model
 curl -L https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord/releases/download/v4.0/model_contrast_agnostic_20260529.zip -o model_v4.zip
 unzip model_v4.zip
-
 ```
 
 ### Step 3: Convert v4.0 checkpoint to ONNX
@@ -151,7 +149,7 @@ sct_deepseg spinalcord -i t2.nii.gz -o seg_sct.nii.gz
 fsleyes t2.nii.gz seg_sct.nii.gz -cm red seg_v4_pt.nii.gz -cm blue seg_v4_onnx.nii.gz -cm green &
 ```
 
-### Step 2: Train the model
+### Training the model
 
 The script `scripts/train_contrast_agnostic.sh` downloads the datasets from git-annex, creates datalists, converts them into nnUNet-specific format, and trains the model. More instructions about what variables to set and which datasets to use can be found in the script itself. Once these variables are set, run:
 
