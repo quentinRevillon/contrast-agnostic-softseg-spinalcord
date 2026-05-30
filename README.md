@@ -87,10 +87,9 @@ pip install -r nnUnet/requirements.txt
 
 ## Running inference on a trained model
 
-This section shows how to run inference on a pre-trained model released on GitHub.
 All steps below are copy-paste ready and have been tested end-to-end.
 
-### Step 1: Set up the environment
+### Step 1: Set up the environment and clone the repo
 
 ```bash
 conda create -n sc_crop python=3.10 -y
@@ -99,22 +98,27 @@ pip install \
     "sc-crop @ git+https://github.com/ivadomed/sc-crop.git" \
     "nnunet-onnx @ git+https://github.com/quentinRevillon/nnunet-onnx.git" \
     torch nnunetv2 onnxscript onnx
+
+mkdir ~/ca-inference-test && cd ~/ca-inference-test
+git clone https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord.git --branch sc-crop-v4 --depth 1 repo
 ```
 
-### Step 2: Download the example image and the model
+### Step 2: Download the example image and the models
 
 ```bash
-mkdir ~/ca-inference-test && cd ~/ca-inference-test
-
 # Example T2w image (from sc-crop test data)
 curl -L https://github.com/ivadomed/sc-crop/releases/download/test-data/t2.nii.gz -o t2.nii.gz
 
-# Model weights from the latest release
-curl -L https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord/releases/download/v4.0/model_contrast_agnostic_20260529.zip -o model_contrast_agnostic_20260529.zip
-unzip model_contrast_agnostic_20260529.zip
+# v4.0 model (this branch, sc-crop-based training)
+curl -L https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord/releases/download/v4.0/model_contrast_agnostic_20260529.zip -o model_v4.zip
+unzip model_v4.zip
+
+# v3.0 model (main branch, Naga — no sc-crop cropping)
+curl -L https://github.com/sct-pipeline/contrast-agnostic-softseg-spinalcord/releases/download/v3.0/model_contrast_agnostic_20250123.zip -o model_v3.zip
+unzip model_v3.zip
 ```
 
-### Step 3: Convert the checkpoint to ONNX
+### Step 3: Convert v4.0 checkpoint to ONNX
 
 ```bash
 python -m nnunet_onnx.export \
@@ -122,56 +126,33 @@ python -m nnunet_onnx.export \
     --output model_contrast_agnostic_v4.0.onnx
 ```
 
-### Step 4: Run inference
+### Step 4: Run inference — v4.0 model
 
 ```bash
-# PyTorch inference
+# PyTorch
 sc-segment-pt \
-    -i t2.nii.gz \
-    -o seg_pt.nii.gz \
+    -i t2.nii.gz -o seg_v4_pt.nii.gz \
     --checkpoint nnUNetTrainer__nnUNetPlans__3d_fullres/fold_0/checkpoint_best.pth
 
-# ONNX inference (faster, no nnUNet required at runtime)
+# ONNX (no nnUNet at runtime)
 sc-segment-onnx \
-    -i t2.nii.gz \
-    -o seg_onnx.nii.gz \
+    -i t2.nii.gz -o seg_v4_onnx.nii.gz \
     --model model_contrast_agnostic_v4.0.onnx
 ```
 
-Both commands print a timing breakdown. To visualise the result:
+### Step 5: Run inference — v3.0 model (requires SCT)
 
 ```bash
-fsleyes t2.nii.gz seg_pt.nii.gz -cm red seg_onnx.nii.gz -cm blue &
-```
-
-### Comparison: v3.0 model (main branch, Naga) with `run_inference_single_subject.py`
-
-The v3.0 model was trained without sc-crop cropping. It uses SCT (`sct_image`) for reorientation. Requires SCT and the `contrast_agnostic` conda environment.
-
-```bash
-# Download v3.0 model
-curl -L https://github.com/sct-pipeline/contrast-agnostic-softseg-spinalcord/releases/download/v3.0/model_contrast_agnostic_20250123.zip \
-    -o model_contrast_agnostic_20250123.zip
-unzip model_contrast_agnostic_20250123.zip
-
-# Clone the repo to get the inference script (main branch)
-git clone https://github.com/sct-pipeline/contrast-agnostic-softseg-spinalcord.git --branch main --depth 1 ca-main
-
-# Run inference (requires SCT + contrast_agnostic env)
-conda activate contrast_agnostic
-python ca-main/nnUnet/run_inference_single_subject.py \
-    -i t2.nii.gz \
-    -o seg_v3.nii.gz \
+python repo/nnUnet/run_inference_single_subject.py \
+    -i t2.nii.gz -o seg_v3.nii.gz \
     -path-model model_contrast_agnostic_20250123/nnUNetTrainer__nnUNetPlans__3d_fullres \
-    -pred-type sc \
-    -use-best-checkpoint \
-    -tile-step-size 0.5
+    -pred-type sc -use-best-checkpoint -tile-step-size 0.5
 ```
 
-To visualise all three results side by side:
+### Visualise all results
 
 ```bash
-fsleyes t2.nii.gz seg_v3.nii.gz -cm red seg_pt.nii.gz -cm blue seg_onnx.nii.gz -cm green &
+fsleyes t2.nii.gz seg_v3.nii.gz -cm red seg_v4_pt.nii.gz -cm blue seg_v4_onnx.nii.gz -cm green &
 ```
 
 ### Step 2: Train the model
