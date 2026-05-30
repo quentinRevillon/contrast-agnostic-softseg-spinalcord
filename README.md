@@ -113,9 +113,6 @@ curl -L https://github.com/ivadomed/sc-crop/releases/download/test-data/t2.nii.g
 curl -L https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord/releases/download/v4.0/model_contrast_agnostic_20260529.zip -o model_v4.zip
 unzip model_v4.zip
 
-# v3.0 model (main branch, Naga — no sc-crop cropping)
-curl -L https://github.com/sct-pipeline/contrast-agnostic-softseg-spinalcord/releases/download/v3.0/model_contrast_agnostic_20250123.zip -o model_v3.zip
-unzip model_v3.zip
 ```
 
 ### Step 3: Convert v4.0 checkpoint to ONNX
@@ -140,19 +137,18 @@ sc-segment-onnx \
     --model model_contrast_agnostic_v4.0.onnx
 ```
 
-### Step 5: Run inference — v3.0 model (requires SCT)
+### Step 5: Run inference — v3.0 model via SCT (requires SCT installed)
+
+`sct_deepseg spinalcord` uses the v3.0 contrast-agnostic model bundled in SCT — no separate download needed.
 
 ```bash
-python repo/nnUnet/run_inference_single_subject.py \
-    -i t2.nii.gz -o seg_v3.nii.gz \
-    -path-model model_contrast_agnostic_20250123/nnUNetTrainer__nnUNetPlans__3d_fullres \
-    -pred-type sc -use-best-checkpoint -tile-step-size 0.5
+sct_deepseg spinalcord -i t2.nii.gz -o seg_sct.nii.gz
 ```
 
 ### Visualise all results
 
 ```bash
-fsleyes t2.nii.gz seg_v3.nii.gz -cm red seg_v4_pt.nii.gz -cm blue seg_v4_onnx.nii.gz -cm green &
+fsleyes t2.nii.gz seg_sct.nii.gz -cm red seg_v4_pt.nii.gz -cm blue seg_v4_onnx.nii.gz -cm green &
 ```
 
 ### Step 2: Train the model
