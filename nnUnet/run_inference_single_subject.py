@@ -153,9 +153,11 @@ def main():
         # reorient the image to RPI using SCT
         os.system('sct_image -i {} -setorient RPI -o {}'.format(fname_file_tmp, fname_file_tmp))
 
-    # NOTE: for individual images, the _0000 suffix is not needed.
-    # BUT, the images should be in a list of lists
-    fname_file_tmp_list = [[fname_file_tmp]]
+    # nnUNet derives the case_id by stripping _0000.nii.gz from the filename.
+    # Rename the temp file to ensure a valid case_id regardless of the original filename.
+    fname_file_tmp_nnunet = fname_file_tmp.replace('.nii.gz', '_0000.nii.gz')
+    shutil.move(fname_file_tmp, fname_file_tmp_nnunet)
+    fname_file_tmp_list = [[fname_file_tmp_nnunet]]
 
     # Use all the folds available in the model folder by default
     folds_avail = [int(f.split('_')[-1]) for f in os.listdir(args.path_model) if f.startswith('fold_')]
@@ -210,7 +212,7 @@ def main():
     print('Total inference time: {} minute(s) {} seconds'.format(int(total_time // 60), int(round(total_time % 60))))
 
     # Copy .nii.gz file from tmpdir_nnunet to tmpdir
-    pred_file = [os.path.join(tmpdir_nnunet, f) for f in os.listdir(tmpdir_nnunet) if f.endswith('.nii.gz')][0]
+    pred_file = glob.glob(os.path.join(tmpdir_nnunet, '*.nii.gz'))[0]
     shutil.copyfile(pred_file, fname_prediction)
 
     if args.save_probs:
