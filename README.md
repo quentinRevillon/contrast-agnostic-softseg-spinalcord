@@ -62,7 +62,7 @@ author = {Enamundram Naga Karthik and Sandrine Bédard and Jan Valošek and Chri
 
 1. Create a conda environment with the following command:
 ```bash
-conda create -n contrast_agnostic python=3.9.16
+conda create -n contrast_agnostic python=3.10
 ```
 
 2. Activate the environment with the following command:
@@ -75,15 +75,76 @@ conda activate contrast_agnostic
 git clone https://github.com/sct-pipeline/contrast-agnostic-softseg-spinalcord.git
 ```
 
-3. Install the required packages with the following command:
+4. Install the required packages (includes nnUNet and PyTorch):
 ```bash
 cd contrast-agnostic-softseg-spinalcord
 pip install -r nnUnet/requirements.txt
 ```
 
 > **Note**
-> The `requirements.txt` does NOT install nnUNet. It has to be installed separately and can be done within the conda environment created above. See [here](https://github.com/MIC-DKFZ/nnUNet/blob/master/documentation/installation_instructions.md) for installation instructions. Please note that the nnUNet version used in this work is tag `v2.5.1`.
+> `requirements.txt` now includes nnUNet (pinned to a specific GitHub commit compatible with PyTorch 2.8) and PyTorch 2.8+cu128. PyTorch 2.8 is required for Blackwell GPUs (sm_120, e.g. RTX PRO 6000). PyPI `nnunetv2==2.5.2` is broken with PyTorch>=2.4 due to a removed `verbose` parameter in `_LRScheduler`.
 
+
+## Running inference on a trained model
+
+This section shows how to run inference on a pre-trained model released on GitHub.
+All steps below are copy-paste ready and have been tested end-to-end.
+
+### Step 1: Set up the environment
+
+```bash
+conda create -n sc_crop python=3.10 -y
+conda activate sc_crop
+pip install \
+    "sc-crop @ git+https://github.com/ivadomed/sc-crop.git" \
+    "nnunet-onnx @ git+https://github.com/ivadomed/nnunet-onnx.git" \
+    torch nnunetv2 onnxscript onnx
+```
+
+### Step 2: Download the example image and the model
+
+```bash
+mkdir ~/ca-inference-test && cd ~/ca-inference-test
+
+# Example T2w image (from sc-crop test data)
+curl -L https://github.com/ivadomed/sc-crop/releases/download/test-data/t2.nii.gz -o t2.nii.gz
+
+# Model weights from the latest release
+gh release download v4.0 \
+    --repo quentinRevillon/contrast-agnostic-softseg-spinalcord \
+    --pattern "model_contrast_agnostic_*.zip"
+unzip model_contrast_agnostic_*.zip
+```
+
+### Step 3: Convert the checkpoint to ONNX
+
+```bash
+python -m nnunet_onnx.export \
+    --checkpoint nnUNetTrainer__nnUNetPlans__3d_fullres/fold_0/checkpoint_best.pth \
+    --output model_contrast_agnostic_v4.0.onnx
+```
+
+### Step 4: Run inference
+
+```bash
+# PyTorch inference
+sc-segment-pt \
+    -i t2.nii.gz \
+    -o seg_pt.nii.gz \
+    --checkpoint nnUNetTrainer__nnUNetPlans__3d_fullres/fold_0/checkpoint_best.pth
+
+# ONNX inference (faster, no nnUNet required at runtime)
+sc-segment-onnx \
+    -i t2.nii.gz \
+    -o seg_onnx.nii.gz \
+    --model model_contrast_agnostic_v4.0.onnx
+```
+
+Both commands print a timing breakdown. To visualise the result:
+
+```bash
+fsleyes t2.nii.gz seg_pt.nii.gz -cm red seg_onnx.nii.gz -cm blue &
+```
 
 ### Step 2: Train the model
 
