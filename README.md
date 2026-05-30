@@ -81,7 +81,7 @@ pip install -r nnUnet/requirements.txt
 > `requirements.txt` pins nnUNet to a specific GitHub commit (v2.6.0) compatible with PyTorch 2.8+cu128. PyTorch 2.8 is required for Blackwell GPUs (sm_120, e.g. RTX PRO 6000). PyPI `nnunetv2==2.5.2` is broken with PyTorch>=2.4 due to a removed `verbose` parameter in `_LRScheduler`.
 
 
-## Running inference on a trained model
+## Run inference of a trained segmentation model with cropping
 
 All steps below are copy-paste ready and have been tested end-to-end.
 
@@ -146,6 +146,8 @@ fsleyes t2.nii.gz seg_sct.nii.gz -cm red seg_v4_pt.nii.gz -cm blue seg_v4_onnx.n
 ```
 
 > **Benchmark results** (Intel i7-11370H @ 3.30GHz, 11 GB RAM, CPU only) are documented in [issue #2](https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord/issues/2): `sc-segment-onnx` is ~10× faster than `sct_deepseg spinalcord` on the same image.
+
+> Dice results on the test set are documented in [issue #3](https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord/issues/3).
 
 ### Training the model
 
