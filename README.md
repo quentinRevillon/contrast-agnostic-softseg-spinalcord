@@ -149,6 +149,8 @@ sct_deepseg spinalcord -i t2.nii.gz -o seg_sct.nii.gz
 fsleyes t2.nii.gz seg_sct.nii.gz -cm red seg_v4_pt.nii.gz -cm blue seg_v4_onnx.nii.gz -cm green &
 ```
 
+> **Benchmark results** (Intel i7-11370H @ 3.30GHz, 11 GB RAM, CPU only) are documented in [issue #2](https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord/issues/2): `sc-segment-onnx` is ~10× faster than `sct_deepseg spinalcord` on the same image.
+
 ### Training the model
 
 The script `scripts/train_contrast_agnostic.sh` downloads the datasets from git-annex, creates datalists, converts them into nnUNet-specific format, and trains the model. More instructions about what variables to set and which datasets to use can be found in the script itself. Once these variables are set, run:
