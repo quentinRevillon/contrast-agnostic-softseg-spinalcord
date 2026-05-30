@@ -110,10 +110,8 @@ mkdir ~/ca-inference-test && cd ~/ca-inference-test
 curl -L https://github.com/ivadomed/sc-crop/releases/download/test-data/t2.nii.gz -o t2.nii.gz
 
 # Model weights from the latest release
-gh release download v4.0 \
-    --repo quentinRevillon/contrast-agnostic-softseg-spinalcord \
-    --pattern "model_contrast_agnostic_*.zip"
-unzip model_contrast_agnostic_*.zip
+curl -L https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord/releases/download/v4.0/model_contrast_agnostic_20260529.zip -o model_contrast_agnostic_20260529.zip
+unzip model_contrast_agnostic_20260529.zip
 ```
 
 ### Step 3: Convert the checkpoint to ONNX
