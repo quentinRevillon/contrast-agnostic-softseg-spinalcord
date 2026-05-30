@@ -28,7 +28,7 @@ NNUNET_PLANS_FILE="nnUNetPlans"
 configurations=("3d_fullres")
 folds=(0)
 cuda_visible_devices=0
-CHECKPOINT=${CHECKPOINT:-checkpoint_best}
+CHECKPOINT=${CHECKPOINT:-checkpoint_best.pth}
 
 PATH_IMAGES_TS="${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/imagesTs"
 PATH_LABELS_TS="${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/labelsTs"
@@ -41,7 +41,7 @@ PATH_DATASET_JSON="${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/d
 for configuration in ${configurations[@]}; do
     for fold in ${folds[@]}; do
 
-        PATH_PREDICTIONS="${PATH_NNUNET_RESULTS}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/nnUNetTrainer__nnUNetPlans__${configuration}/predictions_test_fold${fold}_${CHECKPOINT}"
+        PATH_PREDICTIONS="${PATH_NNUNET_RESULTS}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/nnUNetTrainer__nnUNetPlans__${configuration}/predictions_test_fold${fold}_${CHECKPOINT%.pth}"
         PATH_PLANS_JSON="${PATH_NNUNET_RESULTS}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/nnUNetTrainer__nnUNetPlans__${configuration}/plans.json"
 
         echo "-------------------------------------------"
