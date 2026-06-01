@@ -93,7 +93,8 @@ def infer_v3_gpu(orig_image: str, seg_v3: Path, logger: Logger) -> None:
     run([SCT_GPU_BIN, "spinalcord",
          "-i", orig_image, "-o", str(seg_v3)],
         logger,
-        env={"SCT_USE_GPU": "1", "CUDA_VISIBLE_DEVICES": "0"})
+        env={"SCT_USE_GPU": "1", "CUDA_VISIBLE_DEVICES": "0",
+             "TORCHDYNAMO_DISABLE": "1"})
 
 
 def dice(gt: np.ndarray, pred: np.ndarray) -> float:
