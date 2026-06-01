@@ -24,9 +24,7 @@ import argparse
 import json
 import os
 import re
-import shutil
 import subprocess
-import tempfile
 from pathlib import Path
 
 import nibabel as nib
@@ -90,15 +88,6 @@ def contrast_name(path: str) -> str:
     return match.group(1) if match else "unknown"
 
 
-def bids_symlink(orig_image: str, contrast: str, tmpdir: Path) -> str:
-    """Return a symlink path inside {tmpdir}/{contrast}/ so sct_qc reads contrast from folder."""
-    dest_dir = tmpdir / contrast
-    dest_dir.mkdir(exist_ok=True)
-    link = dest_dir / Path(orig_image).name
-    if not link.exists():
-        link.symlink_to(os.path.abspath(orig_image))
-    return str(link)
-
 
 def infer_v3_gpu(orig_image: str, seg_v3: Path, qc_dir: Path,
                  subj: str, dset: str, logger: Logger) -> None:
@@ -157,7 +146,6 @@ def main():
     for d in [qc_dir, seg_v4_dir, seg_v3_dir]:
         d.mkdir(parents=True, exist_ok=True)
 
-    symlink_dir = Path(tempfile.mkdtemp(prefix="sct_qc_bids_"))
     logger = Logger(output_dir / "run.log")
     pairs  = build_test_pairs(dataset_dir)
     if args.n_subjects:
@@ -190,7 +178,7 @@ def main():
             logger)
 
         # v3 inference — sct_deepseg spinalcord on GPU (QC généré directement)
-        infer_v3_gpu(img_link, seg_v3, qc_dir, subj, dset, logger)
+        infer_v3_gpu(p["orig_image"], seg_v3, qc_dir, subj, dset, logger)
 
         # Dice
         gt   = np.asarray(nib.load(p["orig_label"]).dataobj)
@@ -209,18 +197,16 @@ def main():
             "voxels_after":   crop_qc["voxels_after"],
         })
 
-        img_link = bids_symlink(p["orig_image"], contrast, symlink_dir)
-
         # QC GT
         run(["sct_qc",
-             "-i", img_link, "-s", p["orig_label"],
+             "-i", p["orig_image"], "-s", p["orig_label"],
              "-p", "sct_deepseg_sc",
              "-qc", str(qc_dir), "-qc-subject", f"{dset}/{subj}", "-qc-dataset", "gt"],
             logger)
 
         # QC v4
         run(["sct_qc",
-             "-i", img_link, "-s", str(seg_v4),
+             "-i", p["orig_image"], "-s", str(seg_v4),
              "-p", "sct_deepseg_sc",
              "-qc", str(qc_dir), "-qc-subject", f"{dset}/{subj}", "-qc-dataset", "seg_v4"],
             logger)
@@ -264,7 +250,6 @@ def main():
     logger.log(f"QC report: {qc_dir}/index.html")
     logger.log(f"Metrics  : {metrics_path}")
     logger.close()
-    shutil.rmtree(symlink_dir)
 
 
 if __name__ == "__main__":
