@@ -201,17 +201,24 @@ def main():
             "voxels_after":   crop_qc["voxels_after"],
         })
 
-        # QC v4 — prediction (s) + GT toggleable (d)
+        # QC GT — label de référence
         run(["sct_qc",
-             "-i", p["orig_image"], "-s", str(seg_v4), "-d", p["orig_label"],
-             "-p", "sct_deepseg_lesion", "-plane", "axial",
+             "-i", p["orig_image"], "-s", p["orig_label"],
+             "-p", "sct_deepseg_sc",
+             "-qc", str(qc_dir), "-qc-subject", f"{dset}/{subj}", "-qc-dataset", "gt"],
+            logger)
+
+        # QC v4
+        run(["sct_qc",
+             "-i", p["orig_image"], "-s", str(seg_v4),
+             "-p", "sct_deepseg_sc",
              "-qc", str(qc_dir), "-qc-subject", f"{dset}/{subj}", "-qc-dataset", "seg_v4"],
             logger)
 
-        # QC v3 — prediction (s) + GT toggleable (d)
+        # QC v3
         run(["sct_qc",
-             "-i", p["orig_image"], "-s", str(seg_v3), "-d", p["orig_label"],
-             "-p", "sct_deepseg_lesion", "-plane", "axial",
+             "-i", p["orig_image"], "-s", str(seg_v3),
+             "-p", "sct_deepseg_sc",
              "-qc", str(qc_dir), "-qc-subject", f"{dset}/{subj}", "-qc-dataset", "seg_v3"],
             logger)
 
