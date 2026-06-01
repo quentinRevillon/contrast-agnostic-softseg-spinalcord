@@ -28,7 +28,6 @@ from pathlib import Path
 
 import nibabel as nib
 import numpy as np
-from nibabel.orientations import axcodes2ornt, io_orientation, ornt_transform
 from sc_crop import detect, check_label_crop
 
 V3_CHECKPOINT = (
@@ -91,17 +90,13 @@ def contrast_name(path: str) -> str:
 
 
 def infer_v3_gpu(orig_image: str, seg_v3: Path) -> None:
-    """Run v3 inference on GPU without sc-crop — replicates sct_deepseg internal pipeline."""
+    """Run v3 inference on GPU without sc-crop.
+
+    infer_pt handles RPI reorientation internally — matches main branch
+    run_inference_single_subject.py behaviour (no sc_crop).
+    """
     from nnunet_onnx.inference import infer_pt
-
-    img      = nib.load(orig_image)
-    orig_ornt = io_orientation(img.affine)
-    rpi_ornt  = axcodes2ornt(("R", "P", "I"))
-    img_rpi   = img.as_reoriented(ornt_transform(orig_ornt, rpi_ornt))
-
-    seg_rpi  = infer_pt(img_rpi, V3_CHECKPOINT, device="cuda")
-    seg_orig = seg_rpi.as_reoriented(ornt_transform(rpi_ornt, orig_ornt))
-    nib.save(seg_orig, seg_v3)
+    nib.save(infer_pt(nib.load(orig_image), V3_CHECKPOINT, device="cuda"), seg_v3)
 
 
 def dice(gt: np.ndarray, pred: np.ndarray) -> float:
