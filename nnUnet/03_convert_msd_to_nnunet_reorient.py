@@ -24,8 +24,25 @@ import tqdm
 from collections import OrderedDict
 from multiprocessing import Pool, cpu_count
 
+import numpy as np
 import nibabel as nib
-from sc_crop import detect, crop
+from sc_crop import detect, crop, check_label_crop, CropReport
+
+
+def force_orthonormal_affine(img: nib.Nifti1Image) -> nib.Nifti1Image:
+    """Force direction cosines to be exactly orthonormal via SVD.
+
+    Oblique acquisitions (e.g. sci-zurich sagittal T2w) have non-orthonormal
+    direction cosines that survive sct_image -setorient RPI. SimpleITK/ITK
+    (used by nnUNetv2_plan_and_preprocess) rejects these files.
+    SVD gives the nearest orthonormal matrix while preserving spacing and origin.
+    """
+    affine = img.affine.copy()
+    R = affine[:3, :3]
+    spacing = np.linalg.norm(R, axis=0)
+    U, _, Vt = np.linalg.svd(R)
+    affine[:3, :3] = (U @ Vt) * spacing
+    return nib.Nifti1Image(np.asarray(img.dataobj), affine, img.header)
 
 
 def parse_args():
@@ -52,7 +69,9 @@ def process_single_image(args):
     # sc_crop: detect SC bbox on image (no GT mask), crop image and label with the same bbox
     bbox = detect(nib.load(image_file_nnunet))
     nib.save(crop(nib.load(image_file_nnunet), bbox), image_file_nnunet)
-    nib.save(crop(nib.load(label_file_nnunet), bbox), label_file_nnunet)
+    label_nii = nib.load(label_file_nnunet)
+    qc_result = check_label_crop(label_nii, bbox)
+    nib.save(crop(label_nii, bbox), label_file_nnunet)
 
     # Put label to image to match dimension, resolution and orientation
     # '-identity 1': registration optimization (e.g. translations, rotations, deformations) is skipped
@@ -67,12 +86,17 @@ def process_single_image(args):
 
     # Binarize label
     assert os.system(f"sct_maths -i {str(label_file_nnunet)} -bin 0.5 -o {str(label_file_nnunet)}") == 0
-    
+
+    # Force orthonormal direction cosines — SimpleITK/ITK rejects oblique affines
+    for path in [image_file_nnunet, label_file_nnunet]:
+        nib.save(force_orthonormal_affine(nib.load(path)), path)
+
     return {
         'image': str(os.path.abspath(img_dict['image'])),
         'label': str(os.path.abspath(img_dict['label'])),
         'image_nnunet': image_file_nnunet,
-        'label_nnunet': label_file_nnunet
+        'label_nnunet': label_file_nnunet,
+        'qc': qc_result,
     }
 
 
@@ -164,6 +188,13 @@ def main():
     # Save conversion dictionary
     with open(os.path.join(path_out, "conversion_dict.json"), "w") as f:
         json.dump(conversion_dict, f, indent=4)
+
+    # Save crop QC report
+    report = CropReport()
+    for result in train_results + test_results:
+        report.add(result['label'], result['qc'])
+    report.save(os.path.join(path_out, "crop_qc_report.csv"))
+    report.save_summary(os.path.join(path_out, "crop_qc_summary.json"))
 
     # Create dataset description
     json_dict = OrderedDict({
