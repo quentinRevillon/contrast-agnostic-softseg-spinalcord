@@ -28,7 +28,14 @@ from pathlib import Path
 
 import nibabel as nib
 import numpy as np
+from nibabel.orientations import axcodes2ornt, io_orientation, ornt_transform
 from sc_crop import detect, check_label_crop
+
+V3_CHECKPOINT = (
+    "/home/quentinr/spinalcordtoolbox/data/deepseg_models"
+    "/model_seg_sc_contrast_agnostic_nnunet"
+    "/nnUNetTrainer__nnUNetPlans__3d_fullres/fold_0/checkpoint_best.pth"
+)
 
 _CONTRAST_PATTERN = (
     r'.*(T1w|T2w|acq-sagthor_T2w|acq-sagcerv_T2w|acq-sagstir_T2w|acq-ax_T2w'
@@ -81,6 +88,20 @@ def dataset_name(path: str) -> str:
 def contrast_name(path: str) -> str:
     match = re.search(_CONTRAST_PATTERN, path)
     return match.group(1) if match else "unknown"
+
+
+def infer_v3_gpu(orig_image: str, seg_v3: Path) -> None:
+    """Run v3 inference on GPU without sc-crop — replicates sct_deepseg internal pipeline."""
+    from nnunet_onnx.inference import infer_pt
+
+    img      = nib.load(orig_image)
+    orig_ornt = io_orientation(img.affine)
+    rpi_ornt  = axcodes2ornt(("R", "P", "I"))
+    img_rpi   = img.as_reoriented(ornt_transform(orig_ornt, rpi_ornt))
+
+    seg_rpi  = infer_pt(img_rpi, V3_CHECKPOINT, device="cuda")
+    seg_orig = seg_rpi.as_reoriented(ornt_transform(rpi_ornt, orig_ornt))
+    nib.save(seg_orig, seg_v3)
 
 
 def dice(gt: np.ndarray, pred: np.ndarray) -> float:
@@ -165,10 +186,9 @@ def main():
              "--device", "cuda"],
             logger)
 
-        # v3 inference
-        run(["sct_deepseg", "spinalcord",
-             "-i", p["orig_image"], "-o", str(seg_v3)],
-            logger)
+        # v3 inference — GPU, no sc-crop (replicates sct_deepseg internal pipeline)
+        logger.log(f"  $ infer_v3_gpu {p['orig_image']}")
+        infer_v3_gpu(p["orig_image"], seg_v3)
 
         # Dice
         gt   = np.asarray(nib.load(p["orig_label"]).dataobj)
