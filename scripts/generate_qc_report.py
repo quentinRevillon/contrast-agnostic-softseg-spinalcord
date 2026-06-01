@@ -22,6 +22,7 @@ Author: Quentin Revillon
 
 import argparse
 import json
+import os
 import re
 import subprocess
 from pathlib import Path
@@ -67,9 +68,7 @@ class Logger:
 
 def run(cmd: list, logger: Logger, env: dict | None = None) -> None:
     logger.log(f"  $ {' '.join(cmd)}")
-    import os
-    merged_env = {**os.environ, **(env or {})}
-    subprocess.run(cmd, check=True, env=merged_env)
+    subprocess.run(cmd, check=True, env={**os.environ, **(env or {})})
 
 
 def subject_name(path: str) -> str:
