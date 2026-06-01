@@ -226,6 +226,10 @@ def main():
         "aggregate": {
             "n_total":                    len(subjects_metrics),
             "n_bad_crops":                len(crop_failed),
+            "failed_crop_subjects":       [{"subject": s["subject"], "dataset": s["dataset"],
+                                            "voxels_before": s["voxels_before"],
+                                            "voxels_after": s["voxels_after"]}
+                                           for s in crop_failed],
             "dice_v4":                    _stats(dices_v4),
             "dice_v3":                    _stats(dices_v3),
             "dice_v4_crop_ok":            _stats([s["dice_v4"] for s in crop_ok])     if crop_ok     else None,

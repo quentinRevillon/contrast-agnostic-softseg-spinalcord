@@ -3,7 +3,7 @@
 # ONLY VARIABLES TO CHANGE
 # ====================================
 DATASET_NUMBER=4000
-N_SUBJECTS=2    # leave empty for all subjects, set e.g. 10 for a quick test
+N_SUBJECTS=""   # leave empty for all subjects, set e.g. 10 for a quick test
 
 # ====================================
 # DERIVED PATHS (do not edit)
