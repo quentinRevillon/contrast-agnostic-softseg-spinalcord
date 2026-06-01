@@ -204,14 +204,14 @@ def main():
         # QC v4 — prediction (s) + GT toggleable (d)
         run(["sct_qc",
              "-i", p["orig_image"], "-s", str(seg_v4), "-d", p["orig_label"],
-             "-p", "sct_deepseg_lesion",
+             "-p", "sct_deepseg_lesion", "-plane", "axial",
              "-qc", str(qc_dir), "-qc-subject", f"{dset}/{subj}", "-qc-dataset", "seg_v4"],
             logger)
 
         # QC v3 — prediction (s) + GT toggleable (d)
         run(["sct_qc",
              "-i", p["orig_image"], "-s", str(seg_v3), "-d", p["orig_label"],
-             "-p", "sct_deepseg_lesion",
+             "-p", "sct_deepseg_lesion", "-plane", "axial",
              "-qc", str(qc_dir), "-qc-subject", f"{dset}/{subj}", "-qc-dataset", "seg_v3"],
             logger)
 
