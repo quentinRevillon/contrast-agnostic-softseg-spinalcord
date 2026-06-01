@@ -51,6 +51,8 @@ def parse_args():
                         help="Path to fold_0/checkpoint_best.pth")
     parser.add_argument("--output-dir", required=True,
                         help="Where to write seg_v4/, seg_v3/, qc/, metrics.json, run.log")
+    parser.add_argument("--n-subjects", type=int, default=None,
+                        help="Process only the first N subjects (for testing)")
     return parser.parse_args()
 
 
@@ -147,7 +149,9 @@ def main():
 
     logger = Logger(output_dir / "run.log")
     pairs  = build_test_pairs(dataset_dir)
-    logger.log(f"Found {len(pairs)} test subjects")
+    if args.n_subjects:
+        pairs = pairs[:args.n_subjects]
+    logger.log(f"Processing {len(pairs)} test subjects")
 
     subjects_metrics = []
 
