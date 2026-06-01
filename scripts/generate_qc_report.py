@@ -167,13 +167,6 @@ def main():
                    f"voxels_before={crop_qc['voxels_before']}  "
                    f"voxels_after={crop_qc['voxels_after']}")
 
-        # Crop QC — visual
-        run(["sct_qc",
-             "-i", p["crop_image"], "-s", p["crop_label"],
-             "-p", "sct_deepseg_sc",
-             "-qc", str(qc_dir), "-qc-subject", f"{dset}/{subj}", "-qc-dataset", "crop"],
-            logger)
-
         # v4 inference
         run(["sc-segment-pt",
              "-i", p["orig_image"], "-o", str(seg_v4),
