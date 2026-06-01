@@ -201,16 +201,16 @@ def main():
             "voxels_after":   crop_qc["voxels_after"],
         })
 
-        # QC v4
+        # QC v4 — prediction + GT label as reference
         run(["sct_qc",
-             "-i", p["orig_image"], "-s", str(seg_v4),
+             "-i", p["orig_image"], "-s", str(seg_v4), "-qc-seg", p["orig_label"],
              "-p", "sct_deepseg_sc",
              "-qc", str(qc_dir), "-qc-subject", f"{dset}/{subj}", "-qc-dataset", "seg_v4"],
             logger)
 
-        # QC v3
+        # QC v3 — prediction + GT label as reference
         run(["sct_qc",
-             "-i", p["orig_image"], "-s", str(seg_v3),
+             "-i", p["orig_image"], "-s", str(seg_v3), "-qc-seg", p["orig_label"],
              "-p", "sct_deepseg_sc",
              "-qc", str(qc_dir), "-qc-subject", f"{dset}/{subj}", "-qc-dataset", "seg_v3"],
             logger)
