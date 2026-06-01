@@ -87,6 +87,7 @@ def main():
     seg_v4_dir  = output_dir / "seg_v4"
     seg_v3_dir  = output_dir / "seg_v3"
 
+    assert not qc_dir.exists(), f"{qc_dir} already exists — delete it or use a different --output-dir"
     for d in [qc_dir, seg_v4_dir, seg_v3_dir]:
         d.mkdir(parents=True, exist_ok=True)
 
