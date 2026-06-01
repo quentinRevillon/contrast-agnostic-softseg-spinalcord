@@ -88,10 +88,12 @@ def contrast_name(path: str) -> str:
     return match.group(1) if match else "unknown"
 
 
-def infer_v3_gpu(orig_image: str, seg_v3: Path, logger: Logger) -> None:
-    """Run v3 inference via sct_deepseg spinalcord on GPU (SCT GPU install)."""
+def infer_v3_gpu(orig_image: str, seg_v3: Path, qc_dir: Path,
+                 subj: str, dset: str, logger: Logger) -> None:
+    """Run v3 inference via sct_deepseg spinalcord on GPU with built-in QC."""
     run([SCT_GPU_BIN, "spinalcord",
-         "-i", orig_image, "-o", str(seg_v3)],
+         "-i", orig_image, "-o", str(seg_v3),
+         "-qc", str(qc_dir), "-qc-subject", f"seg_v3/{subj}", "-qc-dataset", dset],
         logger,
         env={"SCT_USE_GPU": "1", "CUDA_VISIBLE_DEVICES": "0",
              "TORCHDYNAMO_DISABLE": "1"})
@@ -174,8 +176,8 @@ def main():
              "--device", "cuda"],
             logger)
 
-        # v3 inference — sct_deepseg spinalcord on GPU
-        infer_v3_gpu(p["orig_image"], seg_v3, logger)
+        # v3 inference — sct_deepseg spinalcord on GPU (QC généré directement)
+        infer_v3_gpu(p["orig_image"], seg_v3, qc_dir, subj, dset, logger)
 
         # Dice
         gt   = np.asarray(nib.load(p["orig_label"]).dataobj)
@@ -208,12 +210,6 @@ def main():
              "-qc", str(qc_dir), "-qc-subject", f"{dset}/{subj}", "-qc-dataset", "seg_v4"],
             logger)
 
-        # QC v3
-        run(["sct_qc",
-             "-i", p["orig_image"], "-s", str(seg_v3),
-             "-p", "sct_deepseg_sc",
-             "-qc", str(qc_dir), "-qc-subject", f"{dset}/{subj}", "-qc-dataset", "seg_v3"],
-            logger)
 
     # Aggregate metrics
     def _stats(values):
