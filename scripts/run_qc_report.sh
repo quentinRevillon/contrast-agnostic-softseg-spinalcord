@@ -21,3 +21,7 @@ python ${PATH_REPO}/scripts/generate_qc_report.py \
     --dataset-dir ${DATASET_DIR} \
     --checkpoint  ${CHECKPOINT} \
     --output-dir  ${OUTPUT_DIR}
+
+python ${PATH_REPO}/scripts/plot_metrics.py \
+    --metrics    ${OUTPUT_DIR}/metrics.json \
+    --output-dir ${OUTPUT_DIR}/plots
