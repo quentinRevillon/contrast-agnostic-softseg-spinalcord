@@ -1,8 +1,9 @@
 #!/bin/bash
 # ====================================
-# ONLY VARIABLE TO CHANGE
+# ONLY VARIABLES TO CHANGE
 # ====================================
 DATASET_NUMBER=4000
+N_SUBJECTS=""   # leave empty for all subjects, set e.g. 10 for a quick test
 
 # ====================================
 # DERIVED PATHS (do not edit)
@@ -22,7 +23,8 @@ export CUDA_VISIBLE_DEVICES=0
 python ${PATH_REPO}/scripts/generate_qc_report.py \
     --dataset-dir ${DATASET_DIR} \
     --checkpoint  ${CHECKPOINT} \
-    --output-dir  ${OUTPUT_DIR}
+    --output-dir  ${OUTPUT_DIR} \
+    ${N_SUBJECTS:+--n-subjects ${N_SUBJECTS}}
 
 python ${PATH_REPO}/scripts/plot_metrics.py \
     --metrics    ${OUTPUT_DIR}/metrics.json \
