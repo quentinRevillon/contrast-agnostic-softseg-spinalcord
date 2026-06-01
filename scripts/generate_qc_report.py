@@ -30,12 +30,7 @@ import nibabel as nib
 import numpy as np
 from sc_crop import detect, check_label_crop
 
-# SCT model directory — create_nnunet_from_plans selects the checkpoint
-# exactly as sct_deepseg does (checkpoint_final.pth first, checkpoint_best.pth as fallback)
-V3_MODEL_DIR = (
-    "/home/quentinr/spinalcordtoolbox/data/deepseg_models"
-    "/model_seg_sc_contrast_agnostic_nnunet"
-)
+SCT_GPU_BIN = "/home/quentinr/spinalcordtoolbox-gpu/bin/sct_deepseg"
 
 _CONTRAST_PATTERN = (
     r'.*(T1w|T2w|acq-sagthor_T2w|acq-sagcerv_T2w|acq-sagstir_T2w|acq-ax_T2w'
@@ -70,9 +65,11 @@ class Logger:
         self._f.close()
 
 
-def run(cmd: list, logger: Logger) -> None:
+def run(cmd: list, logger: Logger, env: dict | None = None) -> None:
     logger.log(f"  $ {' '.join(cmd)}")
-    subprocess.run(cmd, check=True)
+    import os
+    merged_env = {**os.environ, **(env or {})}
+    subprocess.run(cmd, check=True, env=merged_env)
 
 
 def subject_name(path: str) -> str:
@@ -92,29 +89,12 @@ def contrast_name(path: str) -> str:
     return match.group(1) if match else "unknown"
 
 
-def infer_v3_gpu(orig_image: str, seg_v3: Path) -> None:
-    """Run v3 inference on GPU using SCT's exact inference pipeline.
-
-    Replicates sct_deepseg spinalcord behaviour (predict_single_npy_array +
-    manual [2,1,0] transpose) but on GPU instead of CPU.
-    """
-    import sys
-    import tempfile
-    import torch
-    sys.path.insert(0, "/home/quentinr/spinalcordtoolbox")
-    from spinalcordtoolbox.deepseg.nnunet import create_nnunet_from_plans
-    from spinalcordtoolbox.deepseg.inference import segment_nnunet
-
-    v3_model_dir = V3_MODEL_DIR
-    device = torch.device("cuda")
-    predictor = create_nnunet_from_plans(v3_model_dir, device)
-
-    tmpdir = tempfile.mkdtemp()
-    fnames_out, _ = segment_nnunet(path_img=orig_image, tmpdir=tmpdir,
-                                   predictor=predictor, device=device)
-    import shutil
-    shutil.copy(fnames_out[0], seg_v3)
-    shutil.rmtree(tmpdir)
+def infer_v3_gpu(orig_image: str, seg_v3: Path, logger: Logger) -> None:
+    """Run v3 inference via sct_deepseg spinalcord on GPU (SCT GPU install)."""
+    run([SCT_GPU_BIN, "spinalcord",
+         "-i", orig_image, "-o", str(seg_v3)],
+        logger,
+        env={"SCT_USE_GPU": "1", "CUDA_VISIBLE_DEVICES": "0"})
 
 
 def dice(gt: np.ndarray, pred: np.ndarray) -> float:
@@ -201,9 +181,8 @@ def main():
              "--device", "cuda"],
             logger)
 
-        # v3 inference — GPU, no sc-crop (replicates sct_deepseg internal pipeline)
-        logger.log(f"  $ infer_v3_gpu {p['orig_image']}")
-        infer_v3_gpu(p["orig_image"], seg_v3)
+        # v3 inference — sct_deepseg spinalcord on GPU
+        infer_v3_gpu(p["orig_image"], seg_v3, logger)
 
         # Dice
         gt   = np.asarray(nib.load(p["orig_label"]).dataobj)

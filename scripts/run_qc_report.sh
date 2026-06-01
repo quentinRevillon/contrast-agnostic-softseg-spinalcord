@@ -18,7 +18,7 @@ DATASET_DIR="${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}"
 CHECKPOINT="${PATH_NNUNET_RESULTS}/Dataset${DATASET_NUMBER}_${DATASET_NAME}/nnUNetTrainer__nnUNetPlans__3d_fullres/fold_0/checkpoint_best.pth"
 OUTPUT_DIR="/home/quentinr/qc_results_dataset${DATASET_NUMBER}"
 
-export CUDA_VISIBLE_DEVICES=0
+export CUDA_VISIBLE_DEVICES=0   # for sc-segment-pt (v4); v3 uses SCT_USE_GPU=1 internally
 
 python ${PATH_REPO}/scripts/generate_qc_report.py \
     --dataset-dir ${DATASET_DIR} \
