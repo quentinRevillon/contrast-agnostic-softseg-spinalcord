@@ -12,12 +12,20 @@ export PATH="/home/quentinr/spinalcordtoolbox/bin:${PATH}"
 echo "--- sct_deepseg spinalcord ---"
 sct_deepseg spinalcord -i ${IMAGE} -o ${OUT_SCT}
 
-echo "--- infer_pt (GPU) ---"
+echo "--- SCT inference pipeline (GPU) ---"
 python -c "
-import nibabel as nib
-from nnunet_onnx.inference import infer_pt
-seg = infer_pt(nib.load('${IMAGE}'), '${V3_CHECKPOINT}', device='cuda')
-nib.save(seg, '${OUT_PT}')
+import sys, tempfile, shutil, torch
+sys.path.insert(0, '/home/quentinr/spinalcordtoolbox')
+from spinalcordtoolbox.deepseg.nnunet import create_nnunet_from_plans
+from spinalcordtoolbox.deepseg.inference import segment_nnunet
+
+V3_MODEL_DIR = '/home/quentinr/spinalcordtoolbox/data/deepseg_models/model_seg_sc_contrast_agnostic_nnunet'
+device = torch.device('cuda')
+predictor = create_nnunet_from_plans(V3_MODEL_DIR, device)
+tmpdir = tempfile.mkdtemp()
+fnames_out, _ = segment_nnunet('${IMAGE}', tmpdir, predictor, device)
+shutil.copy(fnames_out[0], '${OUT_PT}')
+shutil.rmtree(tmpdir)
 print('Done.')
 "
 

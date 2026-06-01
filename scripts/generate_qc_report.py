@@ -30,10 +30,11 @@ import nibabel as nib
 import numpy as np
 from sc_crop import detect, check_label_crop
 
-V3_CHECKPOINT = (
+# SCT model directory — create_nnunet_from_plans selects the checkpoint
+# exactly as sct_deepseg does (checkpoint_final.pth first, checkpoint_best.pth as fallback)
+V3_MODEL_DIR = (
     "/home/quentinr/spinalcordtoolbox/data/deepseg_models"
     "/model_seg_sc_contrast_agnostic_nnunet"
-    "/nnUNetTrainer__nnUNetPlans__3d_fullres/fold_0/checkpoint_best.pth"
 )
 
 _CONTRAST_PATTERN = (
@@ -92,13 +93,28 @@ def contrast_name(path: str) -> str:
 
 
 def infer_v3_gpu(orig_image: str, seg_v3: Path) -> None:
-    """Run v3 inference on GPU without sc-crop.
+    """Run v3 inference on GPU using SCT's exact inference pipeline.
 
-    infer_pt handles RPI reorientation internally — matches main branch
-    run_inference_single_subject.py behaviour (no sc_crop).
+    Replicates sct_deepseg spinalcord behaviour (predict_single_npy_array +
+    manual [2,1,0] transpose) but on GPU instead of CPU.
     """
-    from nnunet_onnx.inference import infer_pt
-    nib.save(infer_pt(nib.load(orig_image), V3_CHECKPOINT, device="cuda"), seg_v3)
+    import sys
+    import tempfile
+    import torch
+    sys.path.insert(0, "/home/quentinr/spinalcordtoolbox")
+    from spinalcordtoolbox.deepseg.nnunet import create_nnunet_from_plans
+    from spinalcordtoolbox.deepseg.inference import segment_nnunet
+
+    v3_model_dir = V3_MODEL_DIR
+    device = torch.device("cuda")
+    predictor = create_nnunet_from_plans(v3_model_dir, device)
+
+    tmpdir = tempfile.mkdtemp()
+    fnames_out, _ = segment_nnunet(path_img=orig_image, tmpdir=tmpdir,
+                                   predictor=predictor, device=device)
+    import shutil
+    shutil.copy(fnames_out[0], seg_v3)
+    shutil.rmtree(tmpdir)
 
 
 def dice(gt: np.ndarray, pred: np.ndarray) -> float:
