@@ -22,12 +22,19 @@ Author: Quentin Revillon
 
 import argparse
 import json
+import re
 import subprocess
 from pathlib import Path
 
 import nibabel as nib
 import numpy as np
 from sc_crop import detect, check_label_crop
+
+_CONTRAST_PATTERN = (
+    r'.*(T1w|T2w|acq-sagthor_T2w|acq-sagcerv_T2w|acq-sagstir_T2w|acq-ax_T2w'
+    r'|T2star|PSIR|STIR|UNIT1|flip-1_mt-on_MTS|flip-2_mt-off_MTS'
+    r'|acq-MTon_MTR|acq-dwiMean_dwi|rec-average_dwi|acq-T1w_MTR).*'
+)
 
 
 def parse_args():
@@ -69,6 +76,11 @@ def dataset_name(path: str) -> str:
         if "datasets_contrast_agnostic" in p and i + 1 < len(parts):
             return parts[i + 1]
     return "unknown"
+
+
+def contrast_name(path: str) -> str:
+    match = re.search(_CONTRAST_PATTERN, path)
+    return match.group(1) if match else "unknown"
 
 
 def dice(gt: np.ndarray, pred: np.ndarray) -> float:
@@ -124,8 +136,9 @@ def main():
     subjects_metrics = []
 
     for i, p in enumerate(pairs, 1):
-        subj   = subject_name(p["orig_image"])
-        dset   = dataset_name(p["orig_image"])
+        subj     = subject_name(p["orig_image"])
+        dset     = dataset_name(p["orig_image"])
+        contrast = contrast_name(p["orig_image"])
         seg_v4 = seg_v4_dir / f"{subj}_seg_v4.nii.gz"
         seg_v3 = seg_v3_dir / f"{subj}_seg_v3.nii.gz"
 
@@ -166,6 +179,7 @@ def main():
         subjects_metrics.append({
             "subject":        subj,
             "dataset":        dset,
+            "contrast":       contrast,
             "dice_v4":        round(d_v4, 4),
             "dice_v3":        round(d_v3, 4),
             "crop_ok":        crop_qc["ok"],
@@ -188,18 +202,25 @@ def main():
             logger)
 
     # Aggregate metrics
+    def _stats(values):
+        a = np.array(values)
+        return {"mean": round(float(a.mean()), 4), "std": round(float(a.std()), 4), "n": len(a)}
+
     dices_v4    = [s["dice_v4"] for s in subjects_metrics]
     dices_v3    = [s["dice_v3"] for s in subjects_metrics]
-    n_bad_crops = sum(1 for s in subjects_metrics if not s["crop_ok"])
+    crop_ok     = [s for s in subjects_metrics if     s["crop_ok"]]
+    crop_failed = [s for s in subjects_metrics if not s["crop_ok"]]
 
     metrics = {
         "aggregate": {
-            "n_total":       len(subjects_metrics),
-            "n_bad_crops":   n_bad_crops,
-            "dice_v4_mean":  round(float(np.mean(dices_v4)), 4),
-            "dice_v4_std":   round(float(np.std(dices_v4)),  4),
-            "dice_v3_mean":  round(float(np.mean(dices_v3)), 4),
-            "dice_v3_std":   round(float(np.std(dices_v3)),  4),
+            "n_total":                    len(subjects_metrics),
+            "n_bad_crops":                len(crop_failed),
+            "dice_v4":                    _stats(dices_v4),
+            "dice_v3":                    _stats(dices_v3),
+            "dice_v4_crop_ok":            _stats([s["dice_v4"] for s in crop_ok])     if crop_ok     else None,
+            "dice_v4_crop_failed":        _stats([s["dice_v4"] for s in crop_failed]) if crop_failed else None,
+            "dice_v3_crop_ok":            _stats([s["dice_v3"] for s in crop_ok])     if crop_ok     else None,
+            "dice_v3_crop_failed":        _stats([s["dice_v3"] for s in crop_failed]) if crop_failed else None,
         },
         "subjects": subjects_metrics,
     }
@@ -208,9 +229,13 @@ def main():
     metrics_path.write_text(json.dumps(metrics, indent=4))
 
     logger.log(f"\n{'='*50}")
-    logger.log(f"Dice v4 : {metrics['aggregate']['dice_v4_mean']} ± {metrics['aggregate']['dice_v4_std']}")
-    logger.log(f"Dice v3 : {metrics['aggregate']['dice_v3_mean']} ± {metrics['aggregate']['dice_v3_std']}")
-    logger.log(f"Bad crops: {n_bad_crops}/{len(subjects_metrics)}")
+    logger.log(f"Dice v4 : {metrics['aggregate']['dice_v4']['mean']} ± {metrics['aggregate']['dice_v4']['std']}")
+    logger.log(f"Dice v3 : {metrics['aggregate']['dice_v3']['mean']} ± {metrics['aggregate']['dice_v3']['std']}")
+    if crop_ok:
+        logger.log(f"Dice v4 (crop ok)     : {metrics['aggregate']['dice_v4_crop_ok']['mean']} ± {metrics['aggregate']['dice_v4_crop_ok']['std']}  (n={metrics['aggregate']['dice_v4_crop_ok']['n']})")
+    if crop_failed:
+        logger.log(f"Dice v4 (crop failed) : {metrics['aggregate']['dice_v4_crop_failed']['mean']} ± {metrics['aggregate']['dice_v4_crop_failed']['std']}  (n={metrics['aggregate']['dice_v4_crop_failed']['n']})")
+    logger.log(f"Bad crops: {len(crop_failed)}/{len(subjects_metrics)}")
     logger.log(f"QC report: {qc_dir}/index.html")
     logger.log(f"Metrics  : {metrics_path}")
     logger.close()
