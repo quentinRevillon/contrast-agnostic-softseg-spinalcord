@@ -42,9 +42,8 @@ PATH_DATA_BASE="/home/quentinr/datasets_contrast_agnostic_retraining"
 # Path to the output folder where the dataset in MSD-style format will be saved as json files with image/label pairs
 # and other dataset-related statistics. To keep track of the experiments, date is also appended as a prefix or suffix
 # Example: 20260524-sc-crop
-# Override with: PATH_OUT_DATALISTS=/path/to/datalists START_STEP=3 bash train_contrast_agnostic.sh
 folder_name=$(date +"%Y%m%d")-sc-crop
-PATH_OUT_DATALISTS="${PATH_OUT_DATALISTS:-/home/quentinr/datalists/${folder_name}}"
+PATH_OUT_DATALISTS="/home/quentinr/datalists/${folder_name}"
 
 # Path to yml file containing subjects to include. These subjects are curated to be of good quality after visual QC'ing
 # Always include this file, when reproducing and also when adding new datasets
