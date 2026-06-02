@@ -3,7 +3,10 @@ Convert MSD datalists to nnU-Net format with RPI reorientation and sc_crop detec
 
 Each image is reoriented to RPI, then the spinal cord is detected with sc_crop (YOLO-based, no GT
 mask required) and both the image and label are cropped to the detected bounding box before saving
-in nnU-Net format. This ensures train/test consistency: inference also runs sc_crop before nnUNet.
+in nnU-Net format. The GT label is reduced to its largest connected component first, removing
+isolated annotation-noise voxels. This ensures train/test consistency: inference also runs
+sc_crop before nnUNet. A per-volume crop QC report (crop_qc_report.csv + crop_qc_summary.json)
+is written alongside the dataset.
 
 Example:
     python 03_convert_msd_to_nnunet_reorient.py \
@@ -26,7 +29,26 @@ from multiprocessing import Pool, cpu_count
 
 import numpy as np
 import nibabel as nib
+from scipy.ndimage import label as cc_label
 from sc_crop import detect, crop, check_label_crop, CropReport
+
+
+def keep_largest_component(nii: nib.Nifti1Image) -> nib.Nifti1Image:
+    """Return the label keeping only its largest 26-connected component.
+
+    Isolated voxels far from the cord (annotation noise) artificially enlarge the
+    detection-bbox QC check and add spurious labels to training. Removing them
+    keeps a single clean spinal cord. Returns the input unchanged if it already
+    has a single component.
+    """
+    data = np.asarray(nii.dataobj)
+    lab, n = cc_label(data > 0, structure=np.ones((3, 3, 3)))
+    if n <= 1:
+        return nii
+    sizes = np.bincount(lab.ravel())
+    sizes[0] = 0
+    cleaned = np.where(lab == sizes.argmax(), data, 0)
+    return nib.Nifti1Image(cleaned, nii.affine, nii.header)
 
 
 def force_orthonormal_affine(img: nib.Nifti1Image) -> nib.Nifti1Image:
@@ -69,7 +91,9 @@ def process_single_image(args):
     # sc_crop: detect SC bbox on image (no GT mask), crop image and label with the same bbox
     bbox = detect(nib.load(image_file_nnunet))
     nib.save(crop(nib.load(image_file_nnunet), bbox), image_file_nnunet)
-    label_nii = nib.load(label_file_nnunet)
+    # Keep only the largest connected component of the GT: isolated parasite voxels
+    # (annotation noise) otherwise stretch the bbox check and pollute training labels.
+    label_nii = keep_largest_component(nib.load(label_file_nnunet))
     qc_result = check_label_crop(label_nii, bbox)
     nib.save(crop(label_nii, bbox), label_file_nnunet)
 
