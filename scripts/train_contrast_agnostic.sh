@@ -68,7 +68,7 @@ export PATH="/home/quentinr/spinalcordtoolbox/bin:${PATH}"
 
 # Name and number/id of the dataset to be referenced by nnunet
 DATASET_NAME="ContrastAgnosticScCrop"
-DATASET_NUMBER=5000          # this refers to the `-d` argument when training nnunet models
+DATASET_NUMBER=6000          # this refers to the `-d` argument when training nnunet models
 
 # Name of the nnUNet trainer variant
 # NOTE: contrast-agnostic v3.0 model used the default trainer defined below
