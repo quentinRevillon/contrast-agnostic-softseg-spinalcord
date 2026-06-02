@@ -6,7 +6,7 @@ torch==2.8.0+cu128
 nnunetv2 @ git+https://github.com/MIC-DKFZ/nnUNet.git@503b1d21c5e12787518c94cffe206e74f49eab9b
 
 nibabel==5.1.0
-sc-crop @ git+https://github.com/ivadomed/sc-crop.git@v0.4.0
+sc-crop @ git+https://github.com/ivadomed/sc-crop.git@v0.4.1
 seaborn==0.13.2
 matplotlib==3.7.1
 pandas==2.0.1
