@@ -1,2 +1,10 @@
 *.idea
 *__pycache__/
+NOTES_*.md
+
+# Runtime markers and local outputs (not source)
+.last_completed_step
+csa-analysis-local-*/
+
+# Dataset clones that may land in the repo root (data lives in PATH_DATA_BASE)
+data-multi-subject/
