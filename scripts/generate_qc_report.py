@@ -29,9 +29,28 @@ from pathlib import Path
 
 import nibabel as nib
 import numpy as np
+from scipy.ndimage import label as cc_label
 from sc_crop import detect, check_label_crop
 
 SCT_GPU_BIN = "/home/quentinr/spinalcordtoolbox-gpu/bin/sct_deepseg"
+
+
+def keep_largest_component(nii: nib.Nifti1Image) -> nib.Nifti1Image:
+    """Return the label keeping only its largest 26-connected component.
+
+    Must match the GT cleanup done at training time in
+    03_convert_msd_to_nnunet_reorient.py so Dice/crop QC are computed against the
+    same ground truth the model was trained on (isolated annotation-noise voxels
+    removed). Returns the input unchanged if it already has a single component.
+    """
+    data = np.asarray(nii.dataobj)
+    lab, n = cc_label(data > 0, structure=np.ones((3, 3, 3)))
+    if n <= 1:
+        return nii
+    sizes = np.bincount(lab.ravel())
+    sizes[0] = 0
+    cleaned = np.where(lab == sizes.argmax(), data, 0)
+    return nib.Nifti1Image(cleaned, nii.affine, nii.header)
 
 _CONTRAST_PATTERN = (
     r'.*(T1w|T2w|acq-sagthor_T2w|acq-sagcerv_T2w|acq-sagstir_T2w|acq-ax_T2w'
@@ -139,11 +158,12 @@ def main():
     qc_dir      = output_dir / "qc"
     seg_v4_dir  = output_dir / "seg_v4"
     seg_v3_dir  = output_dir / "seg_v3"
+    gt_clean_dir = output_dir / "gt_clean"
 
     assert not qc_dir.exists(), \
         f"{qc_dir} already exists — delete it or use a different --output-dir"
 
-    for d in [qc_dir, seg_v4_dir, seg_v3_dir]:
+    for d in [qc_dir, seg_v4_dir, seg_v3_dir, gt_clean_dir]:
         d.mkdir(parents=True, exist_ok=True)
 
     logger = Logger(output_dir / "run.log")
@@ -163,9 +183,15 @@ def main():
 
         logger.log(f"\n[{i}/{len(pairs)}] {subj} ({dset})")
 
-        # Crop QC — detect on original image, check GT label
+        # Clean GT to its largest connected component — identical to the training
+        # preprocessing (03_convert), so Dice/crop QC use the same GT the model saw.
+        gt_clean_path = gt_clean_dir / f"{subj}_gt.nii.gz"
+        gt_clean_nii  = keep_largest_component(nib.load(p["orig_label"]))
+        nib.save(gt_clean_nii, gt_clean_path)
+
+        # Crop QC — detect on original image, check cleaned GT label
         bbox     = detect(p["orig_image"])
-        crop_qc  = check_label_crop(nib.load(p["orig_label"]), bbox)
+        crop_qc  = check_label_crop(gt_clean_nii, bbox)
         logger.log(f"  crop_ok={crop_qc['ok']}  "
                    f"voxels_before={crop_qc['voxels_before']}  "
                    f"voxels_after={crop_qc['voxels_after']}")
@@ -180,8 +206,8 @@ def main():
         # v3 inference — sct_deepseg spinalcord on GPU (QC généré directement)
         infer_v3_gpu(p["orig_image"], seg_v3, qc_dir, subj, dset, logger)
 
-        # Dice
-        gt   = np.asarray(nib.load(p["orig_label"]).dataobj)
+        # Dice vs cleaned GT (same GT the model was trained on)
+        gt   = np.asarray(gt_clean_nii.dataobj)
         d_v4 = dice(gt, np.asarray(nib.load(seg_v4).dataobj))
         d_v3 = dice(gt, np.asarray(nib.load(seg_v3).dataobj))
         logger.log(f"  dice_v4={d_v4:.4f}  dice_v3={d_v3:.4f}")
@@ -197,9 +223,9 @@ def main():
             "voxels_after":   crop_qc["voxels_after"],
         })
 
-        # QC GT
+        # QC GT — show the cleaned GT (consistent with Dice and training)
         run(["sct_qc",
-             "-i", p["orig_image"], "-s", p["orig_label"],
+             "-i", p["orig_image"], "-s", str(gt_clean_path),
              "-p", "sct_deepseg_sc",
              "-qc", str(qc_dir), "-qc-subject", f"{dset}/{subj}", "-qc-dataset", "gt"],
             logger)
