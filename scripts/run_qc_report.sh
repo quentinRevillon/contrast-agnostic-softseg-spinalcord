@@ -2,7 +2,7 @@
 # ====================================
 # ONLY VARIABLES TO CHANGE
 # ====================================
-DATASET_NUMBER=4000
+DATASET_NUMBER=7000
 N_SUBJECTS=""   # leave empty for all subjects, set e.g. 10 for a quick test
 
 # ====================================
