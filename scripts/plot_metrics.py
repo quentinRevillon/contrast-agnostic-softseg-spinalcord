@@ -80,7 +80,7 @@ def main():
     stat, p = wilcoxon(df["dice_v4"], df["dice_v3"])
 
     stats = {
-        "wilcoxon": {"statistic": round(float(stat), 4), "p_value": round(float(p), 6)},
+        "wilcoxon": {"statistic": float(stat), "p_value": float(p)},
         "by_contrast": group_stats(df, "contrast"),
         "by_dataset":  group_stats(df, "dataset"),
         "crop_ok_split": {
@@ -100,7 +100,7 @@ def main():
     }
 
     (output_dir / "stats.json").write_text(json.dumps(stats, indent=4))
-    print(f"Wilcoxon v4 vs v3: stat={stat:.4f}, p={p:.6f}")
+    print(f"Wilcoxon v4 vs v3: stat={stat:.1f}, p={p:.3e}")
 
     violin_plot(df, "contrast", "Dice per contrast — v4 vs v3", output_dir / "dice_by_contrast.png")
     violin_plot(df, "dataset",  "Dice per dataset — v4 vs v3",  output_dir / "dice_by_dataset.png")
