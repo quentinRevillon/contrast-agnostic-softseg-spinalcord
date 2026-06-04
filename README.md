@@ -147,7 +147,7 @@ fsleyes t2.nii.gz seg_sct.nii.gz -cm red seg_v4_pt.nii.gz -cm blue seg_v4_onnx.n
 
 > **Benchmark results** (Intel i7-11370H @ 3.30GHz, 11 GB RAM, CPU only) are documented in [issue #2](https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord/issues/2): `sc-segment-onnx` is ~10× faster than `sct_deepseg spinalcord` on the same image.
 
-> Dice results on the test set are documented in [issue #3](https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord/issues/3).
+> Dice results on the test set (v4.1 vs v3.0) are documented in [issue #5](https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord/issues/5).
 
 ### Training the model
 
@@ -179,7 +179,7 @@ To use the final checkpoint instead:
 CHECKPOINT=checkpoint_final.pth bash scripts/test_contrast_agnostic.sh
 ```
 
-> Dice results for this branch are documented in [issue #3](https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord/issues/3).
+> Dice results for this branch are documented in [issue #5](https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord/issues/5).
 <!-- 
 TODO: move to csa_qc_evaluation folder
 ## 5. Computing morphometric measures (CSA)
