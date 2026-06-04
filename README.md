@@ -91,12 +91,12 @@ All steps below are copy-paste ready and have been tested end-to-end.
 conda create -n sc_crop python=3.10 -y
 conda activate sc_crop
 pip install \
-    "sc-crop @ git+https://github.com/ivadomed/sc-crop.git" \
+    "sc-crop @ git+https://github.com/ivadomed/sc-crop.git@v0.4.1" \
     "nnunet-onnx @ git+https://github.com/quentinRevillon/nnunet-onnx.git" \
     torch nnunetv2 onnxscript onnx
 ```
 
-### Step 2: Download the example image and the v4.0 model
+### Step 2: Download the example image and the v4.1 model
 
 ```bash
 mkdir ~/ca-inference-test && cd ~/ca-inference-test
@@ -104,20 +104,20 @@ mkdir ~/ca-inference-test && cd ~/ca-inference-test
 # Example T2w image (from sc-crop test data)
 curl -L https://github.com/ivadomed/sc-crop/releases/download/test-data/t2.nii.gz -o t2.nii.gz
 
-# v4.0 model
-curl -L https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord/releases/download/v4.0/model_contrast_agnostic_20260529.zip -o model_v4.zip
+# v4.1 model
+curl -L https://github.com/quentinRevillon/contrast-agnostic-softseg-spinalcord/releases/download/v4.1/model_contrast_agnostic_20260602.zip -o model_v4.zip
 unzip model_v4.zip
 ```
 
-### Step 3: Convert v4.0 checkpoint to ONNX
+### Step 3: Convert v4.1 checkpoint to ONNX
 
 ```bash
 python -m nnunet_onnx.export \
     --checkpoint nnUNetTrainer__nnUNetPlans__3d_fullres/fold_0/checkpoint_best.pth \
-    --output model_contrast_agnostic_v4.0.onnx
+    --output model_contrast_agnostic_v4.1.onnx
 ```
 
-### Step 4: Run inference — v4.0 model
+### Step 4: Run inference — v4.1 model
 
 ```bash
 # PyTorch
@@ -128,7 +128,7 @@ sc-segment-pt \
 # ONNX (no nnUNet at runtime)
 sc-segment-onnx \
     -i t2.nii.gz -o seg_v4_onnx.nii.gz \
-    --model model_contrast_agnostic_v4.0.onnx
+    --model model_contrast_agnostic_v4.1.onnx
 ```
 
 ### Step 5: Run inference — v3.0 model via SCT (requires SCT installed)
