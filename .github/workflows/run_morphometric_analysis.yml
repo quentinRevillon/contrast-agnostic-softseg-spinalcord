@@ -117,9 +117,10 @@ jobs:
         run: |
           # Install the cropping + inference pipeline (sc-crop YOLO crop + nnUNet) into the active env.
           # `sc-segment-pt` is then on PATH, so compute_csa.sh uses its default SC_SEGMENT_BIN.
+          # NOTE: torch and nnunetv2 are already provided by the SCT install above; do not reinstall
+          # them — pulling the PyPI nnunetv2 drags dicom2nifti -> python-gdcm, which fails to build on 3.9.
           pip install "sc-crop @ git+https://github.com/ivadomed/sc-crop.git@v0.4.1" \
-                      "nnunet-onnx @ git+https://github.com/quentinRevillon/nnunet-onnx.git" \
-                      torch nnunetv2
+                      "nnunet-onnx @ git+https://github.com/quentinRevillon/nnunet-onnx.git"
 
           # Get the release details from the GitHub event
           RELEASE_ID=${{ github.event.release.id }}
