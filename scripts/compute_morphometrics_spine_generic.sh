@@ -4,13 +4,14 @@
 # This script is one of the steps in the automated GitHub actions for computing spinal cord morphometrics (CSA)
 # 
 # This script performs the following tasks:
-# 1. Downloads the model using sct_deepseg -install seg_sc_contrast_agnostic -custom-url <url>
-# 2. Runs a batch analysis (sct_run_batch) to compute the spinal cord cross-sectional area (CSA) on a 
-# mini-batch of test subjects obtained as input.
+# 1. Resolves the model checkpoint: a local fold_N/checkpoint_best.pth, or a release asset URL
+#    (zipped nnUNet model folder) that is downloaded and unzipped.
+# 2. Runs a batch analysis (sct_run_batch) to compute the spinal cord cross-sectional area (CSA) on a
+# mini-batch of test subjects obtained as input. Inference uses sc-crop (YOLO crop) + nnUNet.
 # 3. Moves the logs/ and results/ to the an output folder
-# 
+#
 # Usage:
-#   bash compute_morphometrics_spine_generic.sh
+#   bash compute_morphometrics_spine_generic.sh "<subjects>" "<checkpoint_path_or_release_url>"
 
 # Exit immediately if a command exits with a non-zero status
 set -e
@@ -29,13 +30,11 @@ echo "Running analysis on ${TEST_SUBJECTS[@]}"
 # Path to the output folder; the data, model, results, etc. will be stored in this folder
 PATH_OUTPUT="csa-analysis"
 
-# Path to the folder where the model exists, will be copied to the output folder PATH_OUTPUT
-# for testing purposes, replace the PATH_MODEL with the path to the model downloaded from the latest release
-MODEL_URL=$2
-echo "Using model at: ${MODEL_URL}"
-
-# Get model version
-MODEL_VERSION=$(echo "$MODEL_URL" | sed -E 's#.*/download/([^/]+)/.*#\1#')
+# Model checkpoint to run inference with. Accepts either:
+#   - a local path to fold_N/checkpoint_best.pth (local testing), or
+#   - a release asset URL pointing to the zipped nnUNet model folder (GitHub Actions).
+MODEL_INPUT=$2
+echo "Using model: ${MODEL_INPUT}"
 
 # Number of parallel processes to run (choose a smaller number as inference is run only on 1 gpu)
 NUM_WORKERS=4
@@ -44,12 +43,23 @@ NUM_WORKERS=4
 trap "echo Caught Keyboard Interrupt within script. Exiting now.; exit" INT
 
 echo "=============================="
-echo "Downloading model from URL ${MODEL_URL} ..."
+echo "Resolving model checkpoint ..."
 echo "=============================="
 
-sct_deepseg spinalcord -install -custom-url ${MODEL_URL}
+if [[ -f "${MODEL_INPUT}" ]]; then
+    # Local checkpoint path
+    PATH_CHECKPOINT="${MODEL_INPUT}"
+    MODEL_VERSION="local"
+else
+    # Release asset URL: parse version from the tag, download and unzip the model folder
+    MODEL_VERSION=$(echo "${MODEL_INPUT}" | sed -E 's#.*/download/([^/]+)/.*#\1#')
+    curl -L -o model.zip "${MODEL_INPUT}"
+    unzip -o model.zip -d model_dir
+    PATH_CHECKPOINT=$(find model_dir -name checkpoint_best.pth | head -1)
+fi
 
-echo "Model download complete."
+echo "Model version  : ${MODEL_VERSION}"
+echo "Checkpoint path: ${PATH_CHECKPOINT}"
 
 # ==============================
 # RUN BATCH ANALYSIS
@@ -68,7 +78,7 @@ sct_run_batch -path-data data-multi-subject \
     -path-output ${path_out_run_batch} \
     -jobs ${NUM_WORKERS} \
     -script scripts/compute_csa.sh \
-    -script-args "${MODEL_VERSION}" \
+    -script-args "${MODEL_VERSION} ${PATH_CHECKPOINT}" \
     -include-list ${TEST_SUBJECTS[@]}
 
 

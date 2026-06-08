@@ -115,6 +115,12 @@ jobs:
       - name: Run morphometric analysis
         shell: bash -el {0}  # Ensures the Conda environment is properly loaded
         run: |
+          # Install the cropping + inference pipeline (sc-crop YOLO crop + nnUNet) into the active env.
+          # `sc-segment-pt` is then on PATH, so compute_csa.sh uses its default SC_SEGMENT_BIN.
+          pip install "sc-crop @ git+https://github.com/ivadomed/sc-crop.git@v0.4.1" \
+                      "nnunet-onnx @ git+https://github.com/quentinRevillon/nnunet-onnx.git" \
+                      torch nnunetv2
+
           # Get the release details from the GitHub event
           RELEASE_ID=${{ github.event.release.id }}
           REPOSITORY="${{ github.repository }}"
