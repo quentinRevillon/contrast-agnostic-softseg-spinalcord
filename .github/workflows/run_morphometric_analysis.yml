@@ -139,6 +139,16 @@ jobs:
           chmod +x scripts/compute_morphometrics_spine_generic.sh
           source scripts/compute_morphometrics_spine_generic.sh "${{ matrix.subjects }}" "$MODEL_URL"
 
+      - name: Print per-subject error logs (debug)
+        if: ${{ always() }}
+        run: |
+          for f in csa-analysis/batch_processing_results/log/err.*.log; do
+            [ -e "$f" ] || continue
+            echo "::group::$f"
+            tail -n 60 "$f"
+            echo "::endgroup::"
+          done
+
       - name: Upload batch processing results
         uses: actions/upload-artifact@v4
         with:
@@ -147,6 +157,7 @@ jobs:
 
       - name: Setup tmate session
         if: ${{ failure() }}
+        timeout-minutes: 5
         uses: mxschmitt/action-tmate@v3
 
   download_results:
