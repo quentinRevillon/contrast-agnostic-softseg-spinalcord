@@ -249,7 +249,14 @@ Here are the steps involved in the workflow:
 
 * Once published, the release triggers a GHA workflow. The workflow is a `.yml` file located in the `.github/workflows` folder. For a high-level overview, it is divided into the following steps:
     * **Job 1**: Clones the dataset via git-annex and only downloads subjects in the test split. The dataset is cached for future use.
-    * **Job 2**: The test set of *(n=49)* is split into batches of 3 subjects for parallel processing. The model is downloaded from the release and each job (or, a runner) is responsible for computing the C2-C3 CSA for all the 6 contrasts. 
+    * **Job 2**: The test set of *(n=49)* is split into batches of 3 subjects for parallel processing. The model (zipped nnUNet folder, containing `plans.json`, `dataset.json` and `fold_0/checkpoint_best.pth`) is downloaded from the release and each job (or, a runner) is responsible for computing the C2-C3 CSA for all the 6 contrasts. Inference uses the cropping pipeline (`sc-segment-pt`: YOLO crop + nnUNet, CPU), not `sct_deepseg`.
+
+> **Tip — run it locally first.** The same scripts run without GitHub Actions. Point the model argument to a local checkpoint and set `SC_SEGMENT_BIN` to the `sc-crop` env binary:
+> ```bash
+> SC_SEGMENT_BIN=/path/to/sc_crop/bin/sc-segment-pt \
+>     bash scripts/compute_morphometrics_spine_generic.sh "sub-barcelona06" "/path/to/fold_0/checkpoint_best.pth"
+> ```
+> Once the C2-C3 CSV is produced correctly, publish a release to trigger the workflow.
     * **Job 3**: The output `.csv` files are aggregated across batches and merged into a single CSV file. The file is saved with the following naming convention `csa_c2c3__model_<tag-name>.csv` (note that the tag name defined in Step 1 is being used here) and uploaded to the release.
     * **Job 4**: All `csa_c2c3__model_<tag-name>.csv` files corresponding to current and previous releases are downloaded. Then, violin plots comparing the CSA per contrast (for each model) and the STD of CSA across contrasts are generated. The plots are saved in the `morphometric_plots.zip` folder and uploaded to the existing release.
 

@@ -27,14 +27,16 @@ echo "PATH_QC: ${PATH_QC}"
 # Variable passed by `sct_run_batch -script-args`
 SUBJECT=$1
 MODEL_VERSION=$2
-# CUDA_DEVICE=$2
-PATH_NNUNET_SCRIPT=$3   # path to the nnUNet contrast-agnostic run_inference_single_subject.py
-PATH_NNUNET_MODEL=$4
+PATH_NNUNET_MODEL=$3   # path to fold_N/checkpoint_best.pth (sc-segment-pt checkpoint)
+
+# Absolute path to the `sc-segment-pt` binary (sc-crop env). Override via env var.
+# Defaults to PATH lookup (e.g. when sc-crop is installed in the active env, as in CI).
+SC_SEGMENT_BIN="${SC_SEGMENT_BIN:-sc-segment-pt}"
 
 echo "SUBJECT: ${SUBJECT}"
-echo "USING CUDA DEVICE ID: ${CUDA_DEVICE}"
-echo "PATH_NNUNET_SCRIPT: ${PATH_NNUNET_SCRIPT}"
+echo "MODEL_VERSION: ${MODEL_VERSION}"
 echo "PATH_NNUNET_MODEL: ${PATH_NNUNET_MODEL}"
+echo "SC_SEGMENT_BIN: ${SC_SEGMENT_BIN}"
 
 # ------------------------------------------------------------------------------
 # CONVENIENCE FUNCTIONS
@@ -50,9 +52,9 @@ label_vertebrae(){
   FILESEG="${file}_softseg_bin"
   FILELABEL="${file}_discs"
 
-  # Get vertebral levels by projecting discs on the spinal cord segmentation
-  # Note: we are using sct_label_utils over sct_label_vertebrae here to avoid straightening (which takes a lot of time)
-  sct_label_utils -i ${FILESEG}.nii.gz -disc ${FILELABEL}.nii.gz -o ${FILESEG}_labeled.nii.gz
+  # Get vertebral levels from the GT discs. `-discfile` skips disc detection (and straightening),
+  # giving the same result as the now-removed `sct_label_utils -disc`. Output: ${FILESEG}_labeled.nii.gz
+  sct_label_vertebrae -i ${FILESEG}.nii.gz -s ${FILESEG}.nii.gz -c ${contrast} -discfile ${FILELABEL}.nii.gz -ofolder .
 }
 
 
@@ -120,8 +122,10 @@ segment_sc(){
 
   # Get the start time
   start_time=$(date +%s)
-  # Run SC segmentation (natively with sct_deepseg)
-  sct_deepseg spinalcord -i ${file}.nii.gz -o ${FILESEG}.nii.gz -qc ${PATH_QC} -qc-subject ${SUBJECT}
+  # Run SC segmentation: sc-crop (YOLO crop) + nnUNet inference on the crop, restored to full image space
+  ${SC_SEGMENT_BIN} -i ${file}.nii.gz -o ${FILESEG}.nii.gz --checkpoint ${PATH_NNUNET_MODEL} --device cpu
+  # Generate the QC report separately (sc-segment-pt does not produce one)
+  sct_qc -i ${file}.nii.gz -s ${FILESEG}.nii.gz -p sct_deepseg_sc -qc ${PATH_QC} -qc-subject ${SUBJECT}
   # Get the end time
   end_time=$(date +%s)
   # Calculate the time difference
