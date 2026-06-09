@@ -65,6 +65,13 @@ PATH_CHECKPOINT=$(realpath "${PATH_CHECKPOINT}")
 echo "Model version  : ${MODEL_VERSION}"
 echo "Checkpoint path: ${PATH_CHECKPOINT}"
 
+# Warm the sc-crop model cache once, serially, before the parallel batch. Otherwise the
+# `sct_run_batch -jobs N` subjects download the shared YOLO/cls models concurrently on first
+# use -> SHA256 mismatch / missing file. Use the python from the same env as sc-segment-pt.
+SC_BIN="${SC_SEGMENT_BIN:-sc-segment-pt}"
+SC_BIN=$(command -v "${SC_BIN}" || echo "${SC_BIN}")
+"$(dirname "${SC_BIN}")/python" -c "from sc_crop.download import ensure_model, ensure_cls_model; ensure_model(); ensure_cls_model()"
+
 # ==============================
 # RUN BATCH ANALYSIS
 # NOTE: this section piggybacks on the sct_run_batch argument provided by SCT
