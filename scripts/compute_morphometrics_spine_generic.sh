@@ -58,6 +58,10 @@ else
     PATH_CHECKPOINT=$(find model_dir -name checkpoint_best.pth | head -1)
 fi
 
+# sct_run_batch runs compute_csa.sh from a different working directory, so the checkpoint
+# path must be absolute (sc-segment-pt resolves dataset.json/plans.json relative to it).
+PATH_CHECKPOINT=$(realpath "${PATH_CHECKPOINT}")
+
 echo "Model version  : ${MODEL_VERSION}"
 echo "Checkpoint path: ${PATH_CHECKPOINT}"
 
