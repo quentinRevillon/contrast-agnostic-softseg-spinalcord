@@ -115,12 +115,15 @@ jobs:
       - name: Run morphometric analysis
         shell: bash -el {0}  # Ensures the Conda environment is properly loaded
         run: |
-          # Install the cropping + inference pipeline (sc-crop YOLO crop + nnUNet) into the active env.
-          # `sc-segment-pt` is then on PATH, so compute_csa.sh uses its default SC_SEGMENT_BIN.
-          # NOTE: torch and nnunetv2 are already provided by the SCT install above; do not reinstall
-          # them — pulling the PyPI nnunetv2 drags dicom2nifti -> python-gdcm, which fails to build on 3.9.
-          pip install "sc-crop @ git+https://github.com/ivadomed/sc-crop.git@v0.4.1" \
-                      "nnunet-onnx @ git+https://github.com/quentinRevillon/nnunet-onnx.git"
+          # Install the cropping + inference pipeline (sc-crop YOLO crop + nnUNet) INTO SCT's env.
+          # SCT's env (venv_sct) already provides torch + nnunetv2-neuropoly; the runner's default
+          # `pip` is the setup-python 3.9 which has NEITHER, so sc-segment-pt would fail with
+          # "No module named 'torch'". Install with venv_sct's python and point SC_SEGMENT_BIN at it.
+          # (Not reinstalling nnunetv2 also avoids dragging dicom2nifti -> python-gdcm.)
+          SCT_PY="${SCT_DIR}/python/envs/venv_sct/bin/python"
+          "${SCT_PY}" -m pip install "sc-crop @ git+https://github.com/ivadomed/sc-crop.git@v0.4.1" \
+                                     "nnunet-onnx @ git+https://github.com/quentinRevillon/nnunet-onnx.git"
+          export SC_SEGMENT_BIN="${SCT_DIR}/python/envs/venv_sct/bin/sc-segment-pt"
 
           # Get the release details from the GitHub event
           RELEASE_ID=${{ github.event.release.id }}
