@@ -22,7 +22,7 @@ export nnUNet_results=${PATH_NNUNET_RESULTS}
 export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
 
 DATASET_NAME="ContrastAgnosticScCrop"
-DATASET_NUMBER=4000
+DATASET_NUMBER=7000
 NNUNET_TRAINER="nnUNetTrainer"
 NNUNET_PLANS_FILE="nnUNetPlans"
 configurations=("3d_fullres")
