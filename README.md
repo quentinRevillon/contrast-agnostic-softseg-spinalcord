@@ -13,6 +13,7 @@ Official repository for contrast-agnostic segmentation of the spinal cord. This 
    - [2.2. Train](#22-train)
    - [2.3. Test](#23-test)
    - [2.4. Automated drift monitoring — the GitHub Action](#24-automated-drift-monitoring--the-github-action)
+   - [2.5. No-crop ablation](#25-no-crop-ablation)
 3. [Using the trained model](#3-using-the-trained-model)
 4. [Citation](#4-citation)
 
@@ -128,6 +129,42 @@ Create a GitHub release with these conventions:
 >     bash scripts/compute_morphometrics_spine_generic.sh "sub-barcelona06" "/path/to/fold_0/checkpoint_best.pth"
 > ```
 > Once the C2–C3 CSV is produced correctly, publish the release to trigger the workflow.
+
+### 2.5. No-crop ablation
+
+To measure what the sc-crop step actually contributes, train an otherwise
+identical model on **full volumes** (no cropping) and compare. The ablation
+reuses the **same datalists** as the cropped run, so the train/val/test split is
+identical and the only difference is the crop — this is the only clean way to
+attribute a Dice or speed difference to cropping.
+
+The no-crop pipeline mirrors the cropped one on a separate dataset (`Dataset7001_ContrastAgnosticNoCrop`):
+
+| Step | Cropped (Dataset7000) | No-crop (Dataset7001) |
+|------|------------------------|------------------------|
+| Convert | `nnUnet/03_convert_msd_to_nnunet_reorient.py` | `nnUnet/03_convert_msd_to_nnunet_reorient_nocrop.py` |
+| Train | `scripts/train_contrast_agnostic.sh` | `scripts/train_contrast_agnostic_nocrop.sh` |
+| Test | `scripts/test_contrast_agnostic.sh` | `scripts/test_contrast_agnostic_nocrop.sh` |
+| QC report | `scripts/run_qc_report.sh` | `scripts/run_qc_report_nocrop.sh` |
+
+```bash
+# 1. Point PATH_OUT_DATALISTS in train_contrast_agnostic_nocrop.sh to the SAME
+#    datalists folder used for Dataset7000, then:
+bash scripts/train_contrast_agnostic_nocrop.sh        # convert (no crop) -> preprocess -> train
+
+# 2. Dice on the test set
+bash scripts/test_contrast_agnostic_nocrop.sh
+
+# 3. QC report (gt / seg_v3 / seg_nocrop) + per-contrast metrics.json
+bash scripts/run_qc_report_nocrop.sh
+```
+
+> [!NOTE]
+> nnUNet self-configures differently for full volumes (larger patch/spacing,
+> possibly the 3D cascade) than for crops — this is expected and is part of the
+> no-crop vs crop comparison. `dice_v3` (the `sct_deepseg` baseline) is reported
+> in both QC reports as a shared anchor so the cropped (`dice_v4`) and no-crop
+> (`dice_nocrop`) results can be compared per contrast.
 
 ---
 
