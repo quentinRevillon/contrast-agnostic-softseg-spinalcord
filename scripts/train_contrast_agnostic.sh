@@ -8,7 +8,7 @@
 
 
 # Define (full) path to the contrast-agnostic repository
-PATH_REPO="/home/GRAMES.POLYMTL.CA/u114716/contrast-agnostic/contrast-agnostic-softseg-spinalcord"
+PATH_REPO="/home/quentinr/contrast-agnostic-softseg-spinalcord-v3"
 
 
 # ====================================
@@ -31,17 +31,16 @@ DATASETS=("data-multi-subject" "basel-mp2rage" "canproco" \
             "sci-paris" "sci-zurich" "sci-colorado" "sct-testing-large" \
             "site_006" "site_007"
             )
-DATASETS=("site_006")
+# DATASETS=("site_006")
 
 # Path to the folder where the datasets will be downloaded
-# PATH_DATA_BASE="/home/GRAMES.POLYMTL.CA/u114716/datasets"
-PATH_DATA_BASE="/scratch/naga/contrast_agnostic/datasets"
+PATH_DATA_BASE="/home/quentinr/datasets_contrast_agnostic_retraining"
 
 # Path to the output folder where the dataset in MSD-style format will be saved as json files with image/label pairs
 # and other dataset-related statistics. To keep track of the experiments, date is also appended as a prefix or suffix
-# Example: 20250211_v31contrastAgnostic
-folder_name=$(date +"%Y%m%d")-temp
-PATH_OUT_DATALISTS="/scratch/naga/contrast_agnostic/datalists/${folder_name}"
+# Example: 20260620-nocrop
+folder_name=$(date +"%Y%m%d")-nocrop
+PATH_OUT_DATALISTS="/home/quentinr/datalists/${folder_name}"
 
 # Path to yml file containing subjects to include. These subjects are curated to be of good quality after visual QC'ing
 # Always include this file, when reproducing and also when adding new datasets
@@ -53,19 +52,26 @@ PATH_INCLUDE_SUBJECTS=${PATH_REPO}/subjects_to_include.yml
 # ====================================
 
 # Path to store the converted dataset (ideally the ${nnUNet_raw} folder once nnUNet is installed)
-PATH_NNUNET_RAW="/home/GRAMES.POLYMTL.CA/u114716/nnunet-v2/nnUNet_raw"
+PATH_NNUNET_RAW="/home/quentinr/nnunet-v2/nnUNet_raw"
 
 # Path to the nnUNet results folder (ideally ${nnUNet_results})
-PATH_NNUNET_RESULTS="/home/GRAMES.POLYMTL.CA/u114716/nnunet-v2/nnUNet_results"
+PATH_NNUNET_RESULTS="/home/quentinr/nnunet-v2/nnUNet_results"
+
+export nnUNet_raw=${PATH_NNUNET_RAW}
+export nnUNet_preprocessed="/home/quentinr/nnunet-v2/nnUNet_preprocessed"
+export nnUNet_results=${PATH_NNUNET_RESULTS}
+export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
+export TORCHDYNAMO_DISABLE=1
+export PATH="/home/quentinr/spinalcordtoolbox/bin:${PATH}"
 
 # Name and number/id of the dataset to be referenced by nnunet
-DATASET_NAME="TempContrastAgnostic"
-DATASET_NUMBER=999          # this refers to the `-d` argument when training nnunet models
+DATASET_NAME="ContrastAgnostic"
+DATASET_NUMBER=9000          # this refers to the `-d` argument when training nnunet models
 
-# Name of the nnUNet trainer variant 
+# Name of the nnUNet trainer variant
 # NOTE: contrast-agnostic v3.0 model used the default trainer defined below
-# NNUNET_TRAINER="nnUNetTrainer"
-NNUNET_TRAINER="nnUNetTrainer_5epochs"
+NNUNET_TRAINER="nnUNetTrainer"
+# NNUNET_TRAINER="nnUNetTrainer_5epochs"
 
 # Name of the plans file. Recommended to keep the default one below unless you want to train
 # other models given in nnunet's model suite
@@ -80,7 +86,7 @@ configurations=("3d_fullres")
 folds=(0)
 
 # GPU ID to use for training the model
-cuda_visible_devices=2
+cuda_visible_devices=0
 
 
 # ====================================
