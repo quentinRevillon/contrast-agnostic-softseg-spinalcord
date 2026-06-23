@@ -40,9 +40,7 @@ def download_dataset(dataset_name, dataset_commit):
         subprocess.run(["git", "annex", "init"])
         subprocess.run(["git", "annex", "dead", "here"])
 
-    # Checkout the specific commit (strip git-HEAD- prefix used for PRAXIS datasets)
-    if dataset_commit and str(dataset_commit).startswith("git-HEAD-"):
-        dataset_commit = str(dataset_commit)[len("git-HEAD-"):]
+    # Checkout the specific commit
     subprocess.run(["git", "checkout", f"{dataset_commit}"])
 
     # Get the git commit ID of the dataset
