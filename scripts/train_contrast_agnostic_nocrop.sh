@@ -56,7 +56,7 @@ PATH_NNUNET_RESULTS="/home/quentinr/nnunet-v2/nnUNet_results"
 export nnUNet_raw=${PATH_NNUNET_RAW}
 export nnUNet_preprocessed="/home/quentinr/nnunet-v2/nnUNet_preprocessed"
 export nnUNet_results=${PATH_NNUNET_RESULTS}
-export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
+export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=3
 export PATH="/home/quentinr/spinalcordtoolbox/bin:${PATH}"
 
 # No-crop dataset identity (DIFFERENT from the cropped Dataset7000)
@@ -77,6 +77,12 @@ export TORCHDYNAMO_DISABLE=1
 # Steps: 1=clone  2=datalists  3=convert(no-crop)  4=preprocess  5=train
 # ====================================
 END_STEP=${END_STEP:-5}
+
+# Re-run the no-crop conversion from scratch: the Dataset7001 raw dir already
+# exists (partial), which would make auto-resume skip step 3 and preprocess an
+# incomplete dataset. Force START_STEP=3 to redo convert -> preprocess -> train.
+# Remove this line to restore auto-resume.
+START_STEP=${START_STEP:-3}
 
 if [ -z "${START_STEP}" ]; then
     NNUNET_RESULTS_DIR="${PATH_NNUNET_RESULTS}/Dataset${DATASET_NUMBER}_${DATASET_NAME}"
@@ -154,12 +160,16 @@ fi
 if [ ${START_STEP} -le 3 ] && [ ${END_STEP} -ge 3 ]; then
 
     echo "Converting the datalists to nnUNetv2 format WITHOUT cropping ..."
+    # NOTE: no-crop = full-FOV volumes, so each per-image SCT registration is heavy
+    # (~4-5 GB RAM). ANTs threads are capped to 1 via ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS,
+    # so each worker uses ~1 core. 10 workers ~= 10 cores / ~50 GB RAM: fast without
+    # re-saturating CPU/swap on this 48-core / 125 GB server.
     python ${PATH_REPO}/nnUnet/03_convert_msd_to_nnunet_reorient_nocrop.py \
         --input ${PATH_OUT_DATALISTS} \
         --output ${PATH_NNUNET_RAW} \
         --taskname ${DATASET_NAME} \
         --tasknumber ${DATASET_NUMBER} \
-        --workers 8
+        --workers 10
     echo "STEP 3 done — no-crop dataset at ${PATH_NNUNET_RAW}/Dataset${DATASET_NUMBER}_${DATASET_NAME}."
 
 fi
