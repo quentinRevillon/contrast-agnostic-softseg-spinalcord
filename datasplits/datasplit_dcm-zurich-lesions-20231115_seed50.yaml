@@ -1,5 +1,5 @@
 dataset_name: dcm-zurich-lesions-20231115
-dataset_version_commit: 3f55c854226b39ec6e6aa0eb578a15ba5a7d5ab7
+dataset_version_commit: 39e540f032b1d45645783e47a660f6d1a3be34e1
 test:
 - sub-11
 - sub-12
